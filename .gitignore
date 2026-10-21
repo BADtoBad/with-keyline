@@ -1,0 +1,6 @@
+node_modules/
+.test-build/
+evidence/
+dist/
+*.log
+.DS_Store
