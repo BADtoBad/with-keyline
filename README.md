@@ -16,9 +16,9 @@ Pair With Keyline with the [Keyline theme](https://community.obsidian.md/themes/
 - **One coordinated writing surface.** Tune text width, paragraph rhythm, list indentation and headings from six clear settings categories: tabs on the left, options on the right. English and Chinese are built in.
 - **Switch the whole working context.** With core Workspaces enabled, switch saved layouts from a compact control, with a verified recovery snapshot before a switch.
 
-![With Keyline typography settings](assets/settings-en-light.png)
+![With Keyline inline editing toolbar in a fully English showcase Vault](assets/inline-editing-en.png)
 
-![With Keyline interface settings in dark mode](assets/settings-en-dark.png)
+![Type @ to insert dates or search pages without leaving the text](assets/at-mentions-en.png)
 
 ## Previous Keyline companion
 

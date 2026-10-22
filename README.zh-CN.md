@@ -16,9 +16,9 @@
 - **排版与操作保持一致。** 栏宽、段间距、列表缩进和标题节奏集中管理，恢复熟悉的“左侧分类、右侧选项”布局，内置中英双语。
 - **切换任务，也切换工作布局。** 启用 Obsidian 核心工作区后，使用紧凑切换器切换已保存布局；切换前验证保存恢复快照。
 
-![With Keyline 排版设置](assets/settings-zh-light.png)
+![With Keyline 就地编辑栏，纯英文展示库实拍](assets/inline-editing-en.png)
 
-![With Keyline 暗色界面设置](assets/settings-zh-dark.png)
+![输入 @ 插入日期或搜索页面](assets/at-mentions-en.png)
 
 ## 和旧版是什么关系？
 
