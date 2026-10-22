@@ -4,7 +4,7 @@
 
 Pair With Keyline with the [Keyline theme](https://community.obsidian.md/themes/keyline) to make Obsidian feel ready to use. The theme supplies the visual foundation; this companion brings everyday tools to the text, files and workspaces you are already using.
 
-[中文](README.zh-CN.md) · [Downloads](https://github.com/BADtoBad/with-keyline/releases) · [Report a bug](https://github.com/BADtoBad/with-keyline/issues)
+[中文](README.zh-CN.md) · [Community](https://community.obsidian.md/plugins/with-keyline) · [Downloads](https://github.com/BADtoBad/with-keyline/releases) · [Report a bug](https://github.com/BADtoBad/with-keyline/issues)
 
 ## Your tools, where you need them
 
@@ -28,7 +28,7 @@ With Keyline is an independently implemented successor to the integrated [Keylin
 
 ## Install
 
-Find **With Keyline** in Obsidian's Community plugins once the directory review permits installation. If it is not available there yet, use [GitHub Releases](https://github.com/BADtoBad/with-keyline/releases):
+Open the [With Keyline Community page](https://community.obsidian.md/plugins/with-keyline) for the current release and installation entry, or search **With Keyline** in Obsidian's Community plugins. Manual installation is also available from [GitHub Releases](https://github.com/BADtoBad/with-keyline/releases):
 
 1. Back up your Vault's `.obsidian` configuration and disable the previous Keyline companion if installed.
 2. Create `.obsidian/plugins/with-keyline/` and copy `main.js`, `manifest.json` and `styles.css` from the same release.

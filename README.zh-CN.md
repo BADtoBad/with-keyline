@@ -28,7 +28,7 @@ With Keyline 是原 [Keyline 交互插件](https://github.com/BADtoBad/keyline-i
 
 ## 安装
 
-Community 审核允许安装后，在 Obsidian 的第三方插件中搜索 **With Keyline**。暂未搜到时，可从 [GitHub Releases](https://github.com/BADtoBad/with-keyline/releases) 手动安装：
+在 [With Keyline Community 页面](https://community.obsidian.md/plugins/with-keyline)查看当前版本与安装入口，或在 Obsidian 的第三方插件中搜索 **With Keyline**。也可从 [GitHub Releases](https://github.com/BADtoBad/with-keyline/releases) 手动安装：
 
 1. 备份 Vault 的 `.obsidian` 配置；如装有旧版 Keyline 交互插件，先停用。
 2. 新建 `.obsidian/plugins/with-keyline/`，放入同一版本的 `main.js`、`manifest.json` 和 `styles.css`。
