@@ -64,6 +64,26 @@ test("slash settings validate triggers, inline mode and disabled state", () => {
   assert.ok(slashAt(";h6", 3, { ...prefs, slashTrigger: ";" }));
   for (const trigger of ["", "ab", " ", "@", "[", "\n", "\\"]) assert.equal(normalizeInsert({ slashTrigger: trigger }).slashTrigger, "/");
 });
+for (const original of ["/", "/h6", "Before /task", "> /quote", "- /table", "  - /codeblock", "\n/h1", "- item\n  - /task", "- [ ] /h2"]) test(`ideographic comma has the same range and query as slash: ${JSON.stringify(original)}`, () => {
+  const text = original.replaceAll("/", "、");
+  assert.deepEqual(slashAt(text, text.length, prefs), slashAt(original, original.length, prefs));
+});
+for (const original of ["user/path", "/usr/bin", "`/h1", "[[/h1", "[a](/h1", "    /code", "```\n/h1", "- item\n  ```\n  /h1", "> ```\n> /h1", "---\nkey: /h1", "$$\n/h1", "%%\n/h1", "<div>\n/h1"]) test(`ideographic comma keeps protected contexts: ${JSON.stringify(original)}`, () => {
+  const text = original.replaceAll("/", "、");
+  assert.equal(slashAt(text, text.length, prefs), null);
+});
+test("ideographic comma respects ordinary prose, settings and explicit custom triggers", () => {
+  for (const text of ["甲、乙", "正文、", "、 h2", "、h2、task", "/h2、task", "、h2/task", "、、", "、/"]) assert.equal(slashAt(text, text.length, prefs), null, text);
+  assert.equal(slashAt("Before 、task", 12, { ...prefs, inlineSlash: false }), null);
+  assert.ok(slashAt("- 、task", 7, { ...prefs, inlineSlash: false }));
+  assert.equal(slashAt("、", 1, { ...prefs, slash: false }), null);
+  assert.equal(slashAt("、", 1, { ...prefs, slashTrigger: ";" }), null);
+  assert.equal(slashAt("/", 1, { ...prefs, slashTrigger: ";" }), null);
+  const custom = normalizeInsert({ slashTrigger: "、" });
+  assert.equal(custom.slashTrigger, "、");
+  assert.ok(slashAt("、h6", 3, custom));
+  assert.equal(slashAt("/h6", 3, custom), null);
+});
 test("menu catalog includes every required template in two languages", () => {
   assert.equal(insertItems.length, 28);
   for (const [id, en, zh, , mode] of insertItems) {

@@ -46,7 +46,12 @@ export const insertDefaults: InsertPreferences = {
 };
 const boundedString = (v: unknown, fallback: string, limit: number) => typeof v === "string" && v.trim() && v.length <= limit && !/[\x00-\x1f]/u.test(v) ? v.trim() : fallback;
 export function validSlashTrigger(value: unknown): value is string {
-  return typeof value === "string" && /^[\/;:!?~+%＝／；：！～＋]$/u.test(value);
+  return typeof value === "string" && /^[\/;:!?~+%＝／；：！～＋、]$/u.test(value);
+}
+/** Chinese punctuation is an alias for the default slash, not an override of
+ * an explicitly configured custom trigger. Keep all input paths in agreement. */
+export function slashTriggers(prefs: Pick<InsertPreferences, "slashTrigger">): readonly string[] {
+  return prefs.slashTrigger === "/" ? ["/", "、"] : [prefs.slashTrigger];
 }
 export function normalizeInsert(raw: Record<string, unknown>): InsertPreferences {
   const customInsert: CustomInsert[] = [];
@@ -82,9 +87,13 @@ export function insertionEntries(prefs: InsertPreferences, zh: boolean, query = 
 export function slashAt(text: string, cursor: number, prefs: InsertPreferences): { from: number; to: number; query: string } | null {
   if (!prefs.slash || cursor < 0 || cursor > text.length || !Number.isInteger(cursor)) return null;
   const begin = cursor === 0 ? 0 : text.lastIndexOf("\n", cursor - 1) + 1, line = text.slice(begin, cursor);
-  const index = line.lastIndexOf(prefs.slashTrigger);
+  let index = -1, trigger = prefs.slashTrigger;
+  for (const candidate of slashTriggers(prefs)) {
+    const at = line.lastIndexOf(candidate);
+    if (at > index) { index = at; trigger = candidate; }
+  }
   if (index < 0 || index > 0 && !/[\s（(]/u.test(line[index - 1])) return null;
-  const before = line.slice(0, index), query = line.slice(index + prefs.slashTrigger.length);
+  const before = line.slice(0, index), query = line.slice(index + trigger.length);
   if (query.length > 64 || /[\/\\\r\n\t:[\]<>`]/u.test(query) || /^\s/u.test(query)) return null;
   if (!prefs.inlineSlash && !/^(?:[ \t]*>[ \t]*)*[ \t]*(?:(?:[-+*]|\d+[.)])[ \t]+(?:\[[ xX]\][ \t]*)?)?$/u.test(before)) return null;
   if ((before.match(/(?<!\\)`+/gu) ?? []).length % 2 || before.lastIndexOf("[[") > before.lastIndexOf("]]") || before.lastIndexOf("](") > before.lastIndexOf(")")) return null;

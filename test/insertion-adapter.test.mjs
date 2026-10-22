@@ -79,6 +79,24 @@ test("slash cancellation and explicit existing-file picker cancellation preserve
   assert.equal(s.dialogs.length, 1); s.dialogs[0].close();
   assert.equal(s.editor.text, "/image"); assert.equal(s.editor.edits.length, 0); assert.equal(s.dialogs[0].cleaned, true);
 });
+for (const trigger of ["/", "、"]) test(`${trigger} suggestion selection replaces only the literal query in one undoable edit`, () => {
+  const s = setup(`Before\n${trigger}h2`);
+  assert.ok(s.controller.suggest.context);
+  s.controller.suggest.selectSuggestion(s.entry('h2'));
+  assert.equal(s.editor.text, 'Before\n## ');
+  assert.deepEqual(s.editor.edits, [`Before\n${trigger}h2`]);
+});
+test("ideographic comma suggestion cancellation and stale query never write", () => {
+  const cancelled = setup('、task');
+  assert.ok(cancelled.controller.suggest.context);
+  cancelled.controller.suggest.close();
+  cancelled.controller.suggest.selectSuggestion(cancelled.entry('task'));
+  assert.equal(cancelled.editor.text, '、task');assert.deepEqual(cancelled.editor.edits, []);
+  const stale = setup('、task');
+  stale.editor.text = '、code';
+  stale.controller.suggest.selectSuggestion(stale.entry('task'));
+  assert.equal(stale.editor.text, '、code');assert.deepEqual(stale.editor.edits, []);
+});
 test("plus opens without writing blanks, and commits after code in one edit", async () => {
   const s = setup("```\nCode\n```\n\nTail."), block = blockAt(parseBlocks(s.editor.text), 0);
   const context = s.controller.capture(s.editor, s.file, { from: block.to, to: block.to }, block.id);

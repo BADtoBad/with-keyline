@@ -2,6 +2,8 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+const {slashAt}=createRequire(import.meta.url)('../.test-build/domain/insertion.cjs');
 
 function fixture(){
   const target=()=>({handlers:new Map(),attrs:new Map(),addEventListener(k,f){const a=this.handlers.get(k)??[];a.push(f);this.handlers.set(k,a);},removeEventListener(k,f){this.handlers.set(k,(this.handlers.get(k)??[]).filter(x=>x!==f));},getAttribute(k){return this.attrs.get(k)??null;},setAttribute(k,v){this.attrs.set(k,v);},removeAttribute(k){this.attrs.delete(k);}});
@@ -10,7 +12,7 @@ function fixture(){
   const content=target();doc.activeElement=content;
   const prefs={slash:true,slashTrigger:'/',insertOrder:[],hiddenInsert:[],customInsert:[]},writes=[];
   const file={path:'Start.md'},editor={getCursor:()=>({line:0,ch:text.length}),posToOffset:p=>p.ch,focus(){doc.activeElement=content;}};
-  const owner={live:true,preferences:()=>prefs,zh:()=>false,suggest:{onTrigger(){return prefs.slash&&text.startsWith(prefs.slashTrigger)?{start:{line:0,ch:0},end:editor.getCursor(),query:text.slice(1)}:null;}},capture(){const source=text;return{editor,file,text:source,from:0,to:text.length,valid:()=>owner.live&&source===text};},choose:(context,entry)=>writes.push(entry.id)};
+  const owner={live:true,preferences:()=>prefs,zh:()=>false,suggest:{onTrigger(){const hit=slashAt(text,text.length,{...prefs,inlineSlash:true});return hit?{start:{line:0,ch:hit.from},end:editor.getCursor(),query:hit.query}:null;}},capture(){const source=text;return{editor,file,text:source,from:0,to:text.length,valid:()=>owner.live&&source===text};},choose:(context,entry)=>writes.push(entry.id)};
   const modules={obsidian:{editorInfoField:'info'},'@codemirror/state':{Prec:{highest:v=>v}},'@codemirror/view':{ViewPlugin:{define:create=>({create})},keymap:{of:v=>v}}};
   const module={exports:{}};
   vm.runInNewContext(readFileSync(new URL('../.test-build/platform/insertion-menus.cjs',import.meta.url),'utf8'),{module,exports:module.exports,require:name=>{assert.ok(modules[name]);return modules[name];}});
@@ -25,6 +27,26 @@ function fixture(){
 }
 for(const event of ['input.paste','undo','redo','set','input.type.compose'])test(`insert menu ignores non-trigger ${event}`,()=>{
   const f=fixture();f.input('/',event);f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);
+});
+for(const event of ['input.paste','undo','redo','set','input.type.compose'])test(`ideographic comma ignores non-trigger ${event}`,()=>{
+  const f=fixture();f.input('、',event);f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);
+});
+test('ideographic comma opens the same menu, filters and commits exactly once',()=>{
+  const slash=fixture();slash.input('/');slash.flush();
+  const f=fixture();f.input('、');f.flush();assert.equal(f.rendered,1);
+  assert.deepEqual(Array.from(f.instance.entries,e=>e.id),Array.from(slash.instance.entries,e=>e.id));
+  f.input('待办');f.flush();assert.equal(f.key('Enter'),true);assert.deepEqual(f.writes,['task']);assert.equal(f.key('Enter'),false);
+});
+test('ideographic comma Escape retains text and does not reopen on continued typing',()=>{
+  const f=fixture();f.input('、');f.flush();assert.equal(f.key('Escape'),true);
+  f.input('task');f.flush();assert.equal(f.rendered,1);assert.equal(f.text,'、task');assert.deepEqual(f.writes,[]);
+});
+test('whole query, normal enumeration, disabled menu and custom triggers do not open the alias',()=>{
+  const whole=fixture();whole.input('、h2');whole.flush();assert.equal(whole.rendered,0);
+  const prose=fixture();prose.input('甲');prose.input('、');prose.flush();assert.equal(prose.rendered,0);
+  const disabled=fixture();disabled.prefs.slash=false;disabled.input('、');disabled.flush();assert.equal(disabled.rendered,0);
+  const custom=fixture();custom.prefs.slashTrigger=';';custom.input('、');custom.flush();assert.equal(custom.rendered,0);
+  const explicit=fixture();explicit.prefs.slashTrigger='、';explicit.input('、');explicit.flush();assert.equal(explicit.rendered,1);
 });
 test('an inserted whole query is not a genuine slash keystroke',()=>{const f=fixture();f.input('/h2');f.flush();assert.equal(f.rendered,0);});
 test('slash opens first matching choice; Escape retains literal input and dismissal',()=>{

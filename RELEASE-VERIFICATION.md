@@ -1,4 +1,34 @@
-# With Keyline 1.0.0 — verification scope
+# With Keyline — verification scope
+
+## 1.0.2 insertion-trigger update
+
+Added `、` as an alias for the default `/` trigger across query recognition,
+menu opening and explicit insertion. Custom triggers keep their existing scope.
+No CSS, typography, sidebar, block-drag, mention or persistence implementation
+was changed.
+
+- Strict TypeScript checking, all 1,336 tests and the production build passed.
+- The development tree's write-disabled source audit reproduced the exact
+  release bundle from 64 local source modules and the three Lezer modules.
+- A focused native regression passed 31 checks on macOS, Obsidian 1.13.7 and
+  the published Keyline theme 0.8.25 in a fresh fictional Vault, in light/dark.
+  It covered both triggers after a newline, identical menus, Chinese query
+  filtering, actual mouse selection, Enter, native undo, Escape, backspace,
+  ordinary punctuation, protected code/frontmatter, whole-query insertion,
+  disabled/custom-trigger settings and line-only insertion. No runtime
+  exceptions were recorded.
+- Harness: `node scripts/host-insert-trigger.mjs /absolute/path/to/downloaded/Keyline`.
+  It starts its own disposable Obsidian process; `OBSIDIAN_TEST_BINARY` can
+  point at a desktop executable. Reports and captures go under
+  `evidence/insert-trigger/` (not shipped with the plugin).
+- Native text/key/pointer input was driven through the isolated test process's
+  local debugging connection. Physical keyboards, every Chinese IME, mobile
+  devices and other operating systems were not tested. The existing composition
+  guard remains unchanged; automated checks verify that preedit transactions do
+  not open the menu or perform an insertion.
+
+The earlier settings, input-parity and drag checks below describe their stated
+release artifacts, not a complete fresh rerun of every feature on 1.0.2.
 
 ## 1.0.1 Community submission patch
 

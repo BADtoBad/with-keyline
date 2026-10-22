@@ -5162,7 +5162,10 @@ var insertDefaults = {
 };
 var boundedString = (v, fallback, limit2) => typeof v === "string" && v.trim() && v.length <= limit2 && !/[\x00-\x1f]/u.test(v) ? v.trim() : fallback;
 function validSlashTrigger(value) {
-  return typeof value === "string" && /^[\/;:!?~+%＝／；：！～＋]$/u.test(value);
+  return typeof value === "string" && /^[\/;:!?~+%＝／；：！～＋、]$/u.test(value);
+}
+function slashTriggers(prefs) {
+  return prefs.slashTrigger === "/" ? ["/", "\u3001"] : [prefs.slashTrigger];
 }
 function normalizeInsert(raw) {
   const customInsert = [];
@@ -5210,10 +5213,17 @@ function slashAt(text2, cursor, prefs) {
   if (!prefs.slash || cursor < 0 || cursor > text2.length || !Number.isInteger(cursor))
     return null;
   const begin = cursor === 0 ? 0 : text2.lastIndexOf("\n", cursor - 1) + 1, line = text2.slice(begin, cursor);
-  const index = line.lastIndexOf(prefs.slashTrigger);
+  let index = -1, trigger = prefs.slashTrigger;
+  for (const candidate of slashTriggers(prefs)) {
+    const at = line.lastIndexOf(candidate);
+    if (at > index) {
+      index = at;
+      trigger = candidate;
+    }
+  }
   if (index < 0 || index > 0 && !/[\s（(]/u.test(line[index - 1]))
     return null;
-  const before = line.slice(0, index), query = line.slice(index + prefs.slashTrigger.length);
+  const before = line.slice(0, index), query = line.slice(index + trigger.length);
   if (query.length > 64 || /[\/\\\r\n\t:[\]<>`]/u.test(query) || /^\s/u.test(query))
     return null;
   if (!prefs.inlineSlash && !/^(?:[ \t]*>[ \t]*)*[ \t]*(?:(?:[-+*]|\d+[.)])[ \t]+(?:\[[ xX]\][ \t]*)?)?$/u.test(before))
@@ -6163,7 +6173,7 @@ var strings = {
   insertMenu: ["Insert menu", "\u63D2\u5165\u83DC\u5355"],
   openInsert: ["Insert block or content\u2026", "\u63D2\u5165\u5757\u6216\u5185\u5BB9\u2026"],
   slash: ["Slash menu", "\u659C\u6760\u83DC\u5355"],
-  slashHint: ["Choose an item to insert. Escape leaves the literal query unchanged.", "\u9009\u4E2D\u9879\u76EE\u624D\u63D2\u5165\uFF1B\u6309 Esc \u4FDD\u7559\u539F\u8F93\u5165\u3002"],
+  slashHint: ["With the default trigger, type / or \u3001. Choose an item to insert; Escape keeps the original input.", "\u9ED8\u8BA4\u89E6\u53D1\u7B26\u652F\u6301 / \u6216 \u3001\u3002\u9009\u4E2D\u9879\u76EE\u624D\u63D2\u5165\uFF1B\u6309 Esc \u4FDD\u7559\u539F\u8F93\u5165\u3002"],
   trigger: ["Trigger", "\u89E6\u53D1\u7B26"],
   invalidTrigger: ["Use a single supported punctuation mark, for example / ; : ! ~ +.", "\u4F7F\u7528\u4E00\u4E2A\u652F\u6301\u7684\u6807\u70B9\uFF0C\u4F8B\u5982 / ; : ! ~ +\u3002"],
   inlineSlash: ["Inline slash menu", "\u884C\u5185\u83DC\u5355"],
@@ -7273,7 +7283,7 @@ var SlashSuggest = class {
     var _a;
     if (!file || !this.owner.live || editor.somethingSelected() || editor.listSelections().length !== 1)
       return null;
-    if (!editor.getLine(cursor.line).includes(this.owner.preferences().slashTrigger))
+    if (!slashTriggers(this.owner.preferences()).some((trigger) => editor.getLine(cursor.line).includes(trigger)))
       return null;
     const hit = slashAt(editor.getValue(), editor.posToOffset(cursor), this.owner.preferences());
     if (!hit || !((_a = this.owner.capture(editor, file, hit)) == null ? void 0 : _a.valid()))
@@ -7294,7 +7304,7 @@ var SlashSuggest = class {
       return;
     const { editor, file, start, end } = current;
     const hit = this.onTrigger(editor.getCursor(), editor, file);
-    if (!hit || editor.getRange(start, end) !== this.owner.preferences().slashTrigger + current.query || hit.start.line !== start.line || hit.start.ch !== start.ch || hit.end.line !== end.line || hit.end.ch !== end.ch) {
+    if (!hit || !slashTriggers(this.owner.preferences()).some((trigger) => editor.getRange(start, end) === trigger + current.query) || hit.start.line !== start.line || hit.start.ch !== start.ch || hit.end.line !== end.line || hit.end.ch !== end.ch) {
       this.close();
       return;
     }
@@ -10556,13 +10566,13 @@ var InsertMenu = class {
     }
     if (!input || !this.eligible())
       return;
-    const trigger = this.owner.preferences().slashTrigger;
-    let inserted = false;
+    const triggers = slashTriggers(this.owner.preferences());
+    let trigger = "";
     update.changes.iterChanges((_a, _b, _c, end, text2) => {
-      if (text2.toString() === trigger && end === update.state.selection.main.head)
-        inserted = true;
+      if (triggers.includes(text2.toString()) && end === update.state.selection.main.head)
+        trigger = text2.toString();
     });
-    if (!inserted)
+    if (!trigger)
       return;
     const info = this.view.state.field(import_obsidian16.editorInfoField, false);
     if (!info.editor || !info.file)

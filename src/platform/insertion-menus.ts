@@ -1,7 +1,7 @@
 import { Prec } from "@codemirror/state";
 import { EditorView, ViewPlugin, keymap, type ViewUpdate } from "@codemirror/view";
 import { editorInfoField, setIcon } from "obsidian";
-import { insertionEntries, type InsertEntry } from "../domain/insertion";
+import { insertionEntries, slashTriggers, type InsertEntry } from "../domain/insertion";
 import type { InsertionController, InsertContext } from "./insertion";
 
 const callouts = [
@@ -105,10 +105,10 @@ class InsertMenu {
       return;
     }
     if(!input||!this.eligible())return;
-    const trigger=this.owner.preferences().slashTrigger;
-    let inserted=false;
-    update.changes.iterChanges((_a,_b,_c,end,text)=>{if(text.toString()===trigger&&end===update.state.selection.main.head)inserted=true;});
-    if(!inserted)return;
+    const triggers=slashTriggers(this.owner.preferences());
+    let trigger='';
+    update.changes.iterChanges((_a,_b,_c,end,text)=>{if(triggers.includes(text.toString())&&end===update.state.selection.main.head)trigger=text.toString();});
+    if(!trigger)return;
     const info=this.view.state.field(editorInfoField,false)!;
     if(!info.editor||!info.file)return;
     if(!this.owner.suggest.onTrigger(info.editor.getCursor(),info.editor,info.file))return;

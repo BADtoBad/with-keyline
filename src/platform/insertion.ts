@@ -1,6 +1,6 @@
 import { Modal, Notice, SuggestModal, TFile, type App, type Editor, type EditorPosition, type EditorSuggestContext, type EditorSuggestTriggerInfo } from "obsidian";
 import { inProtectedSyntax, parseBlocks } from "../domain/blocks";
-import { insertionEntries, makeSnippet, planAfterBlock, planInsertion, slashAt, type InsertEntry, type InsertPlan, type InsertPreferences, type Snippet } from "../domain/insertion";
+import { insertionEntries, makeSnippet, planAfterBlock, planInsertion, slashAt, slashTriggers, type InsertEntry, type InsertPlan, type InsertPreferences, type Snippet } from "../domain/insertion";
 import { safeWikiTarget } from "../domain/mentions";
 import { formattedDates } from "./dates";
 import { message } from "../strings";
@@ -188,7 +188,7 @@ export class SlashSuggest {
   onTrigger(cursor: EditorPosition, editor: Editor, file: TFile | null): EditorSuggestTriggerInfo | null {
     if (!file || !this.owner.live || editor.somethingSelected() || editor.listSelections().length !== 1) return null;
     // Cheap check before parsing: most keystrokes contain no trigger at all.
-    if (!editor.getLine(cursor.line).includes(this.owner.preferences().slashTrigger)) return null;
+    if (!slashTriggers(this.owner.preferences()).some(trigger => editor.getLine(cursor.line).includes(trigger))) return null;
     const hit = slashAt(editor.getValue(), editor.posToOffset(cursor), this.owner.preferences());
     if (!hit || !this.owner.capture(editor, file, hit)?.valid()) return null;
     return { start: editor.offsetToPos(hit.from), end: cursor, query: hit.query };
@@ -202,7 +202,7 @@ export class SlashSuggest {
     if (!current || !this.owner.preferences().slash) return;
     const { editor, file, start, end } = current;
     const hit = this.onTrigger(editor.getCursor(), editor, file);
-    if (!hit || editor.getRange(start, end) !== this.owner.preferences().slashTrigger + current.query || hit.start.line !== start.line || hit.start.ch !== start.ch ||
+    if (!hit || !slashTriggers(this.owner.preferences()).some(trigger => editor.getRange(start, end) === trigger + current.query) || hit.start.line !== start.line || hit.start.ch !== start.ch ||
       hit.end.line !== end.line || hit.end.ch !== end.ch) { this.close(); return; }
     const context = this.owner.capture(editor, file, { from: editor.posToOffset(start), to: editor.posToOffset(end) });
     this.close();

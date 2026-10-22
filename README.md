@@ -11,7 +11,7 @@ Pair With Keyline with the [Keyline theme](https://community.obsidian.md/themes/
 - **Select text and keep writing.** A compact toolbar appears beside your selection for formatting, links, colours and block types. Keep the selection while applying more than one action.
 - **Work with blocks.** Hover for an insert button and drag handle. Move paragraphs and nested lists with their contents; undo supported edits through Obsidian. Native collapse arrows stay clickable beside the handle.
 - **Type `@` for pages and dates.** Search notes or insert today, tomorrow, yesterday and the current time. Chinese text can lead directly into `@`. Continue typing to filter; nothing is replaced until you choose an item.
-- **Insert without breaking your flow.** Use `/` or the plus button for headings, lists, tasks, callouts, links, images and attachments. Reorder or hide menu items and add registered commands.
+- **Insert without breaking your flow.** Type `/` or `、` with the default trigger, or use the plus button, for headings, lists, tasks, callouts, links, images and attachments. Reorder or hide menu items and add registered commands. Explicit custom triggers and the inline-menu setting are respected.
 - **Know your files at a glance.** The original Keyline filled/sharp icon family distinguishes notes, folders and file types in the native sidebar and document tabs. Give individual files their own icon and colour. Folder expansion stays in the same icon slot.
 - **One coordinated writing surface.** Tune text width, paragraph rhythm, list indentation and headings from six clear settings categories: tabs on the left, options on the right. English and Chinese are built in.
 - **Switch the whole working context.** With core Workspaces enabled, switch saved layouts from a compact control, with a verified recovery snapshot before a switch.
@@ -44,6 +44,7 @@ No personal notes, demo workspace or old settings are installed automatically. O
 - No telemetry or plugin-owned network requests. Settings and recovery data stay in the Vault configuration. User-invoked host commands and other plugins retain their own behaviour.
 - Formatting and block commands can change selected note content. Imported files and newly created notes are retained when you undo their inserted links; they are not silently deleted.
 - See [release verification](RELEASE-VERIFICATION.md) for the tested scope. Automated checks are not a promise of zero bugs.
+- See the [changelog](CHANGELOG.md) for release updates.
 
 ## Build and licence
 

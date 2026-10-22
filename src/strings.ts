@@ -95,7 +95,7 @@ export const strings = {
   insertMenu: ["Insert menu", "插入菜单"],
   openInsert: ["Insert block or content…", "插入块或内容…"],
   slash: ["Slash menu", "斜杠菜单"],
-  slashHint: ["Choose an item to insert. Escape leaves the literal query unchanged.", "选中项目才插入；按 Esc 保留原输入。"],
+  slashHint: ["With the default trigger, type / or 、. Choose an item to insert; Escape keeps the original input.", "默认触发符支持 / 或 、。选中项目才插入；按 Esc 保留原输入。"],
   trigger: ["Trigger", "触发符"],
   invalidTrigger: ["Use a single supported punctuation mark, for example / ; : ! ~ +.", "使用一个支持的标点，例如 / ; : ! ~ +。"],
   inlineSlash: ["Inline slash menu", "行内菜单"],
