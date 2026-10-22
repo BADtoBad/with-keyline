@@ -7963,6 +7963,12 @@ settings-backups/${error.backup}` : "");
 var sections = ["interface", "typography", "icons", "editing", "insert", "advanced"];
 var settingsSerial = 0;
 var sectionIcons = ["panels-top-left", "type", "palette", "pencil", "plus", "settings"];
+function settingsHeading(container, text2, level, kind2) {
+  const heading2 = new import_obsidian11.Setting(container).setName(text2).setHeading();
+  heading2.settingEl.addClass("keyline-next-settings-heading", kind2);
+  heading2.nameEl.setAttribute("role", "heading");
+  heading2.nameEl.setAttribute("aria-level", String(level));
+}
 var descriptions = {
   interface: ["Navigation, menus and hints.", "\u5BFC\u822A\u3001\u83DC\u5355\u4E0E\u63D0\u793A\u3002"],
   typography: ["Page, body, lists and headings.", "\u9875\u9762\u3001\u6B63\u6587\u3001\u5217\u8868\u4E0E\u6807\u9898\u3002"],
@@ -8015,7 +8021,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
     root.empty();
     root.addClass("keyline-next-settings");
     const header = root.createDiv({ cls: "keyline-next-settings-header" });
-    header.createEl("h2", { text: message("title", zh) });
+    settingsHeading(header, message("title", zh), 2, "keyline-next-settings-title");
     header.createSpan({ text: owner.manifest.version, cls: "keyline-next-settings-version" });
     if (owner.readOnly)
       root.createEl("p", { text: message("incompatible", zh) });
@@ -8110,7 +8116,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
       const shown = this.query.trim() ? sections : [this.section];
       for (const section of shown) {
         const group = panel.createDiv({ cls: "keyline-next-settings-group" });
-        group.createEl("h3", { text: message(section, zh) });
+        settingsHeading(group, message(section, zh), 3, "keyline-next-settings-section-title");
         group.createEl("p", { text: descriptions[section][zh ? 1 : 0], cls: "keyline-next-settings-description" });
         let count2 = 0;
         if (section === "interface" && labelMatches("language", "languageHint")) {
@@ -8247,7 +8253,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
               renderPanel();
             }));
             const preview = group.createDiv({ cls: "keyline-next-type-preview" });
-            preview.createEl("h4", { text: message("preview", zh) });
+            settingsHeading(preview, message("preview", zh), 4, "keyline-next-settings-preview-title");
             preview.createEl("p", { text: message("previewText", zh) });
             preview.createEl("p", { text: message("previewText", zh) });
             preview.createEl("ul").createEl("li", { text: message("previewText", zh) });
@@ -8275,7 +8281,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
         else {
           const cards = /* @__PURE__ */ new Map();
           for (const child of Array.from(group.children)) {
-            if (!child.matches(".setting-item"))
+            if (!child.matches(".setting-item") || child.classList.contains("keyline-next-settings-heading"))
               continue;
             const name2 = (_d = (_c = child.querySelector(".setting-item-name")) == null ? void 0 : _c.textContent) != null ? _d : "";
             let label2 = message(section, zh);
@@ -8289,7 +8295,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
             let card = cards.get(label2);
             if (!card) {
               const sectionEl = group.createEl("section", { cls: "keyline-next-settings-card", attr: { "aria-label": label2 } });
-              sectionEl.createEl("h4", { text: label2 });
+              settingsHeading(sectionEl, label2, 4, "keyline-next-settings-card-title");
               card = sectionEl.createDiv({ cls: "keyline-next-settings-items" });
               cards.set(label2, card);
             }

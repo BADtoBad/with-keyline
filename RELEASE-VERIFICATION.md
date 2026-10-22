@@ -1,5 +1,17 @@
 # With Keyline 1.0.0 — verification scope
 
+## 1.0.1 Community submission patch
+
+Replaced the four direct settings-heading creation sites with Obsidian's native
+`Setting.setHeading()` component, retaining the left tabs and grouped right pane.
+No editor, mention, block-drag, persistence or workspace behaviour was changed.
+Strict typecheck, all 1,302 tests, production build and the 48-capture bilingual,
+light/dark, wide/narrow native settings check were rerun and passed. The new
+production bundle also passed the write-disabled source audit. The earlier
+input/drag checks below describe the 1.0.0 artifact, not a fresh rerun on 1.0.1.
+
+## 1.0.0 baseline
+
 Validated on macOS with Obsidian 1.13.7 and the published Keyline theme 0.8.24.
 All host testing used disposable fictional Vaults, not personal notes.
 

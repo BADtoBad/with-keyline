@@ -13,6 +13,12 @@ const sections = ["interface", "typography", "icons", "editing", "insert", "adva
 let settingsSerial = 0;
 type Section = typeof sections[number];
 const sectionIcons = ["panels-top-left", "type", "palette", "pencil", "plus", "settings"];
+function settingsHeading(container: HTMLElement, text: string, level: number, kind: string): void {
+  const heading = new Setting(container).setName(text).setHeading();
+  heading.settingEl.addClass("keyline-next-settings-heading", kind);
+  heading.nameEl.setAttribute("role", "heading");
+  heading.nameEl.setAttribute("aria-level", String(level));
+}
 const descriptions: Record<Section, [string, string]> = {
   interface: ["Navigation, menus and hints.", "导航、菜单与提示。"],
   typography: ["Page, body, lists and headings.", "页面、正文、列表与标题。"],
@@ -65,7 +71,7 @@ export class NextSettings extends PluginSettingTab {
     owner.watchInterfaceDocument(root.ownerDocument);
     root.empty(); root.addClass("keyline-next-settings");
     const header = root.createDiv({ cls: "keyline-next-settings-header" });
-    header.createEl("h2", { text: message("title", zh) });
+    settingsHeading(header, message("title", zh), 2, "keyline-next-settings-title");
     header.createSpan({ text: owner.manifest.version, cls: "keyline-next-settings-version" });
     if (owner.readOnly) root.createEl("p", { text: message("incompatible", zh) });
     const status = root.createDiv({ cls: "keyline-next-save-status", attr: { "aria-live": "polite" } });
@@ -117,7 +123,7 @@ export class NextSettings extends PluginSettingTab {
       const shown = this.query.trim() ? sections : [this.section];
       for (const section of shown) {
         const group = panel.createDiv({ cls: "keyline-next-settings-group" });
-        group.createEl("h3", { text: message(section, zh) });
+        settingsHeading(group, message(section, zh), 3, "keyline-next-settings-section-title");
         group.createEl("p", { text: descriptions[section][zh ? 1 : 0], cls: "keyline-next-settings-description" });
         let count = 0;
         if (section === "interface" && labelMatches("language", "languageHint")) {
@@ -227,7 +233,7 @@ export class NextSettings extends PluginSettingTab {
           if (!this.query) {
             new Setting(group).setName(message("reset", zh)).addButton(b => b.setButtonText(message("reset", zh)).setDisabled(owner.readOnly).onClick(async () => { await update({ typography: normalizeTypography(null) }); renderPanel(); }));
             const preview = group.createDiv({ cls: "keyline-next-type-preview" });
-            preview.createEl("h4", { text: message("preview", zh) });
+            settingsHeading(preview, message("preview", zh), 4, "keyline-next-settings-preview-title");
             preview.createEl("p", { text: message("previewText", zh) });
             preview.createEl("p", { text: message("previewText", zh) });
             preview.createEl("ul").createEl("li", { text: message("previewText", zh) });
@@ -245,7 +251,7 @@ export class NextSettings extends PluginSettingTab {
           // Layout dimensions follow the accepted companion; no runtime is reused.
           const cards = new Map<string, HTMLElement>();
           for (const child of Array.from(group.children)) {
-            if (!child.matches(".setting-item")) continue;
+            if (!child.matches(".setting-item") || child.classList.contains("keyline-next-settings-heading")) continue;
             const name = child.querySelector(".setting-item-name")?.textContent ?? "";
             let label = message(section, zh);
             if (section === "typography") {
@@ -256,7 +262,7 @@ export class NextSettings extends PluginSettingTab {
             let card = cards.get(label);
             if (!card) {
               const sectionEl = group.createEl("section", { cls: "keyline-next-settings-card", attr: { "aria-label": label } });
-              sectionEl.createEl("h4", { text: label });
+              settingsHeading(sectionEl, label, 4, "keyline-next-settings-card-title");
               card = sectionEl.createDiv({ cls: "keyline-next-settings-items" }); cards.set(label, card);
             }
             card.appendChild(child);
