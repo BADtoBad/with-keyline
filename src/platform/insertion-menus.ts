@@ -3,6 +3,7 @@ import { EditorView, ViewPlugin, keymap, type ViewUpdate } from "@codemirror/vie
 import { editorInfoField, setIcon } from "obsidian";
 import { insertionEntries, slashTriggers, type InsertEntry } from "../domain/insertion";
 import type { InsertionController, InsertContext } from "./insertion";
+import { bindMobileMenuTouch, mobileDocument, positionMobileMenu, watchMobileViewport } from "./mobile-menu";
 
 const callouts = [
   ["note","Note","便签","pencil"], ["info","Info","信息","info"], ["todo","Todo","待办","check-circle"],
@@ -56,21 +57,41 @@ class InsertMenu {
   private ariaValues = new Map<string,{before:string|null;value:string}>();
   private outside: (event: Event) => void;
   private viewport: (event: Event) => void;
-  private composition = () => this.close();
+  private composing = false;
+  private composition = () => {
+    if (!mobileDocument(this.boundDocument)) { this.close(); return; }
+    this.composing = true; this.context = undefined; this.active = -1;
+    this.closeSubmenu(); this.root?.remove(); this.root = undefined;
+    for (const name of [...this.ariaValues.keys()]) this.restoreAria(name);
+  };
+  private composed = () => {
+    this.composing = false;
+    if (mobileDocument(this.boundDocument) && this.anchor >= 0) this.schedule();
+  };
   private boundDocument: Document;
+  private stopViewport?: () => void;
   constructor(private view: EditorView, private controller: InsertionMenus) {
     const doc=view.dom.ownerDocument;
     this.boundDocument=doc;
     this.outside=event=>{if(!this.contains(event.target as Node))this.close();};
-    this.viewport=event=>{if(event.type==='resize'||!this.contains(event.target as Node))this.close();};
+    this.viewport=event=>{
+      if(mobileDocument(this.boundDocument)) {
+        if(event.type==='resize'||!this.contains(event.target as Node))this.position();
+        return;
+      }
+      if(event.type==='resize'||!this.contains(event.target as Node))this.close();
+    };
     this.bindDocument(doc);
     view.contentDOM.addEventListener('compositionstart',this.composition);
+    view.contentDOM.addEventListener('compositionend',this.composed);
   }
   private bindDocument(doc: Document): void {
+    this.stopViewport=watchMobileViewport(doc,()=>this.position());
     doc.addEventListener('pointerdown',this.outside,true);doc.addEventListener('focusin',this.outside,true);
     doc.addEventListener('scroll',this.viewport,true);doc.defaultView?.addEventListener('resize',this.viewport);
   }
   private unbindDocument(doc: Document): void {
+    this.stopViewport?.();this.stopViewport=undefined;
     doc.removeEventListener('pointerdown',this.outside,true);doc.removeEventListener('focusin',this.outside,true);doc.removeEventListener('scroll',this.viewport,true);
     doc.defaultView?.removeEventListener('resize',this.viewport);
   }
@@ -81,9 +102,9 @@ class InsertMenu {
   }
   private get owner() { return this.controller.owner; }
   private contains(node: Node): boolean { return !!this.root?.contains(node)||!!this.submenu?.contains(node); }
-  private eligible(): boolean {
+  private eligible(previewComposition = false): boolean {
     const state=this.view.state,info=state.field(editorInfoField,false);
-    return !this.disposed && this.owner.live && !state.readOnly && !this.view.composing && this.view.hasFocus &&
+    return !this.disposed && this.owner.live && !state.readOnly && (previewComposition || (!this.view.composing && !this.composing)) && this.view.hasFocus &&
       this.view.dom.ownerDocument.activeElement===this.view.contentDOM && state.doc.length<=2*1024*1024 &&
       state.selection.ranges.length===1 && !!info?.file && !!info.editor;
   }
@@ -98,30 +119,40 @@ class InsertMenu {
     this.syncDocument();
     if(update.focusChanged&&!this.view.hasFocus){this.close();return;}
     if(!update.docChanged&&!update.selectionSet)return;
-    const input=update.transactions.some(t=>t.isUserEvent('input.type')&&!t.isUserEvent('input.type.compose'));
+    const mobile=mobileDocument(this.boundDocument);
+    const input=update.transactions.some(t=>t.isUserEvent('input.type')&&(mobile||!t.isUserEvent('input.type.compose')));
     const deletion=update.transactions.some(t=>t.isUserEvent('delete'));
     if(this.root||this.anchor>=0){
-      if(this.typed&&update.docChanged&&(input||deletion)){this.active=0;this.schedule();}else this.close();
+      if(this.typed&&update.docChanged&&(input||deletion)){
+        this.active=-1;this.context=undefined;this.schedule();
+      }else if(!mobile||(!this.composing&&!this.view.composing)||update.docChanged)this.close();
       return;
     }
-    if(!input||!this.eligible())return;
+    if(!input||!this.eligible(mobile))return;
     const triggers=slashTriggers(this.owner.preferences());
     let trigger='';
     update.changes.iterChanges((_a,_b,_c,end,text)=>{if(triggers.includes(text.toString())&&end===update.state.selection.main.head)trigger=text.toString();});
     if(!trigger)return;
     const info=this.view.state.field(editorInfoField,false)!;
     if(!info.editor||!info.file)return;
-    if(!this.owner.suggest.onTrigger(info.editor.getCursor(),info.editor,info.file))return;
+    // Mobile IMEs may commit the trigger inside composition; validation and
+    // display are deferred until the IME has finished. No edit occurs here.
+    if(!mobile&&!this.owner.suggest.onTrigger(info.editor.getCursor(),info.editor,info.file))return;
     this.anchor=update.state.selection.main.head-trigger.length;this.typed=true;
     this.controller.claim(this);this.schedule();
   }
-  private schedule(): void {
+  private schedule(attempt = 0): void {
     const win=this.view.dom.ownerDocument.defaultView;if(!win)return;
     if(this.pending!==undefined)win.clearTimeout(this.pending);
     const generation=this.generation;
     this.pending=win.setTimeout(()=>{
       if(generation!==this.generation)return;
-      this.pending=undefined;if(!this.eligible()){this.close();return;}
+      this.pending=undefined;
+      if(mobileDocument(this.boundDocument)&&(this.composing||this.view.composing)){
+        if(!this.composing&&attempt<10)this.schedule(attempt+1);
+        return;
+      }
+      if(!this.eligible()){this.close();return;}
       const info=this.view.state.field(editorInfoField,false)!;
       if(!info.editor||!info.file){this.close();return;}
       const hit=this.owner.suggest.onTrigger(info.editor.getCursor(),info.editor,info.file);
@@ -129,7 +160,7 @@ class InsertMenu {
       this.context=this.owner.capture(info.editor,info.file,{from:this.anchor,to:info.editor.posToOffset(hit.end)})??undefined;
       if(!this.context){this.close();return;}
       this.entries=this.choices(hit.query);this.active=0;this.render();this.position();
-    },0);
+    },attempt?20:0);
   }
   private choices(query: string): InsertEntry[] {
     const entries=insertionEntries(this.owner.preferences(),this.owner.zh(),query);
@@ -141,7 +172,7 @@ class InsertMenu {
     const p=this.view.dom.ownerDocument.createElement('div');p.className=`keyline-next-insert-menu${sub?' is-callout':''}`;
     p.id=`keyline-next-insert-${++menuSerial}`;
     p.setAttribute('role','listbox');p.setAttribute('aria-label',sub?'Callout':this.owner.zh()?'插入':'Insert');
-    p.addEventListener('mousedown',e=>e.preventDefault());this.view.dom.ownerDocument.body.append(p);return p;
+    p.addEventListener('mousedown',e=>e.preventDefault());bindMobileMenuTouch(p);this.view.dom.ownerDocument.body.append(p);return p;
   }
   private render(): void {
     this.closeSubmenu();if(!this.root)this.root=this.panel();this.root.replaceChildren();
@@ -154,7 +185,7 @@ class InsertMenu {
       band=nextBand;
       if(entry.id==='close')list.createDiv({cls:'keyline-next-insert-separator'});
       const row=this.row(list,entry.label,entry.icon,entry.id==='callout');row.dataset.insertId=entry.id;
-      row.addEventListener('pointermove',()=>{this.setActive(index);if(entry.id==='callout')this.showCallouts(false);else this.closeSubmenu();});
+      row.addEventListener('pointermove',event=>{if(event.pointerType==='touch')return;this.setActive(index);if(entry.id==='callout')this.showCallouts(false);else this.closeSubmenu();});
       row.addEventListener('click',()=>{this.setActive(index);if(entry.id==='callout')this.showCallouts(false);else this.activate();});
     }
     if(!this.entries.length)list.createDiv({cls:'keyline-next-insert-empty',text:this.owner.zh()?'没有匹配项':'No results'});
@@ -178,12 +209,19 @@ class InsertMenu {
   private showCallouts(keyboard: boolean): void {
     if(!this.submenu){
       this.submenu=this.panel(true);const list=this.submenu.createDiv({cls:'keyline-next-insert-list'});
+      if(mobileDocument(this.boundDocument)) {
+        const back=this.row(list,this.owner.zh()?'返回':'Back','arrow-left');
+        back.removeAttribute('role');back.setAttribute('role','button');back.tabIndex=0;
+        back.addEventListener('click',()=>this.closeSubmenu());
+        back.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();this.closeSubmenu();}});
+      }
       list.createDiv({cls:'keyline-next-insert-heading',text:'Callout'});
       callouts.forEach(([id,en,zh,icon],i)=>{const row=this.row(list,this.owner.zh()?zh:en,icon);row.dataset.insertId=`callout-${id}`;
-        row.addEventListener('pointermove',()=>this.setSubActive(i));row.addEventListener('click',()=>this.commitCallout(i));});
+        row.addEventListener('pointermove',event=>{if(event.pointerType!=='touch')this.setSubActive(i);});row.addEventListener('click',()=>this.commitCallout(i));});
       const base=this.root!.getBoundingClientRect(),win=this.view.dom.ownerDocument.defaultView!;
       this.submenu.style.left=`${Math.max(8,base.right+6+164>win.innerWidth-8?base.left-170:base.right+6)}px`;
       this.submenu.style.top=`${Math.max(8,Math.min(base.top,win.innerHeight-this.submenu.offsetHeight-8))}px`;
+      if(mobileDocument(this.boundDocument)) positionMobileMenu(this.submenu,{x:base.left,y:base.top});
     }
     if(keyboard)this.setSubActive(0);
   }
@@ -208,6 +246,11 @@ class InsertMenu {
     const coords=this.view.coordsAtPos(this.typed?this.anchor:this.context.from),win=this.view.dom.ownerDocument.defaultView!;
     if(!coords&&!this.point){this.close();return;}
     const point=this.point??{x:coords!.left,y:coords!.bottom+6};
+    if(mobileDocument(this.boundDocument)) {
+      positionMobileMenu(this.root,point);
+      if(this.submenu){const base=this.root.getBoundingClientRect();positionMobileMenu(this.submenu,{x:base.left,y:base.top});}
+      return;
+    }
     this.root.style.left=`${Math.max(8,Math.min(point.x,win.innerWidth-this.root.offsetWidth-8))}px`;
     this.root.style.top=`${Math.max(8,Math.min(point.y,win.innerHeight-this.root.offsetHeight-8))}px`;
   }
@@ -247,5 +290,6 @@ class InsertMenu {
   destroy(): void {
     if(this.disposed)return;this.disposed=true;this.close();this.unbindDocument(this.boundDocument);
     this.view.contentDOM.removeEventListener('compositionstart',this.composition);this.controller.remove(this.view);
+    this.view.contentDOM.removeEventListener('compositionend',this.composed);
   }
 }

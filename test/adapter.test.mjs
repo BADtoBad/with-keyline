@@ -83,13 +83,16 @@ for (const text of ["email@example.com", "---\ntitle: @", "```md\n@"]) {
     assert.equal(suggest.onTrigger(editor.pos, editor, null), null);
   });
 }
-test("mobile startup does not load data, register commands or write settings", async () => {
+test("mobile initializes existing settings but unload during load prevents late features and writes", async () => {
+  let resolve, loads = 0;
+  const callbacks = [];
   const host = { Platform: { isMobile: true }, Plugin: class {
-    loadData() { throw Error("unexpected load"); } saveData() { throw Error("unexpected save"); }
-    register() { throw Error("unexpected lifecycle"); } addCommand() { throw Error("unexpected command"); }
+    loadData() { loads++; return new Promise(r => { resolve = r; }); } saveData() { throw Error("unexpected save"); }
+    register(fn) { callbacks.push(fn); } addCommand() { throw Error("late command"); }
   }, PluginSettingTab: class {}, EditorSuggest: class {}, SuggestModal: class {}, Notice: class {}, getLanguage: () => "en" };
-  const Plugin = load("main", host).default;
-  await new Plugin().onload();
+  const Plugin = load("main", host).default, plugin = new Plugin();
+  const start = plugin.onload(); callbacks.forEach(fn => fn()); resolve(null); await start;
+  assert.equal(loads, 1); assert.equal(plugin.store, undefined);
 });
 test("unload during asynchronous initialization prevents registering late features", async () => {
   let resolve;

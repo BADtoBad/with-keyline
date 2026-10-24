@@ -6,6 +6,18 @@ Pair With Keyline with the [Keyline theme](https://community.obsidian.md/themes/
 
 [中文](README.zh-CN.md) · [Community](https://community.obsidian.md/plugins/with-keyline) · [Downloads](https://github.com/BADtoBad/with-keyline/releases) · [Report a bug](https://github.com/BADtoBad/with-keyline/issues)
 
+> **Mobile support is Beta from 1.1.0.** Phones and tablets can install this release, with a limited feature set and explicit in-app warnings. Physical-device acceptance is still outstanding. Desktop features are retained; the feature list and product screenshots below describe the full desktop experience.
+
+## Mobile Beta
+
+On phones and tablets this release enables `@` page/date menus, `/` and `、` insertion menus, basic formatting commands, file icons and typography. Basic formatting is available through Obsidian's command palette (or commands added to the native mobile toolbar); the desktop floating selection toolbar is not enabled.
+
+Mobile menus have touch-sized rows, scroll without inserting, and fit the keyboard-reduced visual viewport. Opening a submenu must not select the item that appears beneath the same finger. Input-method composition does not commit a menu choice.
+
+**Not enabled on mobile:** floating selection tools, block dragging/handles, desktop workspace switching, hover shortcuts, selection snapping and custom typing/marker rewriting. Native Obsidian selection and typing remain available. These are runtime limits: existing desktop settings are preserved, not overwritten when loading on mobile. Explicitly changing supported settings can still sync between devices. Mobile uses automatic page inset.
+
+**Beta, not device certification.** A startup reminder and persistent settings banner identify the mobile limitations. Test in a separate Vault and keep backups. Xiaomi/Android, iOS, real software keyboards and accessibility services still need physical-device acceptance; desktop-host emulation is not a substitute. See [verification](RELEASE-VERIFICATION.md). The previous Keyline companion is desktop-only and is **not** a mobile fallback.
+
 ## Your tools, where you need them
 
 - **Select text and keep writing.** A compact toolbar appears beside your selection for formatting, links, colours and block types. Keep the selection while applying more than one action.
@@ -24,7 +36,7 @@ Pair With Keyline with the [Keyline theme](https://community.obsidian.md/themes/
 
 With Keyline is an independently implemented successor to the integrated [Keyline interactions plugin](https://github.com/BADtoBad/keyline-interactions). **Their main everyday features are broadly equivalent**, with some safety and implementation differences—not byte-for-byte behaviour or settings compatibility.
 
-**If you encounter a bug in With Keyline, try the [previous GitHub version](https://github.com/BADtoBad/keyline-interactions/releases) as a fallback.** It remains available and is not replaced by this release. Disable With Keyline before enabling the previous plugin; do not run both together. They have separate settings, and switching does not automatically migrate them. Report the failing action and versions so the new implementation can improve.
+**On desktop, if you encounter a bug in With Keyline, try the [previous GitHub version](https://github.com/BADtoBad/keyline-interactions/releases) as a fallback.** It remains available and is not replaced by this release; it does not support mobile. Disable With Keyline before enabling the previous plugin; do not run both together. They have separate settings, and switching does not automatically migrate them. Report the failing action and versions so the new implementation can improve.
 
 ## Install
 
@@ -39,7 +51,7 @@ No personal notes, demo workspace or old settings are installed automatically. O
 
 ## Compatibility and privacy
 
-- **Desktop only; Obsidian 1.13.7 or newer.** The primary tested combination is macOS, Obsidian 1.13.7 and Community Keyline 0.8.24. Mobile editing is not supported by this release. Other desktop systems and third-party combinations need their own checks.
+- **Obsidian 1.13.7 or newer. Desktop functionality plus limited Mobile Beta.** Current checks use macOS Obsidian 1.13.7 with Keyline 0.8.27. Other systems, physical mobile devices and third-party combinations need their own checks.
 - File icons identify formats; they do not add EPUB or other file readers. Workspace actions require core Workspaces. Iconic retains ownership when enabled.
 - No telemetry or plugin-owned network requests. Settings and recovery data stay in the Vault configuration. User-invoked host commands and other plugins retain their own behaviour.
 - Formatting and block commands can change selected note content. Imported files and newly created notes are retained when you undo their inserted links; they are not silently deleted.

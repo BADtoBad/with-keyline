@@ -1,9 +1,9 @@
 {
   "id": "with-keyline",
   "name": "With Keyline",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "minAppVersion": "1.13.7",
   "description": "Write and navigate with less setup: selection tools, block handles, page mentions, file icons, typography and workspace switching. Pair with the Keyline theme.",
   "author": "Charlie",
-  "isDesktopOnly": true
+  "isDesktopOnly": false
 }

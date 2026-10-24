@@ -27,6 +27,7 @@ import { HoverHints, MenuMode } from "./platform/interface";
 import { ShellPresentation } from "./platform/shell";
 import { SyncStatusPresentation } from "./platform/sync-status";
 import { SettingsTransfer } from "./platform/settings-transfer";
+import { platformPreferences } from "./domain/mobile";
 
 export default class KeylineNext extends Plugin {
   preferences: Preferences = { ...defaults };
@@ -52,15 +53,17 @@ export default class KeylineNext extends Plugin {
   writing?: WritingController;
   private handles?: BlockHandles;
   private warning?: Notice;
+  private betaNotice?: Notice;
   private composition = new WeakSet<Document>();
   private ready = false;
   private active = true;
   get zh(): boolean { return isChinese(this.preferences); }
-  private get editorPreferences(): Preferences { return editingPreferences(this.preferences); }
+  get mobile(): boolean { return Platform.isMobile; }
+  get effectivePreferences(): Preferences { return platformPreferences(this.preferences, this.mobile); }
+  private get editorPreferences(): Preferences { return editingPreferences(this.effectivePreferences); }
   watchInterfaceDocument(doc: Document): void { this.hints?.watch(doc); }
 
   async onload(): Promise<void> {
-    if (Platform.isMobile) { new Notice(message("mobile", this.zh)); return; }
     this.register(() => { this.active = false; });
     try {
       const data: unknown = await this.loadData();
@@ -68,6 +71,10 @@ export default class KeylineNext extends Plugin {
       this.readOnly = !writablePreferences(data);
     } catch { this.readOnly = true; }
     if (!this.active) return;
+    if (this.mobile) {
+      this.betaNotice = new Notice(message("mobileBeta", this.zh), 12000);
+      this.register(() => this.betaNotice?.hide());
+    }
     this.store = new VerifiedStore(value => this.saveData(value), () => this.loadData(), state => this.saveStatus(state));
     this.register(() => { this.store.close(); this.warning?.hide(); });
     const adapter = this.app.vault.adapter, directory = this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
@@ -90,16 +97,16 @@ export default class KeylineNext extends Plugin {
     this.register(() => this.identities?.dispose());
     this.iconEditor = new IconEditor(this);
     this.register(() => this.iconEditor?.dispose());
-    this.explorer = new ExplorerActions(this);
+    if (!this.mobile) this.explorer = new ExplorerActions(this);
     this.register(() => this.explorer?.dispose());
     this.menuMode = new MenuMode(this.app);
     this.register(() => this.menuMode?.dispose());
-    this.hints = new HoverHints(() => this.preferences.hints);
-    this.hints.watch(document);
+    if (!this.mobile) this.hints = new HoverHints(() => this.preferences.hints);
+    this.hints?.watch(document);
     this.register(() => this.hints?.dispose());
-    this.shell = new ShellPresentation(this.app, () => this.zh);
+    if (!this.mobile) this.shell = new ShellPresentation(this.app, () => this.zh);
     this.register(() => this.shell?.dispose());
-    this.syncStatus = new SyncStatusPresentation();
+    if (!this.mobile) this.syncStatus = new SyncStatusPresentation();
     this.register(() => this.syncStatus?.dispose());
     this.registerEvent(this.app.workspace.on("window-open", (_workspace, win) => {
       this.hints?.watch(win.document); this.explorer?.schedule();
@@ -116,24 +123,28 @@ export default class KeylineNext extends Plugin {
       if (!checking) this.iconEditor?.file(file);
       return true;
     } });
-    this.typography = new TypographyController(this.app, () => this.preferences);
+    this.typography = new TypographyController(this.app, () => this.effectivePreferences);
     this.register(() => this.typography?.dispose());
     this.rhythm = new EditorRhythmController(() => this.editorPreferences);
     this.registerEditorExtension(this.rhythm.extension());
     this.register(() => this.rhythm?.dispose());
-    this.rowSelection = new RowSelection(() => this.editorPreferences);
-    this.registerEditorExtension(this.rowSelection.extension());
-    this.register(() => this.rowSelection?.dispose());
+    if (!this.mobile) {
+      this.rowSelection = new RowSelection(() => this.editorPreferences);
+      this.registerEditorExtension(this.rowSelection.extension());
+      this.register(() => this.rowSelection?.dispose());
+    }
     this.rich = new RichFormatting(this.app, () => this.zh, () => this.insertion, editor =>
       this.app.workspace.getLeavesOfType("markdown").some(leaf => (leaf.view as typeof leaf.view & { editor?: unknown }).editor === editor && this.composition.has(leaf.view.containerEl.ownerDocument)));
     this.register(() => this.rich?.dispose());
-    this.toolbar = new ToolbarController(this.app, () => this.editorPreferences, () => this.zh, this.rich);
-    this.registerEditorExtension(this.toolbar.extension());
-    this.register(() => this.toolbar?.dispose());
-    this.workspaces = new WorkspaceController(this.app, this.addStatusBarItem(),
-      this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`,
-      () => !this.readOnly && this.preferences.workspaces, () => this.zh);
-    this.register(() => this.workspaces?.dispose());
+    if (!this.mobile) {
+      this.toolbar = new ToolbarController(this.app, () => this.editorPreferences, () => this.zh, this.rich);
+      this.registerEditorExtension(this.toolbar.extension());
+      this.register(() => this.toolbar?.dispose());
+      this.workspaces = new WorkspaceController(this.app, this.addStatusBarItem(),
+        this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`,
+        () => !this.readOnly && this.preferences.workspaces, () => this.zh);
+      this.register(() => this.workspaces?.dispose());
+    }
     const watched = new WeakSet<Document>();
     const bindDocuments = () => {
       this.app.workspace.iterateAllLeaves(leaf => {
@@ -166,33 +177,37 @@ export default class KeylineNext extends Plugin {
     this.insertMenus = new InsertionMenus(this.insertion);
     this.registerEditorExtension(this.insertMenus.extension());
     this.register(() => this.insertMenus?.dispose());
-    this.handles = new BlockHandles(this.app, () => this.editorPreferences, () => this.zh, this.insertion,
-      dragGranularity => this.update({ dragGranularity }));
-    this.registerEditorExtension(this.handles.extension());
-    this.register(() => this.handles?.dispose());
-    const blockKeys = new BlockKeys(() => this.editorPreferences);
-    this.registerEditorExtension(blockKeys.extension());
-    this.register(() => blockKeys.dispose());
-    this.addCommand({
-      id: "focus-block-handle", name: message("focusBlockHandle", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        if (!view.file || !this.editorPreferences.blockHandles || editor.listSelections().length !== 1) return false;
-        return checking ? !!this.handles?.canFocus(editor) : !!this.handles?.focus(editor);
-      }
-    });
+    if (!this.mobile) {
+      this.handles = new BlockHandles(this.app, () => this.editorPreferences, () => this.zh, this.insertion,
+        dragGranularity => this.update({ dragGranularity }));
+      this.registerEditorExtension(this.handles.extension());
+      this.register(() => this.handles?.dispose());
+      const blockKeys = new BlockKeys(() => this.editorPreferences);
+      this.registerEditorExtension(blockKeys.extension());
+      this.register(() => blockKeys.dispose());
+      this.addCommand({
+        id: "focus-block-handle", name: message("focusBlockHandle", this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          if (!view.file || !this.editorPreferences.blockHandles || editor.listSelections().length !== 1) return false;
+          return checking ? !!this.handles?.canFocus(editor) : !!this.handles?.focus(editor);
+        }
+      });
+    }
     this.mentions = new MentionController(this.app, () => this.editorPreferences, () => this.zh);
     this.registerEditorExtension(this.mentions.extension());
     this.register(() => this.mentions?.dispose());
-    this.writing = new WritingController(() => this.editorPreferences, () => this.zh);
-    this.registerEditorExtension(this.writing.extension());
-    this.register(() => this.writing?.dispose());
-    this.addCommand({ id: "toggle-markers", name: message("toggleMarkers", this.zh),
-      callback: () => { void this.update({ hideMarkers: !this.preferences.hideMarkers }); } });
-    this.addCommand({ id: "next-suspicious", name: message("nextSuspicious", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        if (!view.file || editor.listSelections().length !== 1) return false;
-        return checking || !!this.writing?.next(editor);
-      } });
+    if (!this.mobile) {
+      this.writing = new WritingController(() => this.editorPreferences, () => this.zh);
+      this.registerEditorExtension(this.writing.extension());
+      this.register(() => this.writing?.dispose());
+      this.addCommand({ id: "toggle-markers", name: message("toggleMarkers", this.zh),
+        callback: () => { void this.update({ hideMarkers: !this.preferences.hideMarkers }); } });
+      this.addCommand({ id: "next-suspicious", name: message("nextSuspicious", this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          if (!view.file || editor.listSelections().length !== 1) return false;
+          return checking || !!this.writing?.next(editor);
+        } });
+    }
     const settings = new NextSettings(this);
     this.addSettingTab(settings);
     this.register(() => settings.hide());
@@ -205,58 +220,60 @@ export default class KeylineNext extends Plugin {
         return eligible;
       }
     });
-    for (const action of blockActions) this.addCommand({
-      id: `block-${action.id}`, name: message(action.label, this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : undefined;
-        const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file &&
-          !this.composition.has(doc));
-        const eligible = !!context && (action.id === "select" || !!blockActionPlan(context, action.id));
-        if (eligible && !checking) performBlock(context!, action.id);
-        return eligible;
-      }
-    });
-    this.addCommand({
-      id: "block-convert", name: message("convertBlock", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : undefined;
-        const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
-        if (context && !checking) new BlockConvertPicker(this.app, context, this.zh).open();
-        return !!context;
-      }
-    });
-    for (const [id, label, run] of [
-      ["switch-workspace", "switchWorkspace", () => this.workspaces?.open()],
-      ["save-workspace", "saveWorkspace", () => this.workspaces?.save()],
-      ["save-workspace-as", "saveWorkspaceAs", () => this.workspaces?.saveAs()],
-      ["restore-workspace", "restoreWorkspace", () => { void this.workspaces?.restore(); }]
-    ] as const) this.addCommand({ id, name: message(label, this.zh), callback: run });
-    this.addCommand({
-      id: "focus-toolbar", name: message("focusToolbar", this.zh),
-      editorCheckCallback: (checking, editor) => {
-        const selected = editor.getSelection(), text = editor.getValue();
-        const eligible = this.editorPreferences.toolbar && editor.listSelections().length === 1 && !!selected.trim() &&
-          selected.length <= 16000 && text.length <= 2 * 1024 * 1024 &&
-          !inProtectedSyntax(text, editor.posToOffset(editor.getCursor("from")), editor.posToOffset(editor.getCursor("to")));
-        if (eligible && !checking) this.toolbar?.focus(editor);
-        return eligible;
-      }
-    });
-    for (const action of ["colors", "link"] as const) this.addCommand({
-      id: `selection-${action}`, name: message(action, this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        const context = view.file && this.rich?.capture(editor, view.file);
-        if (!context?.valid()) return false;
-        if (!checking) {
-          if (action === "colors") this.rich!.colors(context);
-          else if ("containerEl" in view) {
-            const rect = view.containerEl.getBoundingClientRect();
-            this.rich!.link(context, { x: rect.left + 24, y: rect.top + 80 }, view.containerEl.ownerDocument);
-          }
+    if (!this.mobile) {
+      for (const action of blockActions) this.addCommand({
+        id: `block-${action.id}`, name: message(action.label, this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : undefined;
+          const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file &&
+            !this.composition.has(doc));
+          const eligible = !!context && (action.id === "select" || !!blockActionPlan(context, action.id));
+          if (eligible && !checking) performBlock(context!, action.id);
+          return eligible;
         }
-        return true;
-      }
-    });
+      });
+      this.addCommand({
+        id: "block-convert", name: message("convertBlock", this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : undefined;
+          const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
+          if (context && !checking) new BlockConvertPicker(this.app, context, this.zh).open();
+          return !!context;
+        }
+      });
+      for (const [id, label, run] of [
+        ["switch-workspace", "switchWorkspace", () => this.workspaces?.open()],
+        ["save-workspace", "saveWorkspace", () => this.workspaces?.save()],
+        ["save-workspace-as", "saveWorkspaceAs", () => this.workspaces?.saveAs()],
+        ["restore-workspace", "restoreWorkspace", () => { void this.workspaces?.restore(); }]
+      ] as const) this.addCommand({ id, name: message(label, this.zh), callback: run });
+      this.addCommand({
+        id: "focus-toolbar", name: message("focusToolbar", this.zh),
+        editorCheckCallback: (checking, editor) => {
+          const selected = editor.getSelection(), text = editor.getValue();
+          const eligible = this.editorPreferences.toolbar && editor.listSelections().length === 1 && !!selected.trim() &&
+            selected.length <= 16000 && text.length <= 2 * 1024 * 1024 &&
+            !inProtectedSyntax(text, editor.posToOffset(editor.getCursor("from")), editor.posToOffset(editor.getCursor("to")));
+          if (eligible && !checking) this.toolbar?.focus(editor);
+          return eligible;
+        }
+      });
+      for (const action of ["colors", "link"] as const) this.addCommand({
+        id: `selection-${action}`, name: message(action, this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          const context = view.file && this.rich?.capture(editor, view.file);
+          if (!context?.valid()) return false;
+          if (!checking) {
+            if (action === "colors") this.rich!.colors(context);
+            else if ("containerEl" in view) {
+              const rect = view.containerEl.getBoundingClientRect();
+              this.rich!.link(context, { x: rect.left + 24, y: rect.top + 80 }, view.containerEl.ownerDocument);
+            }
+          }
+          return true;
+        }
+      });
+    }
     for (const style of inlineStyles) this.addCommand({
       id: `format-${style}`, name: message(style, this.zh),
       editorCheckCallback: (checking, editor) => {
@@ -277,7 +294,7 @@ export default class KeylineNext extends Plugin {
       const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : undefined;
       const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file &&
         !this.composition.has(doc));
-      if (context) appendBlockMenu(menu, this.app, context, this.zh);
+      if (context && !this.mobile) appendBlockMenu(menu, this.app, context, this.zh);
       if (editor.listSelections().length !== 1 || !inlineEdit(editor.getSelection(), "bold")) return;
       menu.addItem(item => item.setTitle(message("format", this.zh)).setIcon("type").onClick(() => new FormatPicker(this.app, editor, this.zh).open()));
     }));

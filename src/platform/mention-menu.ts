@@ -4,6 +4,7 @@ import { editorInfoField, setIcon, type App, type EditorSuggestContext } from "o
 import { mentionNavigation, type MentionChoice } from "../domain/mentions";
 import type { Preferences } from "../domain/preferences";
 import { DatePageSuggest } from "./mention-suggest";
+import { bindMobileMenuTouch, mobileDocument, positionMobileMenu, watchMobileViewport } from "./mobile-menu";
 
 /** A passive, editor-owned menu. Cancelling never dispatches a text change.
  * The native caret keeps focus; no system scope or private suggest DOM is used. */
@@ -51,23 +52,32 @@ class MentionMenu {
     if (this.anchor >= 0) this.schedule();
   };
   private boundDocument: Document;
+  private stopViewport?: () => void;
   constructor(private view: EditorView, private owner: MentionController) {
     this.source = new DatePageSuggest(owner.app, () => owner.preferences().mentions, owner.zh, () => view.composing, owner.preferences);
     const doc = view.dom.ownerDocument;
     this.boundDocument = doc;
     this.outside = e => { if (!this.root?.contains(e.target as Node)) this.close(); };
-    this.viewport = e => { if (e.type === "resize" || !this.root?.contains(e.target as Node)) this.close(); };
+    this.viewport = e => {
+      if (mobileDocument(this.boundDocument)) {
+        if (e.type === "resize" || !this.root?.contains(e.target as Node)) this.position();
+        return;
+      }
+      if (e.type === "resize" || !this.root?.contains(e.target as Node)) this.close();
+    };
     this.bindDocument(doc);
     view.contentDOM.addEventListener("compositionstart", this.compose);
     view.contentDOM.addEventListener("compositionend", this.composed);
   }
   private bindDocument(doc: Document): void {
+    this.stopViewport = watchMobileViewport(doc, () => this.position());
     doc.addEventListener("pointerdown", this.outside, true);
     doc.addEventListener("focusin", this.outside, true);
     doc.addEventListener("scroll", this.viewport, true);
     doc.defaultView?.addEventListener("resize", this.viewport);
   }
   private unbindDocument(doc: Document): void {
+    this.stopViewport?.(); this.stopViewport = undefined;
     doc.removeEventListener("pointerdown", this.outside, true); doc.removeEventListener("focusin", this.outside, true);
     doc.removeEventListener("scroll", this.viewport, true); doc.defaultView?.removeEventListener("resize", this.viewport);
   }
@@ -96,12 +106,13 @@ class MentionMenu {
     }
     // A new session requires the actual trigger keystroke. Pasted, restored or
     // programmatically selected literals must never reopen a dismissed menu.
-    if (!typed || this.composing || this.view.composing || update.transactions.some(t => t.isUserEvent("input.type.compose"))) return;
+    const mobile = mobileDocument(this.boundDocument);
+    if (!typed || (!mobile && (this.composing || this.view.composing || update.transactions.some(t => t.isUserEvent("input.type.compose"))))) return;
     let trigger = false;
     update.changes.iterChanges((_a, _b, _c, end, inserted) => {
       if (inserted.toString() === "@" && end === update.state.selection.main.head) trigger = true;
     });
-    if (!trigger || !this.current()) return;
+    if (!trigger || !this.current(mobile)) return;
     this.anchor = this.view.state.selection.main.head - 1;
     this.owner.claim(this); this.schedule();
   }
@@ -152,6 +163,7 @@ class MentionMenu {
     if (!this.root) {
       this.root = doc.createElement("div"); this.root.className = "keyline-next-input-menu keyline-next-mention-menu";
       this.root.addEventListener("mousedown", e => e.preventDefault());
+      bindMobileMenuTouch(this.root);
       doc.body.append(this.root);
     }
     this.root.replaceChildren();
@@ -171,12 +183,14 @@ class MentionMenu {
         row.createDiv({ cls: "keyline-next-mention-label", text: choice.label });
         const detail = choice.kind === "date" ? choice.insert : choice.path.split("/").slice(0, -1).join("/") || (zh ? "根目录" : "Vault root");
         row.createDiv({ cls: "keyline-next-mention-detail", text: detail });
-        row.addEventListener("pointermove", () => this.select(index));
+        row.addEventListener("pointermove", event => { if (event.pointerType !== "touch") this.select(index); });
         row.addEventListener("click", () => this.commit(index));
       }
     }
     if (!this.choices.length) list.createDiv({ cls: "keyline-next-mention-empty", text: zh ? "没有匹配项，继续输入会保留原文" : "No results. Keep typing to retain your text." }).setAttribute("role", "status");
-    this.root.createDiv({ cls: "keyline-next-mention-hint", text: zh ? "↑↓ 选择 · Enter 插入 · Esc 保留原文" : "↑↓ Select · Enter Insert · Esc Keep text" });
+    this.root.createDiv({ cls: "keyline-next-mention-hint", text: mobileDocument(doc)
+      ? (zh ? "轻点插入 · 点击外部保留原文" : "Tap to insert · Tap outside to keep text")
+      : (zh ? "↑↓ 选择 · Enter 插入 · Esc 保留原文" : "↑↓ Select · Enter Insert · Esc Keep text") });
     this.aria("aria-controls", list.id); this.aria("aria-expanded", "true"); this.aria("aria-autocomplete", "list");
     this.restoreAria("aria-activedescendant");
   }
@@ -184,6 +198,9 @@ class MentionMenu {
     if (!this.root) return;
     const rect = this.view.coordsAtPos(this.view.state.selection.main.head), win = this.view.dom.ownerDocument.defaultView!;
     if (!rect) { this.close(); return; }
+    if (mobileDocument(this.boundDocument)) {
+      positionMobileMenu(this.root, { x: rect.left, y: rect.bottom + 6 }); return;
+    }
     this.root.style.maxHeight = `${Math.max(32, Math.min(400, win.innerHeight - 16))}px`;
     this.root.style.left = `${Math.max(8, Math.min(rect.left, win.innerWidth - this.root.offsetWidth - 8))}px`;
     this.root.style.top = `${Math.max(8, Math.min(rect.bottom + 6, win.innerHeight - this.root.offsetHeight - 8))}px`;

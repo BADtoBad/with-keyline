@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 — Mobile Beta — 2026-10-24
+
+- Opened phone/tablet installation with limited Mobile Beta, a startup reminder and persistent settings notice. Desktop functionality remains available.
+- Enabled touch-friendly page/date and insertion menus, with native undo, IME guards, keyboard-aware viewport positioning and compatibility-click deduplication.
+- Mobile-only runtime limits disable desktop floating selection tools, block handles/drag, selection snapping, hover shortcuts, workspaces and custom typing/marker rewriting. Saved desktop preferences are preserved; mobile page inset is automatic.
+- Basic format commands, file icons and typography remain available on mobile. Physical Android/Xiaomi/iOS and software-keyboard acceptance is still outstanding; this release is explicitly labelled Mobile Beta, not device-certified support. Test in a separate Vault with backups. See [verification](RELEASE-VERIFICATION.md).
+
+### 中文
+
+- 开放手机和平板安装受限移动端 Beta，启用提醒及设置页常驻说明；桌面功能保留。
+- `@`、`/`、`、` 菜单支持触控、原生撤销、输入法保护、软键盘可视区域定位和触摸补发点击去重。
+- 移动端暂禁用浮动编辑栏、块拖拽／把手、自动整块选区、悬停快捷操作、工作区与输入／标记改写，不覆盖桌面设置；移动端留白采用自动值。
+- 保留基础格式命令、文件图标和排版；Android／小米、iOS 与真实软键盘验收仍未完成，按明确标注的移动端 Beta 发布，不代表真机认证；请先在独立库试用并保留备份。
+
 ## 1.0.2 — 2026-10-23
 
 - Added `、` (ideographic comma) as an equivalent to the default `/` insertion-menu trigger, including at the start of a new line. No language-switching or settings migration is required.

@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 
-function fixture(){
+function fixture(mobile=false){
   const target=()=>({handlers:new Map(),attrs:new Map(),addEventListener(k,f){const a=this.handlers.get(k)??[];a.push(f);this.handlers.set(k,a);},removeEventListener(k,f){this.handlers.set(k,(this.handlers.get(k)??[]).filter(x=>x!==f));},emit(k,e={}){for(const f of this.handlers.get(k)??[])f(e);},getAttribute(k){return this.attrs.get(k)??null;},setAttribute(k,v){this.attrs.set(k,v);},removeAttribute(k){this.attrs.delete(k);}});
   const doc=target(),timers=new Map();let timer=0,rendered=0;
   doc.defaultView={...target(),setTimeout(fn){timers.set(++timer,fn);return timer;},clearTimeout(id){timers.delete(id);}};
   const content=target();doc.activeElement=content;
+  doc.body={classList:{contains:()=>mobile}};
   const prefs={mentions:true,dateFormat:'YYYY-MM-DD',timeFormat:'HH:mm'},writes=[];
   class TFile {path='Start.md';basename='Start';stat={mtime:0};}
   const file=new TFile();
@@ -31,6 +32,21 @@ function fixture(){
 }
 for(const event of ['input.paste','undo','redo','set','input.type.compose'])test(`non-trigger input does not open passive mentions: ${event}`,()=>{
   const f=fixture();f.input('@',event);f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);assert.equal(f.text,'@');
+});
+test('mobile IME trigger is inert until composition finishes; then opens without editing',()=>{
+  const f=fixture(true);f.view.composing=true;f.content.emit('compositionstart');
+  f.input('@','input.type.compose');f.flush();assert.equal(f.rendered,0);assert.equal(f.writes.length,0);
+  f.view.composing=false;f.content.emit('compositionend');f.flush();assert.equal(f.rendered,1);assert.equal(f.text,'@');
+});
+test('mobile composition trigger cancellation cannot resurrect an @ menu',()=>{
+  const f=fixture(true);f.view.composing=true;f.content.emit('compositionstart');f.input('@','input.type.compose');f.instance.close();
+  f.view.composing=false;f.content.emit('compositionend');f.flush();assert.equal(f.rendered,0);assert.equal(f.writes.length,0);
+});
+test('mobile viewport and editor autoscroll retain the literal mention session',()=>{
+  const f=fixture(true);f.input('@');f.flush();let positioned=0;f.instance.position=()=>positioned++;
+  f.instance.viewport({type:'resize',target:f.doc.defaultView});f.instance.viewport({type:'scroll',target:f.content});
+  assert.equal(positioned,2);assert.equal(f.instance.anchor,0);assert.equal(f.writes.length,0);
+  const desktop=fixture();desktop.input('@');desktop.flush();desktop.instance.viewport({type:'resize',target:desktop.doc.defaultView});assert.equal(desktop.instance.anchor,-1);
 });
 test('an entire inserted query is not confused with an actual trigger keystroke',()=>{
   const f=fixture();f.input('@Start');f.flush();assert.equal(f.rendered,0);

@@ -77,7 +77,7 @@ __export(main_exports, {
   default: () => KeylineNext
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian30 = require("obsidian");
+var import_obsidian31 = require("obsidian");
 
 // src/domain/typography.ts
 var typographySpecs = {
@@ -5948,7 +5948,7 @@ function iconOwnerPresent(app) {
 // src/platform/mention-menu.ts
 var import_state = require("@codemirror/state");
 var import_view = require("@codemirror/view");
-var import_obsidian5 = require("obsidian");
+var import_obsidian6 = require("obsidian");
 
 // src/domain/mentions.ts
 function safeWikiTarget(path) {
@@ -6246,14 +6246,16 @@ var strings = {
   save: ["Save", "\u4FDD\u5B58"],
   name: ["Name", "\u540D\u79F0"],
   cancel: ["Cancel", "\u53D6\u6D88"],
-  compatibility: ["Desktop only. Disable the previous Keyline companion before enabling With Keyline. Settings are separate; importing is optional.", "\u4EC5\u652F\u6301\u684C\u9762\u7AEF\u3002\u542F\u7528 With Keyline \u524D\u8BF7\u505C\u7528\u65E7\u7248 Keyline \u4EA4\u4E92\u63D2\u4EF6\u3002\u4E24\u8005\u8BBE\u7F6E\u72EC\u7ACB\uFF0C\u5BFC\u5165\u4E3A\u53EF\u9009\u64CD\u4F5C\u3002"],
+  compatibility: ["Mobile support is Beta with a limited feature set. Disable the previous Keyline companion before enabling With Keyline. Settings are separate; importing is optional. The previous companion remains desktop-only.", "\u79FB\u52A8\u7AEF\u4E3A\u529F\u80FD\u53D7\u9650\u7684 Beta\u3002\u542F\u7528 With Keyline \u524D\u8BF7\u505C\u7528\u65E7\u7248 Keyline \u4EA4\u4E92\u63D2\u4EF6\u3002\u4E24\u8005\u8BBE\u7F6E\u72EC\u7ACB\uFF0C\u5BFC\u5165\u4E3A\u53EF\u9009\u64CD\u4F5C\uFF1B\u65E7\u7248\u4ECD\u4EC5\u652F\u6301\u684C\u9762\u7AEF\u3002"],
   fileIcons: ["File-type icons", "\u6587\u4EF6\u56FE\u6807"],
   iconsHint: ["Identify formats in native sidebars and tabs. Yield to Iconic. Icons do not add file readers.", "\u5728\u539F\u751F\u4FA7\u680F\u4E0E\u6807\u7B7E\u9875\u533A\u5206\u6587\u4EF6\u683C\u5F0F\uFF0CIconic \u542F\u7528\u65F6\u8BA9\u4F4D\uFF1B\u56FE\u6807\u4E0D\u63D0\u4F9B\u6587\u4EF6\u9605\u8BFB\u5668\u3002"],
   failed: ["Changes are not saved. Retry before closing the vault or disabling the plugin.", "\u4FEE\u6539\u5C1A\u672A\u4FDD\u5B58\uFF0C\u8BF7\u5728\u5173\u95ED\u5E93\u6216\u505C\u7528\u63D2\u4EF6\u524D\u91CD\u8BD5\u3002"],
   retry: ["Retry saving", "\u91CD\u8BD5\u4FDD\u5B58"],
   saved: ["Changes saved.", "\u4FEE\u6539\u5DF2\u4FDD\u5B58\u3002"],
   incompatible: ["Unknown settings version or unreadable data. Settings are read-only; the file was not overwritten.", "\u914D\u7F6E\u7248\u672C\u672A\u77E5\u6216\u8BFB\u53D6\u5931\u8D25\u3002\u8BBE\u7F6E\u5DF2\u8BBE\u4E3A\u53EA\u8BFB\uFF0C\u6CA1\u6709\u8986\u76D6\u6587\u4EF6\u3002"],
-  mobile: ["With Keyline currently supports desktop Obsidian only.", "With Keyline \u76EE\u524D\u4EC5\u652F\u6301\u684C\u9762\u7AEF Obsidian\u3002"],
+  mobileBetaTitle: ["Mobile Beta", "\u79FB\u52A8\u7AEF Beta"],
+  mobileBeta: ["With Keyline \xB7 Mobile Beta. Device and keyboard compatibility is still being tested. Try it in a test vault first and keep backups. @, / and \u3001 menus and basic formatting commands are available; floating selection tools, drag handles and desktop workspace tools are disabled. Your desktop settings are preserved.", "With Keyline \xB7 \u79FB\u52A8\u7AEF Beta\u3002\u8BBE\u5907\u4E0E\u8F6F\u952E\u76D8\u517C\u5BB9\u6027\u4ECD\u5728\u6D4B\u8BD5\uFF0C\u8BF7\u5148\u5728\u6D4B\u8BD5\u5E93\u8BD5\u7528\u5E76\u4FDD\u7559\u5907\u4EFD\u3002\u53EF\u7528 @\u3001/\u3001\u987F\u53F7\u83DC\u5355\u548C\u57FA\u7840\u683C\u5F0F\u547D\u4EE4\uFF1B\u6D6E\u52A8\u7F16\u8F91\u680F\u3001\u62D6\u62FD\u628A\u624B\u53CA\u684C\u9762\u5DE5\u4F5C\u533A\u5DE5\u5177\u6682\u4E0D\u5F00\u653E\u3002\u684C\u9762\u8BBE\u7F6E\u539F\u503C\u4FDD\u7559\u3002"],
+  mobileUnavailable: ["Unavailable in Mobile Beta. The saved desktop setting is preserved.", "\u79FB\u52A8\u7AEF Beta \u6682\u4E0D\u5F00\u653E\u6B64\u9879\uFF0C\u5DF2\u4FDD\u5B58\u7684\u684C\u9762\u8BBE\u7F6E\u4FDD\u7559\u3002"],
   dates: ["Date", "\u65E5\u671F"],
   pages: ["Page", "\u9875\u9762"],
   stale: ["The selection changed. Open the menu again.", "\u9009\u533A\u5DF2\u53D8\u5316\uFF0C\u8BF7\u91CD\u65B0\u6253\u5F00\u83DC\u5355\u3002"],
@@ -6385,6 +6387,111 @@ var DatePageSuggest = class {
   }
 };
 
+// src/platform/mobile-menu.ts
+var import_obsidian5 = require("obsidian");
+var pendingClicks = /* @__PURE__ */ new WeakMap();
+function suppressCompatibilityClick(doc) {
+  var _a;
+  (_a = pendingClicks.get(doc)) == null ? void 0 : _a();
+  const win = doc.defaultView;
+  if (!win)
+    return;
+  let timer;
+  const stop = () => {
+    doc.removeEventListener("click", suppress, true);
+    doc.removeEventListener("pointerdown", stop, true);
+    if (timer !== void 0)
+      win.clearTimeout(timer);
+    if (pendingClicks.get(doc) === stop)
+      pendingClicks.delete(doc);
+  };
+  const suppress = (event) => {
+    if (!event.isTrusted || event.detail === 0)
+      return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    stop();
+  };
+  doc.addEventListener("click", suppress, true);
+  doc.addEventListener("pointerdown", stop, true);
+  timer = win.setTimeout(stop, 700);
+  pendingClicks.set(doc, stop);
+}
+function mobileDocument(doc) {
+  var _a, _b;
+  return !!((_a = import_obsidian5.Platform) == null ? void 0 : _a.isMobile) || !!((_b = doc.body) == null ? void 0 : _b.classList.contains("is-mobile"));
+}
+function menuViewport(win) {
+  var _a, _b, _c, _d;
+  const viewport = win.visualViewport;
+  return {
+    left: (_a = viewport == null ? void 0 : viewport.offsetLeft) != null ? _a : 0,
+    top: (_b = viewport == null ? void 0 : viewport.offsetTop) != null ? _b : 0,
+    width: (_c = viewport == null ? void 0 : viewport.width) != null ? _c : win.innerWidth,
+    height: (_d = viewport == null ? void 0 : viewport.height) != null ? _d : win.innerHeight
+  };
+}
+function positionMobileMenu(root, point) {
+  const win = root.ownerDocument.defaultView;
+  if (!win)
+    return;
+  const area = menuViewport(win), margin = 8;
+  const width = Math.max(0, area.width - margin * 2), height = Math.max(0, area.height - margin * 2);
+  root.style.maxWidth = `${width}px`;
+  root.style.maxHeight = `${Math.min(400, height)}px`;
+  root.style.setProperty("--keyline-mobile-menu-height", `${Math.min(400, height)}px`);
+  root.style.left = `${Math.max(area.left + margin, Math.min(point.x, area.left + area.width - root.offsetWidth - margin))}px`;
+  root.style.top = `${Math.max(area.top + margin, Math.min(point.y, area.top + area.height - root.offsetHeight - margin))}px`;
+}
+function watchMobileViewport(doc, reposition) {
+  var _a;
+  const viewport = mobileDocument(doc) ? (_a = doc.defaultView) == null ? void 0 : _a.visualViewport : null;
+  viewport == null ? void 0 : viewport.addEventListener("resize", reposition);
+  viewport == null ? void 0 : viewport.addEventListener("scroll", reposition);
+  return () => {
+    var _a2;
+    viewport == null ? void 0 : viewport.removeEventListener("resize", reposition);
+    viewport == null ? void 0 : viewport.removeEventListener("scroll", reposition);
+    (_a2 = pendingClicks.get(doc)) == null ? void 0 : _a2();
+  };
+}
+function bindMobileMenuTouch(root) {
+  if (!mobileDocument(root.ownerDocument))
+    return;
+  let press;
+  const rowAt = (target) => {
+    const row = target == null ? void 0 : target.closest("[role=option], [role=button], button");
+    return row && root.contains(row) ? row : void 0;
+  };
+  root.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "touch")
+      return;
+    const row = rowAt(event.target);
+    if (!event.isPrimary || !row) {
+      press = void 0;
+      return;
+    }
+    press = { id: event.pointerId, x: event.clientX, y: event.clientY, row };
+    event.preventDefault();
+  });
+  root.addEventListener("pointermove", (event) => {
+    if (press && event.pointerId === press.id && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 8)
+      press = void 0;
+  });
+  root.addEventListener("pointercancel", () => {
+    press = void 0;
+  });
+  root.addEventListener("pointerup", (event) => {
+    const saved = press;
+    press = void 0;
+    if (!saved || event.pointerId !== saved.id || rowAt(event.target) !== saved.row || Math.hypot(event.clientX - saved.x, event.clientY - saved.y) > 8)
+      return;
+    event.preventDefault();
+    suppressCompatibilityClick(root.ownerDocument);
+    saved.row.click();
+  });
+}
+
 // src/platform/mention-menu.ts
 var MentionController = class {
   constructor(app, preferences, zh) {
@@ -6459,8 +6566,13 @@ var MentionMenu = class {
         this.close();
     };
     this.viewport = (e) => {
-      var _a;
-      if (e.type === "resize" || !((_a = this.root) == null ? void 0 : _a.contains(e.target)))
+      var _a, _b;
+      if (mobileDocument(this.boundDocument)) {
+        if (e.type === "resize" || !((_a = this.root) == null ? void 0 : _a.contains(e.target)))
+          this.position();
+        return;
+      }
+      if (e.type === "resize" || !((_b = this.root) == null ? void 0 : _b.contains(e.target)))
         this.close();
     };
     this.bindDocument(doc);
@@ -6469,17 +6581,20 @@ var MentionMenu = class {
   }
   bindDocument(doc) {
     var _a;
+    this.stopViewport = watchMobileViewport(doc, () => this.position());
     doc.addEventListener("pointerdown", this.outside, true);
     doc.addEventListener("focusin", this.outside, true);
     doc.addEventListener("scroll", this.viewport, true);
     (_a = doc.defaultView) == null ? void 0 : _a.addEventListener("resize", this.viewport);
   }
   unbindDocument(doc) {
-    var _a;
+    var _a, _b;
+    (_a = this.stopViewport) == null ? void 0 : _a.call(this);
+    this.stopViewport = void 0;
     doc.removeEventListener("pointerdown", this.outside, true);
     doc.removeEventListener("focusin", this.outside, true);
     doc.removeEventListener("scroll", this.viewport, true);
-    (_a = doc.defaultView) == null ? void 0 : _a.removeEventListener("resize", this.viewport);
+    (_b = doc.defaultView) == null ? void 0 : _b.removeEventListener("resize", this.viewport);
   }
   syncDocument() {
     const doc = this.view.dom.ownerDocument;
@@ -6504,7 +6619,7 @@ var MentionMenu = class {
     const typed = update.transactions.some((t2) => t2.isUserEvent("input.type"));
     const deletion = update.transactions.some((t2) => t2.isUserEvent("delete"));
     if (this.anchor >= 0) {
-      if (this.context && ((_a = update.state.field(import_obsidian5.editorInfoField, false)) == null ? void 0 : _a.file) !== this.context.file) {
+      if (this.context && ((_a = update.state.field(import_obsidian6.editorInfoField, false)) == null ? void 0 : _a.file) !== this.context.file) {
         this.close();
         return;
       }
@@ -6524,21 +6639,22 @@ var MentionMenu = class {
         this.close();
       return;
     }
-    if (!typed || this.composing || this.view.composing || update.transactions.some((t2) => t2.isUserEvent("input.type.compose")))
+    const mobile = mobileDocument(this.boundDocument);
+    if (!typed || !mobile && (this.composing || this.view.composing || update.transactions.some((t2) => t2.isUserEvent("input.type.compose"))))
       return;
     let trigger = false;
     update.changes.iterChanges((_a2, _b, _c, end, inserted) => {
       if (inserted.toString() === "@" && end === update.state.selection.main.head)
         trigger = true;
     });
-    if (!trigger || !this.current())
+    if (!trigger || !this.current(mobile))
       return;
     this.anchor = this.view.state.selection.main.head - 1;
     this.owner.claim(this);
     this.schedule();
   }
   current(previewComposition = false) {
-    const state = this.view.state, info = state.field(import_obsidian5.editorInfoField, false);
+    const state = this.view.state, info = state.field(import_obsidian6.editorInfoField, false);
     if (this.disposed || !this.view.hasFocus || !previewComposition && this.view.composing || state.readOnly || !(info == null ? void 0 : info.file) || !info.editor || state.doc.length > 2 * 1024 * 1024 || state.selection.ranges.length !== 1 || !state.selection.main.empty || this.view.dom.ownerDocument.activeElement !== this.view.contentDOM)
       return;
     const hit = this.anchor >= 0 ? this.source.onSession(info.editor.getCursor(), info.editor, info.editor.offsetToPos(this.anchor), previewComposition) : this.source.onTrigger(info.editor.getCursor(), info.editor, info.file, previewComposition);
@@ -6591,6 +6707,7 @@ var MentionMenu = class {
       this.root = doc.createElement("div");
       this.root.className = "keyline-next-input-menu keyline-next-mention-menu";
       this.root.addEventListener("mousedown", (e) => e.preventDefault());
+      bindMobileMenuTouch(this.root);
       doc.body.append(this.root);
     }
     this.root.replaceChildren();
@@ -6614,17 +6731,20 @@ var MentionMenu = class {
         row.setAttribute("aria-selected", "false");
         const icon = row.createSpan({ cls: "keyline-next-mention-icon" });
         icon.setAttribute("aria-hidden", "true");
-        (0, import_obsidian5.setIcon)(icon, kind2 === "page" ? "file-text" : choice.kind === "date" && choice.key === "now" ? "clock" : "calendar");
+        (0, import_obsidian6.setIcon)(icon, kind2 === "page" ? "file-text" : choice.kind === "date" && choice.key === "now" ? "clock" : "calendar");
         row.createDiv({ cls: "keyline-next-mention-label", text: choice.label });
         const detail = choice.kind === "date" ? choice.insert : choice.path.split("/").slice(0, -1).join("/") || (zh ? "\u6839\u76EE\u5F55" : "Vault root");
         row.createDiv({ cls: "keyline-next-mention-detail", text: detail });
-        row.addEventListener("pointermove", () => this.select(index));
+        row.addEventListener("pointermove", (event) => {
+          if (event.pointerType !== "touch")
+            this.select(index);
+        });
         row.addEventListener("click", () => this.commit(index));
       }
     }
     if (!this.choices.length)
       list.createDiv({ cls: "keyline-next-mention-empty", text: zh ? "\u6CA1\u6709\u5339\u914D\u9879\uFF0C\u7EE7\u7EED\u8F93\u5165\u4F1A\u4FDD\u7559\u539F\u6587" : "No results. Keep typing to retain your text." }).setAttribute("role", "status");
-    this.root.createDiv({ cls: "keyline-next-mention-hint", text: zh ? "\u2191\u2193 \u9009\u62E9 \xB7 Enter \u63D2\u5165 \xB7 Esc \u4FDD\u7559\u539F\u6587" : "\u2191\u2193 Select \xB7 Enter Insert \xB7 Esc Keep text" });
+    this.root.createDiv({ cls: "keyline-next-mention-hint", text: mobileDocument(doc) ? zh ? "\u8F7B\u70B9\u63D2\u5165 \xB7 \u70B9\u51FB\u5916\u90E8\u4FDD\u7559\u539F\u6587" : "Tap to insert \xB7 Tap outside to keep text" : zh ? "\u2191\u2193 \u9009\u62E9 \xB7 Enter \u63D2\u5165 \xB7 Esc \u4FDD\u7559\u539F\u6587" : "\u2191\u2193 Select \xB7 Enter Insert \xB7 Esc Keep text" });
     this.aria("aria-controls", list.id);
     this.aria("aria-expanded", "true");
     this.aria("aria-autocomplete", "list");
@@ -6636,6 +6756,10 @@ var MentionMenu = class {
     const rect = this.view.coordsAtPos(this.view.state.selection.main.head), win = this.view.dom.ownerDocument.defaultView;
     if (!rect) {
       this.close();
+      return;
+    }
+    if (mobileDocument(this.boundDocument)) {
+      positionMobileMenu(this.root, { x: rect.left, y: rect.bottom + 6 });
       return;
     }
     this.root.style.maxHeight = `${Math.max(32, Math.min(400, win.innerHeight - 16))}px`;
@@ -6751,7 +6875,7 @@ var MentionMenu = class {
 };
 
 // src/platform/format-command.ts
-var import_obsidian6 = require("obsidian");
+var import_obsidian7 = require("obsidian");
 var inlineStyles = ["bold", "italic", "strike", "highlight", "code"];
 function formatSelection(editor, style) {
   if (editor.listSelections().length !== 1)
@@ -6764,7 +6888,7 @@ function formatSelection(editor, style) {
   editor.setSelection({ line: start.line, ch: start.ch + edit2.selectionStart }, { line: start.line, ch: start.ch + edit2.selectionEnd });
   return true;
 }
-var FormatPicker = class extends import_obsidian6.SuggestModal {
+var FormatPicker = class extends import_obsidian7.SuggestModal {
   constructor(app, editor, zh) {
     super(app);
     this.editor = editor;
@@ -6783,11 +6907,11 @@ var FormatPicker = class extends import_obsidian6.SuggestModal {
   onChooseSuggestion(style) {
     const start = this.editor.getCursor("from"), end = this.editor.getCursor("to");
     if (start.line !== this.start.line || start.ch !== this.start.ch || end.line !== this.end.line || end.ch !== this.end.ch || this.editor.getRange(start, end) !== this.selected) {
-      new import_obsidian6.Notice(message("stale", this.zh));
+      new import_obsidian7.Notice(message("stale", this.zh));
       return;
     }
     if (!formatSelection(this.editor, style))
-      new import_obsidian6.Notice(message("selectedText", this.zh));
+      new import_obsidian7.Notice(message("selectedText", this.zh));
   }
 };
 
@@ -6867,13 +6991,13 @@ function equalJson(a, b) {
 }
 
 // src/settings.ts
-var import_obsidian11 = require("obsidian");
+var import_obsidian12 = require("obsidian");
 
 // src/platform/insert-settings.ts
-var import_obsidian9 = require("obsidian");
+var import_obsidian10 = require("obsidian");
 
 // src/platform/insertion.ts
-var import_obsidian8 = require("obsidian");
+var import_obsidian9 = require("obsidian");
 
 // src/domain/explorer.ts
 function availableNotePath(parent, chinese, occupied) {
@@ -6890,7 +7014,7 @@ function availableNotePath(parent, chinese, occupied) {
 }
 
 // src/platform/attachment-imports.ts
-var import_obsidian7 = require("obsidian");
+var import_obsidian8 = require("obsidian");
 
 // src/domain/attachments.ts
 var imageExtensions = ["avif", "bmp", "gif", "jpeg", "jpg", "png", "svg", "webp"];
@@ -6989,14 +7113,14 @@ var AttachmentImports = class {
     } catch (e) {
       cancel();
       if (this.owner.live)
-        new import_obsidian7.Notice(message("attachmentFailed", this.owner.zh()));
+        new import_obsidian8.Notice(message("attachmentFailed", this.owner.zh()));
     }
   }
   async import(context, chosen, kind2, valid = context.valid) {
     const files = kind2 === "image" ? chosen.filter((f) => isImageName(f.name)) : chosen;
     if (!files.length) {
       if (chosen.length && this.owner.live)
-        new import_obsidian7.Notice(message("selectImage", this.owner.zh()));
+        new import_obsidian8.Notice(message("selectImage", this.owner.zh()));
       return;
     }
     const saved = [], links2 = [], sourcePath = context.file.path;
@@ -7026,7 +7150,7 @@ var AttachmentImports = class {
         throw Error("Stale insertion");
     } catch (e) {
       if (this.owner.live)
-        new import_obsidian7.Notice(message(saved.length ? "attachmentsKept" : "attachmentFailed", this.owner.zh()) + (saved.length ? "\n" + saved.map((f) => f.path).join("\n") : ""));
+        new import_obsidian8.Notice(message(saved.length ? "attachmentsKept" : "attachmentFailed", this.owner.zh()) + (saved.length ? "\n" + saved.map((f) => f.path).join("\n") : ""));
     }
   }
   dispose() {
@@ -7101,12 +7225,12 @@ var InsertionController = class {
   commit(context, value) {
     if (!context.valid()) {
       if (this.live)
-        new import_obsidian8.Notice(message("stale", this.zh()));
+        new import_obsidian9.Notice(message("stale", this.zh()));
       return false;
     }
     const plan = context.after ? planAfterBlock(context.text, context.after, value) : planInsertion(context.text, context.from, context.to, value);
     if (!plan) {
-      new import_obsidian8.Notice(message("blockUnavailable", this.zh()));
+      new import_obsidian9.Notice(message("blockUnavailable", this.zh()));
       return false;
     }
     commitInsertion(context.editor, context.text, plan);
@@ -7115,13 +7239,13 @@ var InsertionController = class {
   commitAttachment(context, text2) {
     if (!context.valid()) {
       if (this.live)
-        new import_obsidian8.Notice(message("stale", this.zh()));
+        new import_obsidian9.Notice(message("stale", this.zh()));
       return false;
     }
     const caret = context.editor.posToOffset(context.editor.getCursor());
     const plan = context.after ? planAfterBlock(context.text, context.after, { text: text2, from: text2.length, to: text2.length, block: true }) : planAttachmentInsertion(context.text, context.selected ? caret : context.from, context.selected ? caret : context.to, text2);
     if (!plan) {
-      new import_obsidian8.Notice(message("blockUnavailable", this.zh()));
+      new import_obsidian9.Notice(message("blockUnavailable", this.zh()));
       return false;
     }
     commitInsertion(context.editor, context.text, plan);
@@ -7130,13 +7254,13 @@ var InsertionController = class {
   async choose(context, entry) {
     if (!context.valid()) {
       if (this.live)
-        new import_obsidian8.Notice(message("stale", this.zh()));
+        new import_obsidian9.Notice(message("stale", this.zh()));
       return;
     }
     if (entry.mode === "command") {
       const api = hostCommands(this.app);
       if (!entry.command || !(api == null ? void 0 : api.listCommands().some((c) => c.id === entry.command))) {
-        new import_obsidian8.Notice(message("commandMissing", this.zh()));
+        new import_obsidian9.Notice(message("commandMissing", this.zh()));
         return;
       }
       if (context.after) {
@@ -7156,7 +7280,7 @@ var InsertionController = class {
             context.editor.replaceRange("", context.editor.offsetToPos(plan.from), context.editor.offsetToPos(plan.from + plan.insert.length), "keyline-next-insert");
             context.editor.setSelection(originalSelection.from, originalSelection.to);
           }
-          new import_obsidian8.Notice(message("commandUnavailable", this.zh()));
+          new import_obsidian9.Notice(message("commandUnavailable", this.zh()));
         }
         return;
       }
@@ -7173,7 +7297,7 @@ var InsertionController = class {
         const current = this.capture(context.editor, context.file);
         if (trigger && (current == null ? void 0 : current.valid()) && current.text === expected && current.from === context.from && current.to === context.from)
           this.commit(current, { text: trigger, from: trigger.length, to: trigger.length, block: false });
-        new import_obsidian8.Notice(message("commandUnavailable", this.zh()));
+        new import_obsidian9.Notice(message("commandUnavailable", this.zh()));
       }
       return;
     }
@@ -7187,7 +7311,7 @@ var InsertionController = class {
     }
     const value = makeSnippet(entry.id, context.text, context.selected, this.zh(), formattedDates(this.preferences(), this.zh()));
     if (!value) {
-      new import_obsidian8.Notice(message(entry.id === "toc" ? "noHeadings" : "blockUnavailable", this.zh()));
+      new import_obsidian9.Notice(message(entry.id === "toc" ? "noHeadings" : "blockUnavailable", this.zh()));
       return;
     }
     this.commit(context, value);
@@ -7205,7 +7329,7 @@ var InsertionController = class {
       return;
     const target = availableNotePath(folder.path, this.zh(), (p) => this.app.vault.getAbstractFileByPath(p) !== null);
     if (!target) {
-      new import_obsidian8.Notice(message("createFailed", this.zh()));
+      new import_obsidian9.Notice(message("createFailed", this.zh()));
       return;
     }
     this.creating.add(context.editor);
@@ -7214,38 +7338,38 @@ var InsertionController = class {
       created = await this.app.vault.create(target, "");
       if (!valid() || this.app.vault.getAbstractFileByPath(created.path) !== created) {
         if (this.live)
-          new import_obsidian8.Notice(`${message("createdUnlinked", this.zh())} ${created.path}`);
+          new import_obsidian9.Notice(`${message("createdUnlinked", this.zh())} ${created.path}`);
         return;
       }
       const text2 = this.app.fileManager.generateMarkdownLink(created, sourcePath);
       if (!this.commit(context, { text: text2, from: text2.length, to: text2.length, block: false })) {
         if (this.live)
-          new import_obsidian8.Notice(`${message("createdUnlinked", this.zh())} ${created.path}`);
+          new import_obsidian9.Notice(`${message("createdUnlinked", this.zh())} ${created.path}`);
         return;
       }
       try {
         await leaf.openFile(created);
       } catch (e) {
         if (this.live)
-          new import_obsidian8.Notice(`${message("createdNotOpened", this.zh())} ${created.path}`);
+          new import_obsidian9.Notice(`${message("createdNotOpened", this.zh())} ${created.path}`);
       }
     } catch (e) {
       if (this.live)
-        new import_obsidian8.Notice(created ? `${message("createdUnlinked", this.zh())} ${created.path}` : message("createFailed", this.zh()));
+        new import_obsidian9.Notice(created ? `${message("createdUnlinked", this.zh())} ${created.path}` : message("createFailed", this.zh()));
     } finally {
       this.creating.delete(context.editor);
     }
   }
   link(context, file, kind2) {
     if (this.app.vault.getAbstractFileByPath(file.path) !== file) {
-      new import_obsidian8.Notice(message("missing", this.zh()));
+      new import_obsidian9.Notice(message("missing", this.zh()));
       return false;
     }
     let text2;
     if (kind2 === "wiki") {
       const target = this.app.metadataCache.fileToLinktext(file, context.file.path, true);
       if (!safeWikiTarget(target)) {
-        new import_obsidian8.Notice(message("unsafeLink", this.zh()));
+        new import_obsidian9.Notice(message("unsafeLink", this.zh()));
         return false;
       }
       const alias = context.selected && !/[\[\]|\r\n]/u.test(context.selected) ? `|${context.selected}` : "";
@@ -7314,7 +7438,7 @@ var SlashSuggest = class {
       void this.owner.choose(context, entry);
   }
 };
-var FileInsertPicker = class extends import_obsidian8.SuggestModal {
+var FileInsertPicker = class extends import_obsidian9.SuggestModal {
   constructor(app, owner, context, kind2) {
     super(app);
     this.owner = owner;
@@ -7340,7 +7464,7 @@ var FileInsertPicker = class extends import_obsidian8.SuggestModal {
 };
 
 // src/platform/insert-settings.ts
-var InsertSettingsModal = class extends import_obsidian9.Modal {
+var InsertSettingsModal = class extends import_obsidian10.Modal {
   constructor(app, owner) {
     super(app);
     this.owner = owner;
@@ -7352,7 +7476,7 @@ var InsertSettingsModal = class extends import_obsidian9.Modal {
     this.setTitle(message("insertMenu", this.owner.zh));
     this.contentEl.empty();
     this.contentEl.addClass("keyline-next-insert-settings");
-    new import_obsidian9.Setting(this.contentEl).setName(message("customCommand", this.owner.zh)).addButton((b) => b.setButtonText(message("add", this.owner.zh)).setDisabled(this.owner.readOnly).onClick(() => {
+    new import_obsidian10.Setting(this.contentEl).setName(message("customCommand", this.owner.zh)).addButton((b) => b.setButtonText(message("add", this.owner.zh)).setDisabled(this.owner.readOnly).onClick(() => {
       this.picker = new CommandPicker(this.app, this.owner.manifest.id, async (item) => {
         const customInsert = this.owner.preferences.customInsert.filter((c) => customInsertId(c) !== `command:${item.id}`);
         customInsert.push({ command: item.id, label: item.name });
@@ -7363,7 +7487,7 @@ var InsertSettingsModal = class extends import_obsidian9.Modal {
     }));
     const entries = insertionEntries(this.owner.preferences, this.owner.zh, "", true);
     entries.forEach((entry, index) => {
-      const row = new import_obsidian9.Setting(this.contentEl).setName(entry.label);
+      const row = new import_obsidian10.Setting(this.contentEl).setName(entry.label);
       row.settingEl.setAttribute("data-insert-id", entry.id);
       if (entry.command)
         row.setDesc(entry.command);
@@ -7399,7 +7523,7 @@ var InsertSettingsModal = class extends import_obsidian9.Modal {
           this.render();
         }));
     });
-    new import_obsidian9.Setting(this.contentEl).setName(message("reset", this.owner.zh)).addButton((b) => b.setButtonText(message("reset", this.owner.zh)).setDisabled(this.owner.readOnly).onClick(async () => {
+    new import_obsidian10.Setting(this.contentEl).setName(message("reset", this.owner.zh)).addButton((b) => b.setButtonText(message("reset", this.owner.zh)).setDisabled(this.owner.readOnly).onClick(async () => {
       await this.owner.update({ insertOrder: [], hiddenInsert: [] });
       this.render();
     }));
@@ -7409,7 +7533,7 @@ var InsertSettingsModal = class extends import_obsidian9.Modal {
     (_a = this.picker) == null ? void 0 : _a.close();
   }
 };
-var CommandPicker = class extends import_obsidian9.SuggestModal {
+var CommandPicker = class extends import_obsidian10.SuggestModal {
   constructor(app, pluginId, choose) {
     super(app);
     this.pluginId = pluginId;
@@ -7429,7 +7553,7 @@ var CommandPicker = class extends import_obsidian9.SuggestModal {
 };
 
 // src/platform/transfer-modal.ts
-var import_obsidian10 = require("obsidian");
+var import_obsidian11 = require("obsidian");
 
 // src/domain/legacy-import.ts
 var legacyId = "notion-craft-interaction-lab";
@@ -7813,7 +7937,7 @@ var SettingsTransfer = class {
 };
 
 // src/platform/transfer-modal.ts
-var SettingsTransferModal = class extends import_obsidian10.Modal {
+var SettingsTransferModal = class extends import_obsidian11.Modal {
   constructor(owner, done) {
     super(owner.app);
     this.owner = owner;
@@ -7829,19 +7953,19 @@ var SettingsTransferModal = class extends import_obsidian10.Modal {
     root.addClass("keyline-next-transfer");
     root.createEl("p", { text: zh ? `\u9009\u62E9\u6574\u5408\u7248 Keyline ${legacyVersion} \u7684 manifest.json \u4E0E data.json \u526F\u672C\u3002\u53EA\u8BFB\u53D6\u9009\u4E2D\u7684\u6587\u4EF6\uFF0C\u4E0D\u542F\u505C\u65E7\u63D2\u4EF6\u3001\u4E0D\u4FEE\u6539\u7B14\u8BB0\u3001\u4E3B\u9898\u6216\u7CFB\u7EDF\u83DC\u5355\u3002\u8BF7\u52FF\u540C\u65F6\u542F\u7528\u65B0\u65E7\u63D2\u4EF6\u3002` : `Choose manifest.json and data.json copies from integrated Keyline ${legacyVersion}. Only selected files are read. The old plugin, notes, theme and system menus are not changed. Do not enable both companions together.` });
     for (const kind2 of ["manifest", "data"]) {
-      const setting = new import_obsidian10.Setting(root).setName(kind2 === "manifest" ? zh ? "\u65E7\u7248\u7248\u672C\u6587\u4EF6" : "Legacy manifest" : zh ? "\u65E7\u7248\u8BBE\u7F6E\u6587\u4EF6" : "Legacy settings");
+      const setting = new import_obsidian11.Setting(root).setName(kind2 === "manifest" ? zh ? "\u65E7\u7248\u7248\u672C\u6587\u4EF6" : "Legacy manifest" : zh ? "\u65E7\u7248\u8BBE\u7F6E\u6587\u4EF6" : "Legacy settings");
       const input = setting.controlEl.createEl("input", { attr: { type: "file", accept: ".json,application/json", "aria-label": `${kind2}.json` } });
       input.dataset.transferSource = kind2;
       input.addEventListener("change", () => {
         void this.readFile(kind2, input);
       });
     }
-    new import_obsidian10.Setting(root).setName(zh ? "\u5148\u67E5\u770B\u5BFC\u5165\u9884\u89C8" : "Review before importing").addButton((button) => button.setButtonText(zh ? "\u9884\u89C8\u5BFC\u5165" : "Review import").onClick(() => this.work(async () => {
+    new import_obsidian11.Setting(root).setName(zh ? "\u5148\u67E5\u770B\u5BFC\u5165\u9884\u89C8" : "Review before importing").addButton((button) => button.setButtonText(zh ? "\u9884\u89C8\u5BFC\u5165" : "Review import").onClick(() => this.work(async () => {
       if (!this.source.manifest || !this.source.data)
         throw Error(zh ? "\u8BF7\u5148\u9009\u62E9\u4E24\u4E2A\u6587\u4EF6" : "Choose both files first");
       this.show(await this.owner.transfer.previewImport(this.source.manifest, this.source.data));
     })));
-    const restore = new import_obsidian10.Setting(root).setName(zh ? "\u4ECE\u5907\u4EFD\u56DE\u9000" : "Restore a backup");
+    const restore = new import_obsidian11.Setting(root).setName(zh ? "\u4ECE\u5907\u4EFD\u56DE\u9000" : "Restore a backup");
     let selected = "";
     restore.addDropdown((dropdown) => {
       dropdown.selectEl.dataset.transferBackup = "true";
@@ -7864,7 +7988,7 @@ var SettingsTransferModal = class extends import_obsidian10.Modal {
     })));
     this.details = root.createDiv({ cls: "keyline-next-transfer-preview" });
     this.status = root.createEl("p", { attr: { role: "status", "aria-live": "polite" } });
-    new import_obsidian10.Setting(root).addButton((button) => {
+    new import_obsidian11.Setting(root).addButton((button) => {
       this.applyControl = button;
       this.applyButton = button.buttonEl;
       button.buttonEl.dataset.transferApply = "true";
@@ -7969,12 +8093,39 @@ settings-backups/${error.backup}` : "");
   }
 };
 
+// src/domain/mobile.ts
+var mobileUnavailable = /* @__PURE__ */ new Set([
+  "hints",
+  "fileNavigation",
+  "workspaces",
+  "toolbar",
+  "blockHandles",
+  "handlePinned",
+  "handleFold",
+  "handlePlus",
+  "snapSelection",
+  "blockKeys",
+  "optionReveal",
+  "hideMarkers",
+  "markSuspicious",
+  "pasteHints",
+  "fullwidthLinks"
+]);
+function platformPreferences(preferences, mobile) {
+  if (!mobile)
+    return preferences;
+  const effective = { ...preferences, typography: { ...preferences.typography, inset: -1 } };
+  for (const key of mobileUnavailable)
+    Object.assign(effective, { [key]: false });
+  return effective;
+}
+
 // src/settings.ts
 var sections = ["interface", "typography", "icons", "editing", "insert", "advanced"];
 var settingsSerial = 0;
 var sectionIcons = ["panels-top-left", "type", "palette", "pencil", "plus", "settings"];
 function settingsHeading(container, text2, level, kind2) {
-  const heading2 = new import_obsidian11.Setting(container).setName(text2).setHeading();
+  const heading2 = new import_obsidian12.Setting(container).setName(text2).setHeading();
   heading2.settingEl.addClass("keyline-next-settings-heading", kind2);
   heading2.nameEl.setAttribute("role", "heading");
   heading2.nameEl.setAttribute("aria-level", String(level));
@@ -8012,7 +8163,7 @@ var rows = [
   { section: "insert", key: "inlineSlash", label: "inlineSlash" },
   { section: "insert", key: "embedAttachments", label: "embedAttachments" }
 ];
-var NextSettings = class extends import_obsidian11.PluginSettingTab {
+var NextSettings = class extends import_obsidian12.PluginSettingTab {
   constructor(owner) {
     super(owner.app, owner);
     this.owner = owner;
@@ -8033,6 +8184,11 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
     const header = root.createDiv({ cls: "keyline-next-settings-header" });
     settingsHeading(header, message("title", zh), 2, "keyline-next-settings-title");
     header.createSpan({ text: owner.manifest.version, cls: "keyline-next-settings-version" });
+    if (owner.mobile) {
+      const beta = root.createDiv({ cls: "keyline-next-mobile-beta", attr: { role: "note" } });
+      beta.createEl("strong", { text: message("mobileBetaTitle", zh) });
+      beta.createEl("p", { text: message("mobileBeta", zh) });
+    }
     if (owner.readOnly)
       root.createEl("p", { text: message("incompatible", zh) });
     const status = root.createDiv({ cls: "keyline-next-save-status", attr: { "aria-live": "polite" } });
@@ -8041,7 +8197,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
         return;
       status.empty();
       if (owner.store.dirty)
-        new import_obsidian11.Setting(status).setName(message("failed", owner.zh)).addButton((b) => b.setButtonText(message("retry", owner.zh)).onClick(async () => {
+        new import_obsidian12.Setting(status).setName(message("failed", owner.zh)).addButton((b) => b.setButtonText(message("retry", owner.zh)).onClick(async () => {
           await owner.store.retry();
           refreshStatus();
         }));
@@ -8074,7 +8230,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
     sections.forEach((section, index) => {
       const button = nav.createEl("button", { attr: { role: "tab", id: `${this.panelId}-${section}`, "aria-controls": this.panelId } });
       const icon = button.createSpan({ cls: "keyline-next-settings-tab-icon", attr: { "aria-hidden": "true" } });
-      (0, import_obsidian11.setIcon)(icon, sectionIcons[index]);
+      (0, import_obsidian12.setIcon)(icon, sectionIcons[index]);
       button.createSpan({ text: message(section, zh) });
       select.createEl("option", { text: message(section, zh), value: section });
       button.type = "button";
@@ -8130,7 +8286,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
         group.createEl("p", { text: descriptions[section][zh ? 1 : 0], cls: "keyline-next-settings-description" });
         let count2 = 0;
         if (section === "interface" && labelMatches("language", "languageHint")) {
-          new import_obsidian11.Setting(group).setName(message("language", zh)).setDesc(message("languageHint", zh)).addDropdown((d) => {
+          new import_obsidian12.Setting(group).setName(message("language", zh)).setDesc(message("languageHint", zh)).addDropdown((d) => {
             d.addOption("auto", message("auto", zh)).addOption("en", "English").addOption("zh", "\u4E2D\u6587");
             d.setValue(owner.preferences.language).setDisabled(owner.readOnly).onChange(async (value) => {
               if (value !== "auto" && value !== "en" && value !== "zh")
@@ -8143,7 +8299,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
         }
         if (section === "interface" && labelMatches("menuStyle", "menuStyleHint")) {
           const current = (_b2 = (_a2 = owner.menuMode) == null ? void 0 : _a2.read()) != null ? _b2 : null;
-          new import_obsidian11.Setting(group).setName(message("menuStyle", zh)).setDesc(message(current === null ? "menuUnavailable" : "menuStyleHint", zh)).addDropdown((d) => {
+          new import_obsidian12.Setting(group).setName(message("menuStyle", zh)).setDesc(message(current === null ? "menuUnavailable" : "menuStyleHint", zh)).addDropdown((d) => {
             d.selectEl.dataset.keylineMenuMode = "true";
             d.addOption("themed", message("menuThemed", zh)).addOption("system", message("menuNative", zh)).setValue(current ? "system" : "themed").setDisabled(owner.readOnly || current === null).onChange(async (value) => {
               var _a3, _b3, _c2;
@@ -8152,7 +8308,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
               d.setDisabled(true);
               try {
                 if (!await ((_a3 = owner.menuMode) == null ? void 0 : _a3.set(value === "system")))
-                  new import_obsidian11.Notice(message("menuFailed", owner.zh));
+                  new import_obsidian12.Notice(message("menuFailed", owner.zh));
               } finally {
                 const actual = (_c2 = (_b3 = owner.menuMode) == null ? void 0 : _b3.read()) != null ? _c2 : null;
                 d.setValue(actual ? "system" : "themed").setDisabled(owner.readOnly || actual === null);
@@ -8162,16 +8318,19 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
           count2++;
         }
         for (const row of rows.filter((row2) => row2.section === section && labelMatches(row2.label, ...row2.hint ? [row2.hint] : []))) {
-          const setting = new import_obsidian11.Setting(group).setName(message(row.label, zh));
+          const setting = new import_obsidian12.Setting(group).setName(message(row.label, zh));
           if (row.hint)
             setting.setDesc(message(row.hint, zh));
-          setting.addToggle((t2) => t2.setValue(owner.preferences[row.key]).setDisabled(owner.readOnly).onChange((value) => update({ [row.key]: value })));
+          const unavailable = owner.mobile && mobileUnavailable.has(row.key);
+          if (unavailable)
+            setting.setDesc(message("mobileUnavailable", zh));
+          setting.addToggle((t2) => t2.setValue(unavailable ? false : owner.preferences[row.key]).setDisabled(owner.readOnly || unavailable).onChange((value) => update({ [row.key]: value })));
           count2++;
         }
         if (section === "icons") {
           for (const kind2 of iconKinds)
             if (matches2(...kindLabels[kind2], message("changeIcon", zh))) {
-              new import_obsidian11.Setting(group).setName(kindLabels[kind2][zh ? 1 : 0]).addButton((b) => b.setButtonText(message("changeIcon", zh)).setDisabled(owner.readOnly).onClick(() => {
+              new import_obsidian12.Setting(group).setName(kindLabels[kind2][zh ? 1 : 0]).addButton((b) => b.setButtonText(message("changeIcon", zh)).setDisabled(owner.readOnly).onClick(() => {
                 var _a3;
                 return (_a3 = owner.iconEditor) == null ? void 0 : _a3.type(kind2);
               }));
@@ -8180,9 +8339,9 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
           if (!this.query)
             group.createEl("p", { text: message("iconRulesHint", zh), cls: "setting-item-description" });
         }
-        if (section === "editing") {
+        if (section === "editing" && !owner.mobile) {
           if (labelMatches("dragGranularity", "dragGranularityHint", "dragLine", "dragBlock")) {
-            new import_obsidian11.Setting(group).setName(message("dragGranularity", zh)).setDesc(message("dragGranularityHint", zh)).addDropdown((d) => {
+            new import_obsidian12.Setting(group).setName(message("dragGranularity", zh)).setDesc(message("dragGranularityHint", zh)).addDropdown((d) => {
               d.selectEl.dataset.keylineDragGranularity = "true";
               d.addOption("block", message("dragBlock", zh)).addOption("line", message("dragLine", zh)).setValue(owner.preferences.dragGranularity).setDisabled(owner.readOnly).onChange((value) => {
                 if (value === "line" || value === "block")
@@ -8192,14 +8351,14 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
             count2++;
           }
           if (labelMatches("handleSide")) {
-            new import_obsidian11.Setting(group).setName(message("handleSide", zh)).addDropdown((d) => {
+            new import_obsidian12.Setting(group).setName(message("handleSide", zh)).addDropdown((d) => {
               d.addOption("left", message("left", zh)).addOption("right", message("right", zh)).setValue(owner.preferences.handleSide).setDisabled(owner.readOnly).onChange((value) => update({ handleSide: value === "right" ? "right" : "left" }));
             });
             count2++;
           }
           for (const key of ["handleHoverDelay", "handleHideDelay"])
             if (labelMatches(key)) {
-              new import_obsidian11.Setting(group).setName(message(key, zh)).addSlider((slider) => {
+              new import_obsidian12.Setting(group).setName(message(key, zh)).addSlider((slider) => {
                 slider.sliderEl.setAttribute("aria-label", message(key, zh));
                 slider.setLimits(0, key === "handleHoverDelay" ? 1e3 : 1500, 10).setDisplayFormat((value) => `${value} ms`).setValue(owner.preferences[key]).setInstant(true).setDisabled(owner.readOnly).onChange((value) => update({ [key]: value }));
               });
@@ -8208,7 +8367,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
         }
         if (section === "insert") {
           if (labelMatches("trigger")) {
-            const setting = new import_obsidian11.Setting(group).setName(message("trigger", zh));
+            const setting = new import_obsidian12.Setting(group).setName(message("trigger", zh));
             setting.addText((input) => input.setValue(owner.preferences.slashTrigger).setDisabled(owner.readOnly).onChange(async (value) => {
               input.inputEl.setAttribute("aria-invalid", String(!validSlashTrigger(value)));
               setting.setDesc(validSlashTrigger(value) ? "" : message("invalidTrigger", zh));
@@ -8219,7 +8378,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
           }
           for (const key of ["dateFormat", "timeFormat"])
             if (labelMatches(key)) {
-              const setting = new import_obsidian11.Setting(group).setName(message(key, zh));
+              const setting = new import_obsidian12.Setting(group).setName(message(key, zh));
               const preview = () => setting.setDesc(formattedDates(owner.preferences, zh)[key === "dateFormat" ? "today" : "time"]);
               setting.addText((input) => input.setValue(owner.preferences[key]).setDisabled(owner.readOnly).onChange(async (value) => {
                 if (!value.trim() || value.length > 80 || /[\x00-\x1f]/u.test(value))
@@ -8231,7 +8390,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
               count2++;
             }
           if (labelMatches("insertMenu", "customCommand")) {
-            new import_obsidian11.Setting(group).setName(message("insertMenu", zh)).setDesc(zh ? "\u6392\u5E8F\u3001\u9690\u85CF\u4E0E\u81EA\u5B9A\u4E49\u547D\u4EE4\u3002" : "Order, visibility and custom commands.").addButton((b) => b.setButtonText(message("insertMenu", zh)).setDisabled(owner.readOnly).onClick(() => {
+            new import_obsidian12.Setting(group).setName(message("insertMenu", zh)).setDesc(zh ? "\u6392\u5E8F\u3001\u9690\u85CF\u4E0E\u81EA\u5B9A\u4E49\u547D\u4EE4\u3002" : "Order, visibility and custom commands.").addButton((b) => b.setButtonText(message("insertMenu", zh)).setDisabled(owner.readOnly).onClick(() => {
               var _a3;
               (_a3 = this.insertModal) == null ? void 0 : _a3.close();
               this.insertModal = new InsertSettingsModal(owner.app, owner);
@@ -8245,12 +8404,15 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
             const spec = typographySpecs[key];
             if (!matches2(...spec.label))
               continue;
-            const setting = new import_obsidian11.Setting(group).setName(spec.label[zh ? 1 : 0]);
+            const setting = new import_obsidian12.Setting(group).setName(spec.label[zh ? 1 : 0]);
+            const mobileInset = owner.mobile && key === "inset";
+            if (mobileInset)
+              setting.setDesc(zh ? "\u79FB\u52A8\u7AEF\u4F7F\u7528\u81EA\u52A8\u7559\u767D\uFF0C\u5DF2\u4FDD\u5B58\u7684\u684C\u9762\u503C\u4FDD\u7559\u3002" : "Mobile uses automatic inset; the desktop value is preserved.");
             setting.addSlider((slider) => {
               slider.sliderEl.setAttribute("aria-label", spec.label[zh ? 1 : 0]);
               slider.setLimits(spec.min, spec.max, spec.step).setDisplayFormat(
                 (value) => key === "inset" && value < 0 ? message("auto", zh) : `${value}${spec.unit}`
-              ).setValue(owner.preferences.typography[key]).setInstant(true).setDisabled(owner.readOnly).onChange(async (value) => {
+              ).setValue(mobileInset ? -1 : owner.preferences.typography[key]).setInstant(true).setDisabled(owner.readOnly || mobileInset).onChange(async (value) => {
                 await update({ typography: { ...owner.preferences.typography, [key]: value } });
                 updatePreview();
               });
@@ -8258,7 +8420,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
             count2++;
           }
           if (!this.query) {
-            new import_obsidian11.Setting(group).setName(message("reset", zh)).addButton((b) => b.setButtonText(message("reset", zh)).setDisabled(owner.readOnly).onClick(async () => {
+            new import_obsidian12.Setting(group).setName(message("reset", zh)).addButton((b) => b.setButtonText(message("reset", zh)).setDisabled(owner.readOnly).onClick(async () => {
               await update({ typography: normalizeTypography(null) });
               renderPanel();
             }));
@@ -8274,7 +8436,7 @@ var NextSettings = class extends import_obsidian11.PluginSettingTab {
           count2++;
         }
         if (section === "advanced" && labelMatches("settingsTransfer", "settingsTransferHint")) {
-          new import_obsidian11.Setting(group).setName(message("settingsTransfer", zh)).setDesc(message("settingsTransferHint", zh)).addButton((button) => button.setButtonText(message("settingsTransfer", zh)).setDisabled(owner.readOnly || !owner.transfer).onClick(() => {
+          new import_obsidian12.Setting(group).setName(message("settingsTransfer", zh)).setDesc(message("settingsTransferHint", zh)).addButton((button) => button.setButtonText(message("settingsTransfer", zh)).setDisabled(owner.readOnly || !owner.transfer).onClick(() => {
             var _a3;
             (_a3 = this.transferModal) == null ? void 0 : _a3.close();
             this.transferModal = new SettingsTransferModal(owner, () => {
@@ -8400,7 +8562,7 @@ var TypographyController = class {
 // src/platform/editor-rhythm.ts
 var import_state2 = require("@codemirror/state");
 var import_view2 = require("@codemirror/view");
-var import_obsidian12 = require("obsidian");
+var import_obsidian13 = require("obsidian");
 
 // src/domain/structure-presentation.ts
 function flatQuoteContainers(tree) {
@@ -8685,10 +8847,10 @@ var EditorRhythmController = class {
     const owner = this;
     const build = (state) => {
       var _a;
-      if (!owner.active || !owner.preferences().typographyEnabled || !((_a = state.field(import_obsidian12.editorInfoField, false)) == null ? void 0 : _a.file) || state.doc.length > MAX_RHYTHM_UNITS)
+      if (!owner.active || !owner.preferences().typographyEnabled || !((_a = state.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _a.file) || state.doc.length > MAX_RHYTHM_UNITS)
         return import_view2.Decoration.none;
       const plan = editorRhythm(state.doc.toString());
-      const preview = !!state.field(import_obsidian12.editorLivePreviewField, false);
+      const preview = !!state.field(import_obsidian13.editorLivePreviewField, false);
       return import_view2.Decoration.set([
         ...plan.lines.map((line) => import_view2.Decoration.line({ class: `keyline-next-rhythm-${line.role}` }).range(line.at)),
         ...plan.gaps.map((gap) => import_view2.Decoration.widget({ widget: new RhythmWidget(gap, preview), block: true, side: gap.side }).range(gap.at))
@@ -8698,7 +8860,7 @@ var EditorRhythmController = class {
       create: build,
       update(value, transaction) {
         var _a, _b;
-        return transaction.docChanged || transaction.effects.some((effect) => effect.is(measureRhythm)) || ((_a = transaction.startState.field(import_obsidian12.editorInfoField, false)) == null ? void 0 : _a.file) !== ((_b = transaction.state.field(import_obsidian12.editorInfoField, false)) == null ? void 0 : _b.file) || transaction.startState.field(import_obsidian12.editorLivePreviewField, false) !== transaction.state.field(import_obsidian12.editorLivePreviewField, false) ? build(transaction.state) : value;
+        return transaction.docChanged || transaction.effects.some((effect) => effect.is(measureRhythm)) || ((_a = transaction.startState.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _a.file) !== ((_b = transaction.state.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _b.file) || transaction.startState.field(import_obsidian13.editorLivePreviewField, false) !== transaction.state.field(import_obsidian13.editorLivePreviewField, false) ? build(transaction.state) : value;
       },
       provide: (field2) => import_view2.EditorView.decorations.from(field2)
     });
@@ -8764,7 +8926,7 @@ var EditorRhythmController = class {
 
 // src/platform/selection-toolbar.ts
 var import_view3 = require("@codemirror/view");
-var import_obsidian13 = require("obsidian");
+var import_obsidian14 = require("obsidian");
 
 // src/platform/native-selection.ts
 function annotationProvider(app) {
@@ -9015,7 +9177,7 @@ var SelectionToolbar = class {
   }
   get editor() {
     var _a;
-    return (_a = this.view.state.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _a.editor;
+    return (_a = this.view.state.field(import_obsidian14.editorInfoField, false)) == null ? void 0 : _a.editor;
   }
   /** Obsidian can move the existing CodeMirror view between native windows
    * without destroying it. The toolbar and document listeners must follow. */
@@ -9074,7 +9236,7 @@ var SelectionToolbar = class {
       return false;
     if (state.selection.ranges.length !== 1 || selected.empty || selected.to - selected.from > 16e3 || !state.sliceDoc(selected.from, selected.to).trim() || inProtectedSyntax(state.doc.toString(), selected.from, selected.to, true))
       return false;
-    return Boolean((_a = state.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _a.file);
+    return Boolean((_a = state.field(import_obsidian14.editorInfoField, false)) == null ? void 0 : _a.file);
   }
   schedule() {
     if (this.disposed)
@@ -9170,10 +9332,10 @@ var SelectionToolbar = class {
         text2.textContent = selectionBlockLabel(this.view.state.doc.lineAt(this.snapshot.from).text, this.owner.zh());
         button.append(text2);
         const chevron = button.ownerDocument.createElement("span");
-        (0, import_obsidian13.setIcon)(chevron, icon);
+        (0, import_obsidian14.setIcon)(chevron, icon);
         button.append(chevron);
       } else
-        (0, import_obsidian13.setIcon)(button, icon);
+        (0, import_obsidian14.setIcon)(button, icon);
       this.root.append(button);
       button.addEventListener("click", () => {
         var _a2, _b;
@@ -9182,7 +9344,7 @@ var SelectionToolbar = class {
           return;
         }
         const editor = this.editor;
-        const file = (_a2 = this.view.state.field(import_obsidian13.editorInfoField, false)) == null ? void 0 : _a2.file;
+        const file = (_a2 = this.view.state.field(import_obsidian14.editorInfoField, false)) == null ? void 0 : _a2.file;
         const context = file && this.owner.rich.capture(editor, file, () => !this.disposed && !this.view.composing && !this.view.state.readOnly);
         const bounds = button.getBoundingClientRect(), point = { x: bounds.left, y: bounds.bottom };
         if (key === "sidenote" || key === "marginnote") {
@@ -9190,16 +9352,16 @@ var SelectionToolbar = class {
           this.hide();
           const result = insertAnnotation(this.owner.app, this.view, key, () => this.valid());
           if (result.status === "failed")
-            new import_obsidian13.Notice(message("annotationFailed", this.owner.zh()));
+            new import_obsidian14.Notice(message("annotationFailed", this.owner.zh()));
           else if (result.status === "unavailable")
-            new import_obsidian13.Notice((_b = result.reason) != null ? _b : message("annotationUnavailable", this.owner.zh()));
+            new import_obsidian14.Notice((_b = result.reason) != null ? _b : message("annotationUnavailable", this.owner.zh()));
           return;
         }
         if (key in nativeSelectionCommands) {
           this.formatting = true;
           try {
             if (!nativeSelectionAction(this.owner.app, editor, key, () => this.valid())) {
-              new import_obsidian13.Notice(message("commandUnavailable", this.owner.zh()));
+              new import_obsidian14.Notice(message("commandUnavailable", this.owner.zh()));
             }
           } finally {
             this.formatting = false;
@@ -9242,7 +9404,7 @@ var SelectionToolbar = class {
 };
 
 // src/platform/workspaces.ts
-var import_obsidian14 = require("obsidian");
+var import_obsidian15 = require("obsidian");
 
 // src/platform/workspace-state.ts
 var WorkspaceFailure = class extends Error {
@@ -9571,7 +9733,7 @@ var WorkspacePopup = class {
       text2.className = "keyline-next-workspace-title";
       text2.textContent = entry.title;
       if (entry.icon || entry.checked)
-        (0, import_obsidian14.setIcon)(icon, (_a = entry.icon) != null ? _a : "check");
+        (0, import_obsidian15.setIcon)(icon, (_a = entry.icon) != null ? _a : "check");
       row.append(icon, text2);
       this.root.append(row);
       this.rows.push(row);
@@ -9583,7 +9745,7 @@ var WorkspacePopup = class {
         }
       });
     }
-    this.scope = new import_obsidian14.Scope(app.scope);
+    this.scope = new import_obsidian15.Scope(app.scope);
     this.scope.register([], "Escape", () => {
       this.close();
       return false;
@@ -9688,9 +9850,9 @@ var WorkspaceController = class {
     this.button.type = "button";
     this.button.setAttribute("aria-haspopup", "menu");
     this.button.setAttribute("aria-expanded", "false");
-    (0, import_obsidian14.setIcon)(this.button.createSpan({ attr: { "aria-hidden": "true" } }), "panels-top-left");
+    (0, import_obsidian15.setIcon)(this.button.createSpan({ attr: { "aria-hidden": "true" } }), "panels-top-left");
     this.name = this.button.createSpan({ cls: "keyline-next-workspace-name" });
-    (0, import_obsidian14.setIcon)(this.button.createSpan({ cls: "keyline-next-workspace-arrow", attr: { "aria-hidden": "true" } }), "chevron-up");
+    (0, import_obsidian15.setIcon)(this.button.createSpan({ cls: "keyline-next-workspace-arrow", attr: { "aria-hidden": "true" } }), "chevron-up");
     this.button.addEventListener("click", () => {
       if (this.menu)
         this.menu.close();
@@ -9796,10 +9958,10 @@ var WorkspaceController = class {
       this.refresh();
       await pending;
       if (success && this.live)
-        new import_obsidian14.Notice(message("saved", this.zh()));
+        new import_obsidian15.Notice(message("saved", this.zh()));
     } catch (error) {
       if (this.live)
-        new import_obsidian14.Notice(explain(error, this.zh()));
+        new import_obsidian15.Notice(explain(error, this.zh()));
     } finally {
       this.refresh();
     }
@@ -9821,7 +9983,7 @@ var WorkspaceController = class {
           action();
         } catch (error) {
           if (this.live)
-            new import_obsidian14.Notice(explain(error, this.zh()));
+            new import_obsidian15.Notice(explain(error, this.zh()));
         }
       };
       for (const name2 of Object.keys(c.workspaces)) {
@@ -9849,7 +10011,7 @@ var WorkspaceController = class {
         }) });
     } catch (error) {
       entries.push({ title: explain(error, this.zh()), icon: "info", action: () => {
-        new import_obsidian14.Notice(explain(error, this.zh()));
+        new import_obsidian15.Notice(explain(error, this.zh()));
       } });
     }
     const bounds = this.button.getBoundingClientRect();
@@ -9887,7 +10049,7 @@ var WorkspaceController = class {
       else
         void this.run(() => this.actions.save(c.activeWorkspace, true), true);
     } catch (error) {
-      new import_obsidian14.Notice(explain(error, this.zh()));
+      new import_obsidian15.Notice(explain(error, this.zh()));
     }
   }
   saveAs() {
@@ -9905,7 +10067,7 @@ var WorkspaceController = class {
         try {
           await pending;
           if (this.live)
-            new import_obsidian14.Notice(message("saved", this.zh()));
+            new import_obsidian15.Notice(message("saved", this.zh()));
         } finally {
           this.refresh();
         }
@@ -9916,7 +10078,7 @@ var WorkspaceController = class {
       this.modal = modal;
       modal.open();
     } catch (error) {
-      new import_obsidian14.Notice(explain(error, this.zh()));
+      new import_obsidian15.Notice(explain(error, this.zh()));
     }
   }
   dispose() {
@@ -9935,7 +10097,7 @@ var WorkspaceController = class {
     this.slot.remove();
   }
 };
-var WorkspaceNameModal = class extends import_obsidian14.Modal {
+var WorkspaceNameModal = class extends import_obsidian15.Modal {
   constructor(app, zh, save, done) {
     super(app);
     this.zh = zh;
@@ -9992,7 +10154,7 @@ var WorkspaceNameModal = class extends import_obsidian14.Modal {
 };
 
 // src/platform/block-commands.ts
-var import_obsidian15 = require("obsidian");
+var import_obsidian16 = require("obsidian");
 
 // src/domain/relocation.ts
 var rootNames = {
@@ -10352,7 +10514,7 @@ function appendBlockMenu(menu, app, context, zh, convert) {
   for (const action of blockActions)
     menu.addItem((item) => item.setTitle(message(action.label, zh)).setIcon(action.icon).setDisabled(action.id !== "select" && !blockActionPlan(context, action.id)).onClick(() => {
       if (!performBlock(context, action.id))
-        new import_obsidian15.Notice(message("blockUnavailable", zh));
+        new import_obsidian16.Notice(message("blockUnavailable", zh));
     }));
   if (context.blocks.length)
     menu.addItem((item) => item.setTitle(message("convertBlock", zh)).setIcon("replace").onClick(convert != null ? convert : () => new BlockConvertPicker(app, context, zh).open()));
@@ -10371,7 +10533,7 @@ var conversionLabels = {
   task: ["Task", "\u4EFB\u52A1"],
   quote: ["Quote", "\u5F15\u7528"]
 };
-var BlockConvertPicker = class extends import_obsidian15.SuggestModal {
+var BlockConvertPicker = class extends import_obsidian16.SuggestModal {
   constructor(app, context, zh) {
     super(app);
     this.context = context;
@@ -10398,14 +10560,14 @@ var BlockConvertPicker = class extends import_obsidian15.SuggestModal {
   onChooseSuggestion(target) {
     const plan = this.plan(target);
     if (!plan || !commitBlockEdit(this.context, plan))
-      new import_obsidian15.Notice(message("blockUnavailable", this.zh));
+      new import_obsidian16.Notice(message("blockUnavailable", this.zh));
   }
 };
 
 // src/platform/insertion-menus.ts
 var import_state3 = require("@codemirror/state");
 var import_view4 = require("@codemirror/view");
-var import_obsidian16 = require("obsidian");
+var import_obsidian17 = require("obsidian");
 var callouts = [
   ["note", "Note", "\u4FBF\u7B7E", "pencil"],
   ["info", "Info", "\u4FE1\u606F", "info"],
@@ -10448,7 +10610,7 @@ var InsertionMenus = class {
     var _a;
     this.close();
     for (const [view, menu] of this.views)
-      if (((_a = view.state.field(import_obsidian16.editorInfoField, false)) == null ? void 0 : _a.editor) === context.editor) {
+      if (((_a = view.state.field(import_obsidian17.editorInfoField, false)) == null ? void 0 : _a.editor) === context.editor) {
         menu.open(context, point);
         return;
       }
@@ -10484,7 +10646,27 @@ var InsertMenu = class {
     this.generation = 0;
     this.disposed = false;
     this.ariaValues = /* @__PURE__ */ new Map();
-    this.composition = () => this.close();
+    this.composing = false;
+    this.composition = () => {
+      var _a;
+      if (!mobileDocument(this.boundDocument)) {
+        this.close();
+        return;
+      }
+      this.composing = true;
+      this.context = void 0;
+      this.active = -1;
+      this.closeSubmenu();
+      (_a = this.root) == null ? void 0 : _a.remove();
+      this.root = void 0;
+      for (const name2 of [...this.ariaValues.keys()])
+        this.restoreAria(name2);
+    };
+    this.composed = () => {
+      this.composing = false;
+      if (mobileDocument(this.boundDocument) && this.anchor >= 0)
+        this.schedule();
+    };
     const doc = view.dom.ownerDocument;
     this.boundDocument = doc;
     this.outside = (event) => {
@@ -10492,25 +10674,34 @@ var InsertMenu = class {
         this.close();
     };
     this.viewport = (event) => {
+      if (mobileDocument(this.boundDocument)) {
+        if (event.type === "resize" || !this.contains(event.target))
+          this.position();
+        return;
+      }
       if (event.type === "resize" || !this.contains(event.target))
         this.close();
     };
     this.bindDocument(doc);
     view.contentDOM.addEventListener("compositionstart", this.composition);
+    view.contentDOM.addEventListener("compositionend", this.composed);
   }
   bindDocument(doc) {
     var _a;
+    this.stopViewport = watchMobileViewport(doc, () => this.position());
     doc.addEventListener("pointerdown", this.outside, true);
     doc.addEventListener("focusin", this.outside, true);
     doc.addEventListener("scroll", this.viewport, true);
     (_a = doc.defaultView) == null ? void 0 : _a.addEventListener("resize", this.viewport);
   }
   unbindDocument(doc) {
-    var _a;
+    var _a, _b;
+    (_a = this.stopViewport) == null ? void 0 : _a.call(this);
+    this.stopViewport = void 0;
     doc.removeEventListener("pointerdown", this.outside, true);
     doc.removeEventListener("focusin", this.outside, true);
     doc.removeEventListener("scroll", this.viewport, true);
-    (_a = doc.defaultView) == null ? void 0 : _a.removeEventListener("resize", this.viewport);
+    (_b = doc.defaultView) == null ? void 0 : _b.removeEventListener("resize", this.viewport);
   }
   syncDocument() {
     const doc = this.view.dom.ownerDocument;
@@ -10528,9 +10719,9 @@ var InsertMenu = class {
     var _a, _b;
     return !!((_a = this.root) == null ? void 0 : _a.contains(node)) || !!((_b = this.submenu) == null ? void 0 : _b.contains(node));
   }
-  eligible() {
-    const state = this.view.state, info = state.field(import_obsidian16.editorInfoField, false);
-    return !this.disposed && this.owner.live && !state.readOnly && !this.view.composing && this.view.hasFocus && this.view.dom.ownerDocument.activeElement === this.view.contentDOM && state.doc.length <= 2 * 1024 * 1024 && state.selection.ranges.length === 1 && !!(info == null ? void 0 : info.file) && !!info.editor;
+  eligible(previewComposition = false) {
+    const state = this.view.state, info = state.field(import_obsidian17.editorInfoField, false);
+    return !this.disposed && this.owner.live && !state.readOnly && (previewComposition || !this.view.composing && !this.composing) && this.view.hasFocus && this.view.dom.ownerDocument.activeElement === this.view.contentDOM && state.doc.length <= 2 * 1024 * 1024 && state.selection.ranges.length === 1 && !!(info == null ? void 0 : info.file) && !!info.editor;
   }
   open(context, point) {
     this.syncDocument();
@@ -10554,17 +10745,19 @@ var InsertMenu = class {
     }
     if (!update.docChanged && !update.selectionSet)
       return;
-    const input = update.transactions.some((t2) => t2.isUserEvent("input.type") && !t2.isUserEvent("input.type.compose"));
+    const mobile = mobileDocument(this.boundDocument);
+    const input = update.transactions.some((t2) => t2.isUserEvent("input.type") && (mobile || !t2.isUserEvent("input.type.compose")));
     const deletion = update.transactions.some((t2) => t2.isUserEvent("delete"));
     if (this.root || this.anchor >= 0) {
       if (this.typed && update.docChanged && (input || deletion)) {
-        this.active = 0;
+        this.active = -1;
+        this.context = void 0;
         this.schedule();
-      } else
+      } else if (!mobile || !this.composing && !this.view.composing || update.docChanged)
         this.close();
       return;
     }
-    if (!input || !this.eligible())
+    if (!input || !this.eligible(mobile))
       return;
     const triggers = slashTriggers(this.owner.preferences());
     let trigger = "";
@@ -10574,17 +10767,17 @@ var InsertMenu = class {
     });
     if (!trigger)
       return;
-    const info = this.view.state.field(import_obsidian16.editorInfoField, false);
+    const info = this.view.state.field(import_obsidian17.editorInfoField, false);
     if (!info.editor || !info.file)
       return;
-    if (!this.owner.suggest.onTrigger(info.editor.getCursor(), info.editor, info.file))
+    if (!mobile && !this.owner.suggest.onTrigger(info.editor.getCursor(), info.editor, info.file))
       return;
     this.anchor = update.state.selection.main.head - trigger.length;
     this.typed = true;
     this.controller.claim(this);
     this.schedule();
   }
-  schedule() {
+  schedule(attempt = 0) {
     const win = this.view.dom.ownerDocument.defaultView;
     if (!win)
       return;
@@ -10596,11 +10789,16 @@ var InsertMenu = class {
       if (generation !== this.generation)
         return;
       this.pending = void 0;
+      if (mobileDocument(this.boundDocument) && (this.composing || this.view.composing)) {
+        if (!this.composing && attempt < 10)
+          this.schedule(attempt + 1);
+        return;
+      }
       if (!this.eligible()) {
         this.close();
         return;
       }
-      const info = this.view.state.field(import_obsidian16.editorInfoField, false);
+      const info = this.view.state.field(import_obsidian17.editorInfoField, false);
       if (!info.editor || !info.file) {
         this.close();
         return;
@@ -10619,7 +10817,7 @@ var InsertMenu = class {
       this.active = 0;
       this.render();
       this.position();
-    }, 0);
+    }, attempt ? 20 : 0);
   }
   choices(query) {
     const entries = insertionEntries(this.owner.preferences(), this.owner.zh(), query);
@@ -10635,6 +10833,7 @@ var InsertMenu = class {
     p.setAttribute("role", "listbox");
     p.setAttribute("aria-label", sub ? "Callout" : this.owner.zh() ? "\u63D2\u5165" : "Insert");
     p.addEventListener("mousedown", (e) => e.preventDefault());
+    bindMobileMenuTouch(p);
     this.view.dom.ownerDocument.body.append(p);
     return p;
   }
@@ -10662,7 +10861,9 @@ var InsertMenu = class {
         list.createDiv({ cls: "keyline-next-insert-separator" });
       const row = this.row(list, entry.label, entry.icon, entry.id === "callout");
       row.dataset.insertId = entry.id;
-      row.addEventListener("pointermove", () => {
+      row.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch")
+          return;
         this.setActive(index);
         if (entry.id === "callout")
           this.showCallouts(false);
@@ -10690,11 +10891,11 @@ var InsertMenu = class {
     row.id = `keyline-next-insert-option-${++menuSerial}`;
     const glyph = row.createSpan({ cls: "keyline-next-insert-icon" });
     glyph.setAttribute("aria-hidden", "true");
-    (0, import_obsidian16.setIcon)(glyph, icon);
+    (0, import_obsidian17.setIcon)(glyph, icon);
     row.createSpan({ cls: "keyline-next-insert-label", text: label2 });
     if (branch) {
       const chevron = row.createSpan({ cls: "keyline-next-insert-chevron" });
-      (0, import_obsidian16.setIcon)(chevron, "chevron-right");
+      (0, import_obsidian17.setIcon)(chevron, "chevron-right");
     }
     return row;
   }
@@ -10716,16 +10917,34 @@ var InsertMenu = class {
     if (!this.submenu) {
       this.submenu = this.panel(true);
       const list = this.submenu.createDiv({ cls: "keyline-next-insert-list" });
+      if (mobileDocument(this.boundDocument)) {
+        const back = this.row(list, this.owner.zh() ? "\u8FD4\u56DE" : "Back", "arrow-left");
+        back.removeAttribute("role");
+        back.setAttribute("role", "button");
+        back.tabIndex = 0;
+        back.addEventListener("click", () => this.closeSubmenu());
+        back.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            this.closeSubmenu();
+          }
+        });
+      }
       list.createDiv({ cls: "keyline-next-insert-heading", text: "Callout" });
       callouts.forEach(([id, en, zh, icon], i) => {
         const row = this.row(list, this.owner.zh() ? zh : en, icon);
         row.dataset.insertId = `callout-${id}`;
-        row.addEventListener("pointermove", () => this.setSubActive(i));
+        row.addEventListener("pointermove", (event) => {
+          if (event.pointerType !== "touch")
+            this.setSubActive(i);
+        });
         row.addEventListener("click", () => this.commitCallout(i));
       });
       const base = this.root.getBoundingClientRect(), win = this.view.dom.ownerDocument.defaultView;
       this.submenu.style.left = `${Math.max(8, base.right + 6 + 164 > win.innerWidth - 8 ? base.left - 170 : base.right + 6)}px`;
       this.submenu.style.top = `${Math.max(8, Math.min(base.top, win.innerHeight - this.submenu.offsetHeight - 8))}px`;
+      if (mobileDocument(this.boundDocument))
+        positionMobileMenu(this.submenu, { x: base.left, y: base.top });
     }
     if (keyboard)
       this.setSubActive(0);
@@ -10781,6 +11000,14 @@ var InsertMenu = class {
       return;
     }
     const point = (_a = this.point) != null ? _a : { x: coords.left, y: coords.bottom + 6 };
+    if (mobileDocument(this.boundDocument)) {
+      positionMobileMenu(this.root, point);
+      if (this.submenu) {
+        const base = this.root.getBoundingClientRect();
+        positionMobileMenu(this.submenu, { x: base.left, y: base.top });
+      }
+      return;
+    }
     this.root.style.left = `${Math.max(8, Math.min(point.x, win.innerWidth - this.root.offsetWidth - 8))}px`;
     this.root.style.top = `${Math.max(8, Math.min(point.y, win.innerHeight - this.root.offsetHeight - 8))}px`;
   }
@@ -10884,6 +11111,7 @@ var InsertMenu = class {
     this.unbindDocument(this.boundDocument);
     this.view.contentDOM.removeEventListener("compositionstart", this.composition);
     this.controller.remove(this.view);
+    this.view.contentDOM.removeEventListener("compositionend", this.composed);
   }
 };
 
@@ -10891,7 +11119,7 @@ var InsertMenu = class {
 var import_language = require("@codemirror/language");
 var import_state4 = require("@codemirror/state");
 var import_view5 = require("@codemirror/view");
-var import_obsidian17 = require("obsidian");
+var import_obsidian18 = require("obsidian");
 
 // src/domain/writing.ts
 var MAX_WRITING_UNITS = 2 * 1024 * 1024;
@@ -11049,7 +11277,7 @@ var EditableCalloutHeader = class extends import_view5.WidgetType {
     header.className = "keyline-next-callout-heading";
     icon.className = "keyline-next-callout-symbol";
     icon.setAttribute("aria-hidden", "true");
-    (0, import_obsidian17.setIcon)(icon, info.icon);
+    (0, import_obsidian18.setIcon)(icon, info.icon);
     header.append(icon);
     if (this.explicit)
       header.setAttribute("aria-hidden", "true");
@@ -11099,7 +11327,7 @@ var WritingController = class {
         if (view.composing)
           owner.inputStats.composing++;
       }
-      if (!owner.live || view.composing || view.state.readOnly || view.state.doc.length > MAX_WRITING_UNITS || view.state.selection.ranges.length !== 1 || !((_a = view.state.field(import_obsidian17.editorInfoField, false)) == null ? void 0 : _a.file) || !/^[【】]{1,2}$/u.test(input))
+      if (!owner.live || view.composing || view.state.readOnly || view.state.doc.length > MAX_WRITING_UNITS || view.state.selection.ranges.length !== 1 || !((_a = view.state.field(import_obsidian18.editorInfoField, false)) == null ? void 0 : _a.file) || !/^[【】]{1,2}$/u.test(input))
         return false;
       const transaction = insert();
       if (!transaction.isUserEvent("input.type") || transaction.isUserEvent("input.type.compose")) {
@@ -11197,7 +11425,7 @@ var WritingController = class {
     if (!this.live || !this.preferences().pasteHints || !count2)
       return;
     (_a = this.notice) == null ? void 0 : _a.hide();
-    this.notice = new import_obsidian17.Notice(message("pasteWarning", this.zh()).replace("{n}", String(count2)));
+    this.notice = new import_obsidian18.Notice(message("pasteWarning", this.zh()).replace("{n}", String(count2)));
   }
   next(editor) {
     var _a;
@@ -11205,17 +11433,17 @@ var WritingController = class {
     if (!instance || !this.live || instance.view.composing)
       return false;
     if (instance.view.state.doc.length > MAX_WRITING_UNITS) {
-      new import_obsidian17.Notice(message("writingTooLarge", this.zh()));
+      new import_obsidian18.Notice(message("writingTooLarge", this.zh()));
       return true;
     }
     const analysis = instance.analyze();
     if (!analysis) {
-      new import_obsidian17.Notice(message("parsePending", this.zh()));
+      new import_obsidian18.Notice(message("parsePending", this.zh()));
       return true;
     }
     const at = editor.posToOffset(editor.getCursor("to")), next = (_a = analysis.suspicious.find((r) => r.from >= at)) != null ? _a : analysis.suspicious[0];
     if (!next) {
-      new import_obsidian17.Notice(message("noSuspicious", this.zh()));
+      new import_obsidian18.Notice(message("noSuspicious", this.zh()));
       return true;
     }
     instance.navigate(next.from, next.to);
@@ -11226,7 +11454,7 @@ var WritingController = class {
     if (!instance)
       return null;
     return {
-      live: instance.view.state.field(import_obsidian17.editorLivePreviewField, false),
+      live: instance.view.state.field(import_obsidian18.editorLivePreviewField, false),
       nodes: instance.tokens,
       analysis: instance.analyze(),
       structure: instance.structure,
@@ -11264,12 +11492,12 @@ var WritingView = class {
   }
   get editor() {
     var _a;
-    return (_a = this.view.state.field(import_obsidian17.editorInfoField, false)) == null ? void 0 : _a.editor;
+    return (_a = this.view.state.field(import_obsidian18.editorInfoField, false)) == null ? void 0 : _a.editor;
   }
   analyze() {
     var _a;
     const state = this.view.state, tree = (0, import_language.syntaxTree)(state);
-    if (!this.owner.live || !((_a = state.field(import_obsidian17.editorInfoField, false)) == null ? void 0 : _a.file) || state.doc.length > MAX_WRITING_UNITS || !(0, import_language.syntaxTreeAvailable)(state, Math.min(state.doc.length, this.view.viewport.to)))
+    if (!this.owner.live || !((_a = state.field(import_obsidian18.editorInfoField, false)) == null ? void 0 : _a.file) || state.doc.length > MAX_WRITING_UNITS || !(0, import_language.syntaxTreeAvailable)(state, Math.min(state.doc.length, this.view.viewport.to)))
       return null;
     if (this.doc !== state.doc || this.tree !== tree) {
       this.tokens = [];
@@ -11291,7 +11519,7 @@ var WritingView = class {
     if (!analysis)
       return;
     const visible = (r) => this.view.visibleRanges.some((v) => r.from >= v.from && r.to <= v.to);
-    const shown = !!state.field(import_obsidian17.editorLivePreviewField, false);
+    const shown = !!state.field(import_obsidian18.editorLivePreviewField, false);
     const formatted = prefs.hideMarkers && shown && !this.view.composing && !this.owner.revealed(this.view.dom.ownerDocument);
     const hidden = formatted ? analysis.hidden.filter(visible).map((r) => import_view5.Decoration.replace({}).range(r.from, r.to)) : [];
     const layout = [];
@@ -11327,7 +11555,7 @@ var WritingView = class {
     const moved = this.owner.attach(this);
     if (update.docChanged)
       this.revision++;
-    if (moved || update.docChanged || update.viewportChanged || update.selectionSet || this.tree !== (0, import_language.syntaxTree)(update.state) || update.startState.field(import_obsidian17.editorLivePreviewField, false) !== update.state.field(import_obsidian17.editorLivePreviewField, false) || update.transactions.some((t2) => t2.effects.some((e) => e.is(redraw))))
+    if (moved || update.docChanged || update.viewportChanged || update.selectionSet || this.tree !== (0, import_language.syntaxTree)(update.state) || update.startState.field(import_obsidian18.editorLivePreviewField, false) !== update.state.field(import_obsidian18.editorLivePreviewField, false) || update.transactions.some((t2) => t2.effects.some((e) => e.is(redraw))))
       this.rebuild();
     if (update.transactions.some((t2) => t2.isUserEvent("input.paste")) && this.owner.preferences().pasteHints) {
       clearTimeout(this.pasteTimer);
@@ -11408,7 +11636,7 @@ var WritingView = class {
 // src/platform/block-handles.ts
 var import_language2 = require("@codemirror/language");
 var import_view6 = require("@codemirror/view");
-var import_obsidian20 = require("obsidian");
+var import_obsidian21 = require("obsidian");
 
 // src/domain/line-drag.ts
 var limit = 2 * 1024 * 1024;
@@ -11595,7 +11823,7 @@ function handleLayout(viewport, content2, row, side, count2, nativeFold) {
 }
 
 // src/platform/handle-menu.ts
-var import_obsidian18 = require("obsidian");
+var import_obsidian19 = require("obsidian");
 
 // src/domain/rich-format.ts
 var tones = ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"];
@@ -11932,8 +12160,8 @@ function captureHandleMenu(app, editor, file, at, guard, doc, zh) {
       if (!plan || plan.edit && !commit(plan.edit))
         return;
       void clipboard.writeText(plan.link).then(
-        () => new import_obsidian18.Notice(zh ? "\u533A\u5757\u94FE\u63A5\u5DF2\u590D\u5236" : "Block link copied"),
-        () => new import_obsidian18.Notice(zh ? "\u65E0\u6CD5\u5199\u5165\u526A\u8D34\u677F\u3002\u65B0\u589E\u7684\u533A\u5757 ID \u53EF\u64A4\u9500\u3002" : "Could not write to clipboard. A newly added block ID can be undone.")
+        () => new import_obsidian19.Notice(zh ? "\u533A\u5757\u94FE\u63A5\u5DF2\u590D\u5236" : "Block link copied"),
+        () => new import_obsidian19.Notice(zh ? "\u65E0\u6CD5\u5199\u5165\u526A\u8D34\u677F\u3002\u65B0\u589E\u7684\u533A\u5757 ID \u53EF\u64A4\u9500\u3002" : "Could not write to clipboard. A newly added block ID can be undone.")
       );
     } : void 0
   };
@@ -11941,7 +12169,7 @@ function captureHandleMenu(app, editor, file, at, guard, doc, zh) {
 }
 
 // src/platform/selection-menu.ts
-var import_obsidian19 = require("obsidian");
+var import_obsidian20 = require("obsidian");
 var calloutLabels = {
   note: ["Note", "\u4FBF\u7B7E", "pencil"],
   info: ["Info", "\u4FE1\u606F", "info"],
@@ -11979,7 +12207,7 @@ var SelectionMenu = class {
     this.panel = this.createPanel("main");
     this.root.append(this.panel);
     doc.body.append(this.root);
-    this.scope = new import_obsidian19.Scope(app.scope);
+    this.scope = new import_obsidian20.Scope(app.scope);
     this.scope.register([], "Escape", () => {
       this.close(true);
       return false;
@@ -12041,7 +12269,7 @@ var SelectionMenu = class {
     b.disabled = disabled;
     const glyph = this.doc.createElement("span");
     glyph.className = "keyline-next-format-glyph";
-    (0, import_obsidian19.setIcon)(glyph, icon);
+    (0, import_obsidian20.setIcon)(glyph, icon);
     const text2 = this.doc.createElement("span");
     text2.textContent = label2;
     b.append(glyph, text2);
@@ -12128,19 +12356,19 @@ var SelectionMenu = class {
       const clipboard = (_c = this.doc.defaultView) == null ? void 0 : _c.navigator.clipboard;
       if (clipboard)
         void clipboard.writeText(plan.link).then(
-          () => new import_obsidian19.Notice(zh ? "\u533A\u5757\u94FE\u63A5\u5DF2\u590D\u5236" : "Block link copied"),
-          () => new import_obsidian19.Notice(zh ? "\u65E0\u6CD5\u5199\u5165\u526A\u8D34\u677F\u3002\u65B0\u589E\u7684\u533A\u5757 ID \u53EF\u64A4\u9500\u3002" : "Could not write to clipboard. A newly added block ID can be undone.")
+          () => new import_obsidian20.Notice(zh ? "\u533A\u5757\u94FE\u63A5\u5DF2\u590D\u5236" : "Block link copied"),
+          () => new import_obsidian20.Notice(zh ? "\u65E0\u6CD5\u5199\u5165\u526A\u8D34\u677F\u3002\u65B0\u589E\u7684\u533A\u5757 ID \u53EF\u64A4\u9500\u3002" : "Could not write to clipboard. A newly added block ID can be undone.")
         );
       else
-        new import_obsidian19.Notice(zh ? "\u5F53\u524D\u7A97\u53E3\u65E0\u6CD5\u4F7F\u7528\u526A\u8D34\u677F" : "Clipboard is unavailable in this window");
+        new import_obsidian20.Notice(zh ? "\u5F53\u524D\u7A97\u53E3\u65E0\u6CD5\u4F7F\u7528\u526A\u8D34\u677F" : "Clipboard is unavailable in this window");
       this.close(true);
     }, this.actions ? !this.actions.copy : !link || !((_a = this.doc.defaultView) == null ? void 0 : _a.navigator.clipboard));
     copy2.dataset.blockAction = "copy-link";
     const shortcut = this.doc.createElement("span");
     shortcut.className = "keyline-next-format-shortcut";
-    shortcut.textContent = import_obsidian19.Platform.isMacOS ? "\u2318\u2303L" : "Ctrl+Alt+L";
+    shortcut.textContent = import_obsidian20.Platform.isMacOS ? "\u2318\u2303L" : "Ctrl+Alt+L";
     copy2.append(shortcut);
-    this.scope.register(import_obsidian19.Platform.isMacOS ? ["Mod", "Ctrl"] : ["Ctrl", "Alt"], "l", () => {
+    this.scope.register(import_obsidian20.Platform.isMacOS ? ["Mod", "Ctrl"] : ["Ctrl", "Alt"], "l", () => {
       copy2.click();
       return false;
     });
@@ -12168,7 +12396,7 @@ var SelectionMenu = class {
     b.setAttribute("aria-haspopup", "menu");
     b.setAttribute("aria-expanded", "false");
     const arrow = this.doc.createElement("span");
-    (0, import_obsidian19.setIcon)(arrow, "chevron-right");
+    (0, import_obsidian20.setIcon)(arrow, "chevron-right");
     b.append(arrow);
     b.addEventListener("pointerenter", () => this.showSubmenu(page));
   }
@@ -12419,7 +12647,7 @@ var HandleView = class {
   }
   get editor() {
     var _a;
-    return (_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.editor;
+    return (_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.editor;
   }
   bindDocument(doc) {
     var _a, _b;
@@ -12471,7 +12699,7 @@ var HandleView = class {
   }
   eligible() {
     var _a;
-    return !this.destroyed && this.owner.live && this.owner.preferences().blockHandles && !this.view.composing && this.boundDocument === this.view.dom.ownerDocument && !this.view.state.readOnly && this.view.state.doc.length <= 2 * 1024 * 1024 && this.view.state.selection.ranges.length === 1 && !!((_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.file);
+    return !this.destroyed && this.owner.live && this.owner.preferences().blockHandles && !this.view.composing && this.boundDocument === this.view.dom.ownerDocument && !this.view.state.readOnly && this.view.state.doc.length <= 2 * 1024 * 1024 && this.view.state.selection.ranges.length === 1 && !!((_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file);
   }
   parsed() {
     var _a;
@@ -12603,7 +12831,7 @@ var HandleView = class {
   }
   context() {
     var _a;
-    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.file;
+    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file;
     if (!editor || !(target == null ? void 0 : target.block) || !file || !this.eligible())
       return null;
     const selected = this.view.state.selection.main;
@@ -12613,14 +12841,14 @@ var HandleView = class {
       editor,
       () => {
         var _a2;
-        return this.eligible() && ((_a2 = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
+        return this.eligible() && ((_a2 = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
       },
       useSelection ? void 0 : { from: target.block.from, to: target.block.to }
     );
   }
   insert() {
     var _a, _b;
-    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.file;
+    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file;
     if (!editor || !target || !file || !this.eligible() || this.view.state.doc.toString() !== target.model.text)
       return;
     const context = target.block ? this.owner.insertion.capture(editor, file, { from: target.block.to, to: target.block.to }, target.block.id) : this.owner.insertion.capture(editor, file, { from: target.at, to: target.at });
@@ -12655,7 +12883,7 @@ var HandleView = class {
   }
   openMenu() {
     var _a, _b, _c, _d;
-    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.file;
+    const editor = this.editor, target = this.target, file = (_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file;
     if (!editor || !target || !file)
       return;
     const doc = this.root.ownerDocument, captured = captureHandleMenu(
@@ -12665,7 +12893,7 @@ var HandleView = class {
       target.visualAt,
       () => {
         var _a2;
-        return this.eligible() && ((_a2 = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
+        return this.eligible() && ((_a2 = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
       },
       doc,
       this.owner.zh()
@@ -12696,7 +12924,7 @@ var HandleView = class {
     if (!context && (!this.target || !this.eligible() || this.granularity !== "line"))
       return;
     (_a = this.menu) == null ? void 0 : _a.hide();
-    const menu = new import_obsidian20.Menu();
+    const menu = new import_obsidian21.Menu();
     this.menu = menu;
     menu.addItem((item) => item.setTitle(message("insertAfter", this.owner.zh())).setIcon("plus").onClick(() => this.insert()));
     if (context)
@@ -12722,7 +12950,7 @@ var HandleView = class {
     button.setAttribute("aria-label", message(label2, this.owner.zh()));
     if (this.owner.preferences().hints)
       button.title = message(label2, this.owner.zh());
-    (0, import_obsidian20.setIcon)(button, icon);
+    (0, import_obsidian21.setIcon)(button, icon);
     button.addEventListener("click", run);
     this.root.append(button);
     return button;
@@ -12809,7 +13037,7 @@ var HandleView = class {
       event.preventDefault();
       return;
     }
-    const file = (_a = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a.file;
+    const file = (_a = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file;
     const preferenceMode = this.granularity, mode = !this.target.block ? "line" : preferenceMode;
     const line = mode === "line" && this.editor && file ? captureLineDrag(
       this.editor,
@@ -12817,7 +13045,7 @@ var HandleView = class {
       this.owner.preferences().snapSelection,
       () => {
         var _a2;
-        return this.eligible() && this.owner.preferences().dragGranularity === preferenceMode && ((_a2 = this.view.state.field(import_obsidian20.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
+        return this.eligible() && this.owner.preferences().dragGranularity === preferenceMode && ((_a2 = this.view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a2.file) === file;
       }
     ) : null;
     const block = mode === "block" ? this.context() : null;
@@ -12985,7 +13213,7 @@ var HandleView = class {
     const plan = (_a = this.drop) == null ? void 0 : _a.plan, owned2 = ((_b = event.dataTransfer) == null ? void 0 : _b.getData(mime)) === drag.token;
     this.endDrag();
     if (!owned2 || !plan || !commitBlockEdit(drag.context, plan))
-      new import_obsidian20.Notice(message("blockUnavailable", this.owner.zh()));
+      new import_obsidian21.Notice(message("blockUnavailable", this.owner.zh()));
   }
   endDrag() {
     this.pressing = false;
@@ -13011,7 +13239,7 @@ var HandleView = class {
 // src/platform/block-keys.ts
 var import_state5 = require("@codemirror/state");
 var import_view7 = require("@codemirror/view");
-var import_obsidian21 = require("obsidian");
+var import_obsidian22 = require("obsidian");
 
 // src/domain/block-keys.ts
 function expandBlockSelection(model, from, to) {
@@ -13068,7 +13296,7 @@ var BlockKeys = class {
   }
   model(view) {
     var _a;
-    if (!this.live || !this.preferences().blockKeys || !view.hasFocus || view.composing || view.state.readOnly || view.state.doc.length > 2 * 1024 * 1024 || view.state.selection.ranges.length !== 1 || !((_a = view.state.field(import_obsidian21.editorInfoField, false)) == null ? void 0 : _a.file))
+    if (!this.live || !this.preferences().blockKeys || !view.hasFocus || view.composing || view.state.readOnly || view.state.doc.length > 2 * 1024 * 1024 || view.state.selection.ranges.length !== 1 || !((_a = view.state.field(import_obsidian22.editorInfoField, false)) == null ? void 0 : _a.file))
       return null;
     const text2 = view.state.doc.toString(), cached = this.cache.get(view);
     if ((cached == null ? void 0 : cached.text) === text2)
@@ -13112,7 +13340,7 @@ var BlockKeys = class {
 // src/platform/row-selection.ts
 var import_state6 = require("@codemirror/state");
 var import_view8 = require("@codemirror/view");
-var import_obsidian22 = require("obsidian");
+var import_obsidian23 = require("obsidian");
 
 // src/domain/row-selection.ts
 var MAX_SELECTION_DOCUMENT = 2 * 1024 * 1024;
@@ -13172,7 +13400,7 @@ var RowPaint = class {
   build() {
     var _a;
     const { view } = this;
-    const rows2 = this.owner.enabled && ((_a = view.state.field(import_obsidian22.editorInfoField, false)) == null ? void 0 : _a.file) ? selectedRowStarts(view.state.doc, view.state.selection.ranges, view.visibleRanges) : [];
+    const rows2 = this.owner.enabled && ((_a = view.state.field(import_obsidian23.editorInfoField, false)) == null ? void 0 : _a.file) ? selectedRowStarts(view.state.doc, view.state.selection.ranges, view.visibleRanges) : [];
     this.decorations = import_view8.Decoration.set(rows2.map((at) => import_view8.Decoration.line({ class: "keyline-next-selected-row" }).range(at)));
   }
   update(update) {
@@ -13182,7 +13410,7 @@ var RowPaint = class {
       this.refresh();
     } else if (update.transactions.some((tr) => tr.effects.some((e) => e.is(repaint))))
       this.refresh();
-    else if (update.docChanged || update.selectionSet || update.viewportChanged || ((_a = update.startState.field(import_obsidian22.editorInfoField, false)) == null ? void 0 : _a.file) !== ((_b = update.state.field(import_obsidian22.editorInfoField, false)) == null ? void 0 : _b.file))
+    else if (update.docChanged || update.selectionSet || update.viewportChanged || ((_a = update.startState.field(import_obsidian23.editorInfoField, false)) == null ? void 0 : _a.file) !== ((_b = update.state.field(import_obsidian23.editorInfoField, false)) == null ? void 0 : _b.file))
       this.build();
   }
   destroy() {
@@ -13210,7 +13438,7 @@ var RowSelection = class {
     });
     return [plugin, import_state6.EditorState.transactionFilter.of((transaction) => {
       var _a;
-      if (!owner.enabled || !owner.preferences().snapSelection || !transaction.selection || transaction.docChanged || !transaction.isUserEvent("select.pointer") || transaction.startState.readOnly || !((_a = transaction.startState.field(import_obsidian22.editorInfoField, false)) == null ? void 0 : _a.file) || transaction.newDoc.length > MAX_SELECTION_DOCUMENT || ![...owner.views].some(({ view }) => view.state === transaction.startState && view.hasFocus && !view.composing))
+      if (!owner.enabled || !owner.preferences().snapSelection || !transaction.selection || transaction.docChanged || !transaction.isUserEvent("select.pointer") || transaction.startState.readOnly || !((_a = transaction.startState.field(import_obsidian23.editorInfoField, false)) == null ? void 0 : _a.file) || transaction.newDoc.length > MAX_SELECTION_DOCUMENT || ![...owner.views].some(({ view }) => view.state === transaction.startState && view.hasFocus && !view.composing))
         return transaction;
       const ranges = transaction.newSelection.ranges.map((range) => {
         const next = wholeRows(transaction.newDoc, range);
@@ -13269,7 +13497,7 @@ var RowSelection = class {
 };
 
 // src/platform/rich-format.ts
-var import_obsidian23 = require("obsidian");
+var import_obsidian24 = require("obsidian");
 var labels2 = {
   default: "toneDefault",
   gray: "toneGray",
@@ -13308,7 +13536,7 @@ var RichFormatting = class {
   commit(context, edit2) {
     if (!context.valid() || !edit2) {
       if (this.live)
-        new import_obsidian23.Notice(message(edit2 ? "stale" : "formatUnavailable", this.zh()));
+        new import_obsidian24.Notice(message(edit2 ? "stale" : "formatUnavailable", this.zh()));
       return false;
     }
     context.editor.replaceRange(edit2.insert, context.editor.offsetToPos(edit2.from), context.editor.offsetToPos(edit2.to), "keyline-next-format");
@@ -13350,18 +13578,18 @@ var RichFormatting = class {
   link(context, point, doc) {
     if (!context.valid())
       return;
-    const menu = new import_obsidian23.Menu(), oneLine = !/[\r\n]/u.test(context.text.slice(context.from, context.to));
+    const menu = new import_obsidian24.Menu(), oneLine = !/[\r\n]/u.test(context.text.slice(context.from, context.to));
     menu.addItem((item) => item.setTitle(message("linkPage", this.zh())).setIcon("file-text").setDisabled(!oneLine).onClick(() => {
       var _a;
       if (!context.valid()) {
-        new import_obsidian23.Notice(message("stale", this.zh()));
+        new import_obsidian24.Notice(message("stale", this.zh()));
         return;
       }
       const controller = this.insertion(), insert = controller == null ? void 0 : controller.capture(context.editor, context.file);
       const old = selectedLink(context.text, context.from, context.to);
       const alias = (_a = old == null ? void 0 : old.label) != null ? _a : context.text.slice(context.from, context.to);
       if (/[\[\]|\r\n]/u.test(alias)) {
-        new import_obsidian23.Notice(message("unsafeLink", this.zh()));
+        new import_obsidian24.Notice(message("unsafeLink", this.zh()));
         return;
       }
       if (controller && insert)
@@ -13377,7 +13605,7 @@ var RichFormatting = class {
   blocks(context, point, doc) {
     if (!context.valid())
       return;
-    const menu = new import_obsidian23.Menu(), block = captureBlock(context.editor, context.valid);
+    const menu = new import_obsidian24.Menu(), block = captureBlock(context.editor, context.valid);
     menu.addItem((item) => item.setTitle(message("openInsert", this.zh())).setIcon("plus").onClick(() => {
       if (!context.valid())
         return;
@@ -13417,7 +13645,7 @@ var RichFormatting = class {
     this.dialogs.clear();
   }
 };
-var LinkModal = class extends import_obsidian23.Modal {
+var LinkModal = class extends import_obsidian24.Modal {
   constructor(app, owner, context) {
     super(app);
     this.owner = owner;
@@ -13429,7 +13657,7 @@ var LinkModal = class extends import_obsidian23.Modal {
     const current = selectedLink(this.context.text, this.context.from, this.context.to);
     let value = (current == null ? void 0 : current.kind) === "url" ? current.destination : "";
     const form = this.contentEl.createEl("form");
-    new import_obsidian23.Setting(form).setName(message("url", this.owner.zh())).addText((input) => {
+    new import_obsidian24.Setting(form).setName(message("url", this.owner.zh())).addText((input) => {
       input.setValue(value).setPlaceholder("https://\u2026");
       input.inputEl.type = "url";
       input.inputEl.required = true;
@@ -13460,7 +13688,7 @@ var LinkModal = class extends import_obsidian23.Modal {
     this.owner.release(this);
   }
 };
-var ColorModal = class extends import_obsidian23.Modal {
+var ColorModal = class extends import_obsidian24.Modal {
   constructor(app, owner, context) {
     super(app);
     this.owner = owner;
@@ -13505,7 +13733,7 @@ var ColorModal = class extends import_obsidian23.Modal {
 };
 
 // src/platform/icon-editor.ts
-var import_obsidian24 = require("obsidian");
+var import_obsidian25 = require("obsidian");
 function availableGlyphs() {
   return identityGlyphs();
 }
@@ -13526,7 +13754,7 @@ var IconEditor = class {
     if (!this.live || this.owner.readOnly)
       return;
     if (iconOwnerPresent(this.owner.app)) {
-      new import_obsidian24.Notice(message("iconManaged", this.owner.zh));
+      new import_obsidian25.Notice(message("iconManaged", this.owner.zh));
       return;
     }
     const initial = iconChoice(this.owner.preferences.iconRules, scope, key);
@@ -13539,7 +13767,7 @@ var IconEditor = class {
       scope,
       key,
       initial,
-      file instanceof import_obsidian24.TFolder,
+      file instanceof import_obsidian25.TFolder,
       valid,
       async (choice) => {
         if (!valid())
@@ -13586,7 +13814,7 @@ function matchGlyph(id, query) {
   const words = `${id} ${id.replace(/-/gu, " ")} ${aliases2.filter(([key]) => id.split("-").includes(key)).map(([, words2]) => words2).join(" ")}`.toLowerCase();
   return query.trim().toLowerCase().split(/\s+/u).every((word) => words.includes(word));
 }
-var IconDialog = class extends import_obsidian24.Modal {
+var IconDialog = class extends import_obsidian25.Modal {
   constructor(app, owner, targetScope, key, choice, folder, valid, save, releasePicker) {
     super(app);
     this.owner = owner;
@@ -13607,7 +13835,7 @@ var IconDialog = class extends import_obsidian24.Modal {
     const sample = preview.createSpan({ attr: { "aria-hidden": "true" } }), summary = preview.createSpan();
     let query = "", draft = { ...this.choice };
     const icons = availableGlyphs();
-    new import_obsidian24.Setting(this.contentEl).setName(message("iconSearch", zh)).addSearch((search) => {
+    new import_obsidian25.Setting(this.contentEl).setName(message("iconSearch", zh)).addSearch((search) => {
       search.setPlaceholder(message("iconSearchHint", zh));
       search.inputEl.setAttribute("aria-label", message("iconSearch", zh));
       search.onChange((value) => {
@@ -13618,7 +13846,7 @@ var IconDialog = class extends import_obsidian24.Modal {
     const count2 = this.contentEl.createEl("p", { cls: "setting-item-description", attr: { role: "status" } });
     const grid = this.contentEl.createDiv({ cls: "keyline-next-icon-grid" });
     let colors, custom;
-    new import_obsidian24.Setting(this.contentEl).setName(message("iconColor", zh)).addDropdown((dropdown) => {
+    new import_obsidian25.Setting(this.contentEl).setName(message("iconColor", zh)).addDropdown((dropdown) => {
       var _a, _b;
       colors = dropdown;
       dropdown.addOption("", message("auto", zh));
@@ -13655,7 +13883,7 @@ var IconDialog = class extends import_obsidian24.Modal {
       });
     });
     const status = this.contentEl.createEl("p", { attr: { role: "status" } });
-    new import_obsidian24.Setting(this.contentEl).addButton((button) => button.setButtonText(message("iconAutomatic", zh)).onClick(() => {
+    new import_obsidian25.Setting(this.contentEl).addButton((button) => button.setButtonText(message("iconAutomatic", zh)).onClick(() => {
       draft = {};
       colors.setValue("");
       custom.setValue("");
@@ -13726,10 +13954,10 @@ var IconDialog = class extends import_obsidian24.Modal {
 };
 
 // src/platform/explorer.ts
-var import_obsidian26 = require("obsidian");
+var import_obsidian27 = require("obsidian");
 
 // src/platform/button-keys.ts
-var import_obsidian25 = require("obsidian");
+var import_obsidian26 = require("obsidian");
 var ButtonKeys = class {
   constructor(app) {
     this.app = app;
@@ -13741,7 +13969,7 @@ var ButtonKeys = class {
     this.clear();
     if (!button.isConnected || button.ownerDocument.activeElement !== button || button.disabled)
       return;
-    const scope = new import_obsidian25.Scope(parent != null ? parent : this.app.scope);
+    const scope = new import_obsidian26.Scope(parent != null ? parent : this.app.scope);
     for (const key of ["Enter", " "])
       scope.register([], key, (event) => {
         var _a2;
@@ -13807,18 +14035,18 @@ var ExplorerActions = class {
       if (!this.live)
         return;
       if (!this.valid(folder, path) || this.owner.app.vault.getAbstractFileByPath(file.path) !== file) {
-        new import_obsidian26.Notice(`${message("createdNotOpened", this.owner.zh)} ${file.path}`);
+        new import_obsidian27.Notice(`${message("createdNotOpened", this.owner.zh)} ${file.path}`);
         return;
       }
       try {
         await this.owner.app.workspace.getLeaf(false).openFile(file);
       } catch (e) {
         if (this.live)
-          new import_obsidian26.Notice(`${message("createdNotOpened", this.owner.zh)} ${file.path}`);
+          new import_obsidian27.Notice(`${message("createdNotOpened", this.owner.zh)} ${file.path}`);
       }
     } catch (e) {
       if (this.live)
-        new import_obsidian26.Notice(message("createFailed", this.owner.zh));
+        new import_obsidian27.Notice(message("createFailed", this.owner.zh));
     } finally {
       this.busy.delete(folder);
     }
@@ -13828,11 +14056,11 @@ var ExplorerActions = class {
       return;
     const path = row.dataset.path, file = path && this.owner.app.vault.getAbstractFileByPath(path);
     if (!file) {
-      new import_obsidian26.Notice(message("explorerChanged", this.owner.zh));
+      new import_obsidian27.Notice(message("explorerChanged", this.owner.zh));
       return;
     }
     if (kind2 === "new") {
-      if (file instanceof import_obsidian26.TFolder)
+      if (file instanceof import_obsidian27.TFolder)
         void this.createNote(file);
       return;
     }
@@ -13871,7 +14099,7 @@ var ExplorerActions = class {
         button.dataset.keylineAction = kind2;
         button.classList.add("clickable-icon");
         button.dataset.tooltipPosition = "top";
-        (0, import_obsidian26.setIcon)(button, kind2 === "new" ? "plus" : "ellipsis");
+        (0, import_obsidian27.setIcon)(button, kind2 === "new" ? "plus" : "ellipsis");
         bar.append(button);
         button.addEventListener("pointerdown", (e) => e.stopPropagation());
         button.addEventListener("mousedown", (e) => e.stopPropagation());
@@ -13938,7 +14166,7 @@ var ExplorerActions = class {
       root.classList.add("keyline-next-explorer");
       for (const row of Array.from(root.querySelectorAll(".nav-file-title[data-path],.nav-folder-title[data-path]"))) {
         const file = this.owner.app.vault.getAbstractFileByPath((_d = row.dataset.path) != null ? _d : "");
-        const folder = file instanceof import_obsidian26.TFolder;
+        const folder = file instanceof import_obsidian27.TFolder;
         if (!file || row.querySelector(":scope > .nav-file-title-actions,:scope > .nav-folder-title-actions,:scope > .ncl-native-row-actions")) {
           this.removeBar(row);
           continue;
@@ -13992,8 +14220,8 @@ var ExplorerActions = class {
 };
 
 // src/platform/interface.ts
-var import_obsidian27 = require("obsidian");
-var hostMenu = import_obsidian27.Menu;
+var import_obsidian28 = require("obsidian");
+var hostMenu = import_obsidian28.Menu;
 var MenuMode = class {
   constructor(app) {
     this.app = app;
@@ -14002,7 +14230,7 @@ var MenuMode = class {
   }
   read() {
     const vault = this.app.vault;
-    if (!import_obsidian27.Platform.isDesktopApp || typeof vault.getConfig !== "function" || typeof vault.setConfig !== "function" || typeof vault.saveConfig !== "function" || typeof vault.readConfigJson !== "function" || !("useNativeMenu" in hostMenu))
+    if (!import_obsidian28.Platform.isDesktopApp || typeof vault.getConfig !== "function" || typeof vault.setConfig !== "function" || typeof vault.saveConfig !== "function" || typeof vault.readConfigJson !== "function" || !("useNativeMenu" in hostMenu))
       return null;
     try {
       if (typeof hostMenu.useNativeMenu === "boolean")
@@ -14074,7 +14302,7 @@ var HoverHints = class {
 };
 
 // src/platform/shell.ts
-var import_obsidian28 = require("obsidian");
+var import_obsidian29 = require("obsidian");
 
 // src/domain/footer.ts
 function footerGeometry(value) {
@@ -14259,7 +14487,7 @@ var FooterDocument = class {
     space2.setAttribute("aria-hidden", "true");
     glyph.className = "ncl-shell-vault-icon keyline-next-vault-glyph";
     glyph.setAttribute("aria-hidden", "true");
-    (0, import_obsidian28.setIcon)(glyph, "vault");
+    (0, import_obsidian29.setIcon)(glyph, "vault");
     const removeListeners = [];
     this.mounted = { ...parts, lease, space: space2, glyph, removeListeners };
     lease.addClass(workspace, "ncl-shell-managed");
@@ -14313,7 +14541,7 @@ var FooterDocument = class {
     if (!this.live)
       return;
     const win = this.doc.defaultView;
-    const enabled = import_obsidian28.Platform.isDesktopApp && !this.doc.body.classList.contains("is-mobile") && win && win.getComputedStyle(this.doc.body).getPropertyValue("--ncl-shell-controls").trim() === "1";
+    const enabled = import_obsidian29.Platform.isDesktopApp && !this.doc.body.classList.contains("is-mobile") && win && win.getComputedStyle(this.doc.body).getPropertyValue("--ncl-shell-controls").trim() === "1";
     if (!enabled) {
       this.detach();
       return;
@@ -14436,7 +14664,7 @@ var ShellPresentation = class {
 };
 
 // src/platform/sync-status.ts
-var import_obsidian29 = require("obsidian");
+var import_obsidian30 = require("obsidian");
 
 // src/domain/sync-status.ts
 var glyphs = /* @__PURE__ */ new Map([
@@ -14549,7 +14777,7 @@ var SyncStatusDocument = class {
       return;
     this.observer.disconnect();
     this.release();
-    const enabled = import_obsidian29.Platform.isDesktopApp && !this.doc.body.classList.contains("is-mobile") && this.win.getComputedStyle(this.doc.body).getPropertyValue("--ncl-shell-controls").trim() === "1";
+    const enabled = import_obsidian30.Platform.isDesktopApp && !this.doc.body.classList.contains("is-mobile") && this.win.getComputedStyle(this.doc.body).getPropertyValue("--ncl-shell-controls").trim() === "1";
     if (enabled)
       for (const item of Array.from(this.doc.querySelectorAll(itemSelector))) {
         if (item.matches(".ncl-sync-known,.ncl-sync-attention") || Array.from(item.childNodes).some((node) => node.nodeType !== 3))
@@ -14561,7 +14789,7 @@ var SyncStatusDocument = class {
         content2.className = "keyline-next-sync-content";
         const paint = { item, content: content2, tokens: [], lease: new PresentationLease() };
         for (const part of plan.parts) {
-          const icon = part.icon && (0, import_obsidian29.getIcon)(part.icon);
+          const icon = part.icon && (0, import_obsidian30.getIcon)(part.icon);
           if (!icon || icon.textContent) {
             content2.append(this.doc.createTextNode(part.text));
             continue;
@@ -14616,7 +14844,7 @@ var SyncStatusPresentation = class {
 };
 
 // src/main.ts
-var KeylineNext = class extends import_obsidian30.Plugin {
+var KeylineNext = class extends import_obsidian31.Plugin {
   constructor() {
     super(...arguments);
     this.preferences = { ...defaults };
@@ -14628,19 +14856,21 @@ var KeylineNext = class extends import_obsidian30.Plugin {
   get zh() {
     return isChinese(this.preferences);
   }
+  get mobile() {
+    return import_obsidian31.Platform.isMobile;
+  }
+  get effectivePreferences() {
+    return platformPreferences(this.preferences, this.mobile);
+  }
   get editorPreferences() {
-    return editingPreferences(this.preferences);
+    return editingPreferences(this.effectivePreferences);
   }
   watchInterfaceDocument(doc) {
     var _a;
     (_a = this.hints) == null ? void 0 : _a.watch(doc);
   }
   async onload() {
-    var _a, _b;
-    if (import_obsidian30.Platform.isMobile) {
-      new import_obsidian30.Notice(message("mobile", this.zh));
-      return;
-    }
+    var _a, _b, _c;
     this.register(() => {
       this.active = false;
     });
@@ -14653,6 +14883,13 @@ var KeylineNext = class extends import_obsidian30.Plugin {
     }
     if (!this.active)
       return;
+    if (this.mobile) {
+      this.betaNotice = new import_obsidian31.Notice(message("mobileBeta", this.zh), 12e3);
+      this.register(() => {
+        var _a2;
+        return (_a2 = this.betaNotice) == null ? void 0 : _a2.hide();
+      });
+    }
     this.store = new VerifiedStore((value) => this.saveData(value), () => this.loadData(), (state) => this.saveStatus(state));
     this.register(() => {
       var _a2;
@@ -14706,7 +14943,8 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       var _a2;
       return (_a2 = this.iconEditor) == null ? void 0 : _a2.dispose();
     });
-    this.explorer = new ExplorerActions(this);
+    if (!this.mobile)
+      this.explorer = new ExplorerActions(this);
     this.register(() => {
       var _a2;
       return (_a2 = this.explorer) == null ? void 0 : _a2.dispose();
@@ -14716,27 +14954,30 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       var _a2;
       return (_a2 = this.menuMode) == null ? void 0 : _a2.dispose();
     });
-    this.hints = new HoverHints(() => this.preferences.hints);
-    this.hints.watch(document);
+    if (!this.mobile)
+      this.hints = new HoverHints(() => this.preferences.hints);
+    (_b = this.hints) == null ? void 0 : _b.watch(document);
     this.register(() => {
       var _a2;
       return (_a2 = this.hints) == null ? void 0 : _a2.dispose();
     });
-    this.shell = new ShellPresentation(this.app, () => this.zh);
+    if (!this.mobile)
+      this.shell = new ShellPresentation(this.app, () => this.zh);
     this.register(() => {
       var _a2;
       return (_a2 = this.shell) == null ? void 0 : _a2.dispose();
     });
-    this.syncStatus = new SyncStatusPresentation();
+    if (!this.mobile)
+      this.syncStatus = new SyncStatusPresentation();
     this.register(() => {
       var _a2;
       return (_a2 = this.syncStatus) == null ? void 0 : _a2.dispose();
     });
     this.registerEvent(this.app.workspace.on("window-open", (_workspace, win) => {
-      var _a2, _b2, _c, _d;
+      var _a2, _b2, _c2, _d;
       (_a2 = this.hints) == null ? void 0 : _a2.watch(win.document);
       (_b2 = this.explorer) == null ? void 0 : _b2.schedule();
-      (_c = this.shell) == null ? void 0 : _c.watch(win.document);
+      (_c2 = this.shell) == null ? void 0 : _c2.watch(win.document);
       (_d = this.syncStatus) == null ? void 0 : _d.watch(win.document);
     }));
     this.registerEvent(this.app.workspace.on("file-menu", (menu, file) => {
@@ -14754,7 +14995,7 @@ var KeylineNext = class extends import_obsidian30.Plugin {
         (_a2 = this.iconEditor) == null ? void 0 : _a2.file(file);
       return true;
     } });
-    this.typography = new TypographyController(this.app, () => this.preferences);
+    this.typography = new TypographyController(this.app, () => this.effectivePreferences);
     this.register(() => {
       var _a2;
       return (_a2 = this.typography) == null ? void 0 : _a2.dispose();
@@ -14765,78 +15006,82 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       var _a2;
       return (_a2 = this.rhythm) == null ? void 0 : _a2.dispose();
     });
-    this.rowSelection = new RowSelection(() => this.editorPreferences);
-    this.registerEditorExtension(this.rowSelection.extension());
-    this.register(() => {
-      var _a2;
-      return (_a2 = this.rowSelection) == null ? void 0 : _a2.dispose();
-    });
+    if (!this.mobile) {
+      this.rowSelection = new RowSelection(() => this.editorPreferences);
+      this.registerEditorExtension(this.rowSelection.extension());
+      this.register(() => {
+        var _a2;
+        return (_a2 = this.rowSelection) == null ? void 0 : _a2.dispose();
+      });
+    }
     this.rich = new RichFormatting(this.app, () => this.zh, () => this.insertion, (editor) => this.app.workspace.getLeavesOfType("markdown").some((leaf) => leaf.view.editor === editor && this.composition.has(leaf.view.containerEl.ownerDocument)));
     this.register(() => {
       var _a2;
       return (_a2 = this.rich) == null ? void 0 : _a2.dispose();
     });
-    this.toolbar = new ToolbarController(this.app, () => this.editorPreferences, () => this.zh, this.rich);
-    this.registerEditorExtension(this.toolbar.extension());
-    this.register(() => {
-      var _a2;
-      return (_a2 = this.toolbar) == null ? void 0 : _a2.dispose();
-    });
-    this.workspaces = new WorkspaceController(
-      this.app,
-      this.addStatusBarItem(),
-      (_b = this.manifest.dir) != null ? _b : `${this.app.vault.configDir}/plugins/${this.manifest.id}`,
-      () => !this.readOnly && this.preferences.workspaces,
-      () => this.zh
-    );
-    this.register(() => {
-      var _a2;
-      return (_a2 = this.workspaces) == null ? void 0 : _a2.dispose();
-    });
+    if (!this.mobile) {
+      this.toolbar = new ToolbarController(this.app, () => this.editorPreferences, () => this.zh, this.rich);
+      this.registerEditorExtension(this.toolbar.extension());
+      this.register(() => {
+        var _a2;
+        return (_a2 = this.toolbar) == null ? void 0 : _a2.dispose();
+      });
+      this.workspaces = new WorkspaceController(
+        this.app,
+        this.addStatusBarItem(),
+        (_c = this.manifest.dir) != null ? _c : `${this.app.vault.configDir}/plugins/${this.manifest.id}`,
+        () => !this.readOnly && this.preferences.workspaces,
+        () => this.zh
+      );
+      this.register(() => {
+        var _a2;
+        return (_a2 = this.workspaces) == null ? void 0 : _a2.dispose();
+      });
+    }
     const watched = /* @__PURE__ */ new WeakSet();
     const bindDocuments = () => {
       this.app.workspace.iterateAllLeaves((leaf) => {
-        var _a2, _b2, _c;
+        var _a2, _b2, _c2;
         const doc = leaf.view.containerEl.ownerDocument;
         if (watched.has(doc))
           return;
         watched.add(doc);
         (_a2 = this.hints) == null ? void 0 : _a2.watch(doc);
         (_b2 = this.shell) == null ? void 0 : _b2.watch(doc);
-        (_c = this.syncStatus) == null ? void 0 : _c.watch(doc);
+        (_c2 = this.syncStatus) == null ? void 0 : _c2.watch(doc);
         this.registerDomEvent(doc, "compositionstart", () => this.composition.add(doc));
         this.registerDomEvent(doc, "compositionend", () => this.composition.delete(doc));
       });
     };
     this.app.workspace.onLayoutReady(() => {
-      var _a2, _b2, _c, _d, _e, _f;
+      var _a2, _b2, _c2, _d, _e, _f;
       if (!this.active)
         return;
       this.ready = true;
       (_a2 = this.shell) == null ? void 0 : _a2.watch(document);
       (_b2 = this.syncStatus) == null ? void 0 : _b2.watch(document);
       bindDocuments();
-      (_c = this.identities) == null ? void 0 : _c.refresh();
+      (_c2 = this.identities) == null ? void 0 : _c2.refresh();
       (_d = this.explorer) == null ? void 0 : _d.refresh();
       (_e = this.typography) == null ? void 0 : _e.refresh();
       (_f = this.workspaces) == null ? void 0 : _f.refresh();
     });
     this.registerEvent(this.app.workspace.on("layout-change", () => {
-      var _a2, _b2, _c, _d, _e;
+      var _a2, _b2, _c2, _d, _e;
       if (this.ready) {
         bindDocuments();
         (_a2 = this.shell) == null ? void 0 : _a2.refresh();
         (_b2 = this.identities) == null ? void 0 : _b2.schedule();
-        (_c = this.explorer) == null ? void 0 : _c.schedule();
+        (_c2 = this.explorer) == null ? void 0 : _c2.schedule();
         (_d = this.typography) == null ? void 0 : _d.refresh();
         (_e = this.workspaces) == null ? void 0 : _e.refresh();
       }
     }));
     this.registerEvent(this.app.workspace.on("css-change", () => {
-      var _a2, _b2, _c, _d, _e, _f, _g, _h;
+      var _a2, _b2, _c2, _d, _e, _f, _g, _h;
       (_a2 = this.shell) == null ? void 0 : _a2.refresh();
       (_b2 = this.syncStatus) == null ? void 0 : _b2.refresh();
-      (_c = this.identities) == null ? void 0 : _c.schedule();
+      (_c2 = this.identities) == null ? void 0 : _c2.schedule();
       (_d = this.explorer) == null ? void 0 : _d.schedule();
       (_e = this.typography) == null ? void 0 : _e.refresh();
       (_f = this.rhythm) == null ? void 0 : _f.refresh();
@@ -14847,7 +15092,7 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       var _a2, _b2;
       const result = renameIconRules(this.preferences.iconRules, before, file.path);
       if (result.conflict)
-        new import_obsidian30.Notice(message("iconRenameConflict", this.zh));
+        new import_obsidian31.Notice(message("iconRenameConflict", this.zh));
       else if (JSON.stringify(result.rules) !== JSON.stringify(this.preferences.iconRules))
         void this.update({ iconRules: result.rules });
       (_a2 = this.identities) == null ? void 0 : _a2.schedule();
@@ -14864,60 +15109,64 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       var _a2;
       return (_a2 = this.insertMenus) == null ? void 0 : _a2.dispose();
     });
-    this.handles = new BlockHandles(
-      this.app,
-      () => this.editorPreferences,
-      () => this.zh,
-      this.insertion,
-      (dragGranularity) => this.update({ dragGranularity })
-    );
-    this.registerEditorExtension(this.handles.extension());
-    this.register(() => {
-      var _a2;
-      return (_a2 = this.handles) == null ? void 0 : _a2.dispose();
-    });
-    const blockKeys = new BlockKeys(() => this.editorPreferences);
-    this.registerEditorExtension(blockKeys.extension());
-    this.register(() => blockKeys.dispose());
-    this.addCommand({
-      id: "focus-block-handle",
-      name: message("focusBlockHandle", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        var _a2, _b2;
-        if (!view.file || !this.editorPreferences.blockHandles || editor.listSelections().length !== 1)
-          return false;
-        return checking ? !!((_a2 = this.handles) == null ? void 0 : _a2.canFocus(editor)) : !!((_b2 = this.handles) == null ? void 0 : _b2.focus(editor));
-      }
-    });
+    if (!this.mobile) {
+      this.handles = new BlockHandles(
+        this.app,
+        () => this.editorPreferences,
+        () => this.zh,
+        this.insertion,
+        (dragGranularity) => this.update({ dragGranularity })
+      );
+      this.registerEditorExtension(this.handles.extension());
+      this.register(() => {
+        var _a2;
+        return (_a2 = this.handles) == null ? void 0 : _a2.dispose();
+      });
+      const blockKeys = new BlockKeys(() => this.editorPreferences);
+      this.registerEditorExtension(blockKeys.extension());
+      this.register(() => blockKeys.dispose());
+      this.addCommand({
+        id: "focus-block-handle",
+        name: message("focusBlockHandle", this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          var _a2, _b2;
+          if (!view.file || !this.editorPreferences.blockHandles || editor.listSelections().length !== 1)
+            return false;
+          return checking ? !!((_a2 = this.handles) == null ? void 0 : _a2.canFocus(editor)) : !!((_b2 = this.handles) == null ? void 0 : _b2.focus(editor));
+        }
+      });
+    }
     this.mentions = new MentionController(this.app, () => this.editorPreferences, () => this.zh);
     this.registerEditorExtension(this.mentions.extension());
     this.register(() => {
       var _a2;
       return (_a2 = this.mentions) == null ? void 0 : _a2.dispose();
     });
-    this.writing = new WritingController(() => this.editorPreferences, () => this.zh);
-    this.registerEditorExtension(this.writing.extension());
-    this.register(() => {
-      var _a2;
-      return (_a2 = this.writing) == null ? void 0 : _a2.dispose();
-    });
-    this.addCommand({
-      id: "toggle-markers",
-      name: message("toggleMarkers", this.zh),
-      callback: () => {
-        void this.update({ hideMarkers: !this.preferences.hideMarkers });
-      }
-    });
-    this.addCommand({
-      id: "next-suspicious",
-      name: message("nextSuspicious", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
+    if (!this.mobile) {
+      this.writing = new WritingController(() => this.editorPreferences, () => this.zh);
+      this.registerEditorExtension(this.writing.extension());
+      this.register(() => {
         var _a2;
-        if (!view.file || editor.listSelections().length !== 1)
-          return false;
-        return checking || !!((_a2 = this.writing) == null ? void 0 : _a2.next(editor));
-      }
-    });
+        return (_a2 = this.writing) == null ? void 0 : _a2.dispose();
+      });
+      this.addCommand({
+        id: "toggle-markers",
+        name: message("toggleMarkers", this.zh),
+        callback: () => {
+          void this.update({ hideMarkers: !this.preferences.hideMarkers });
+        }
+      });
+      this.addCommand({
+        id: "next-suspicious",
+        name: message("nextSuspicious", this.zh),
+        editorCheckCallback: (checking, editor, view) => {
+          var _a2;
+          if (!view.file || editor.listSelections().length !== 1)
+            return false;
+          return checking || !!((_a2 = this.writing) == null ? void 0 : _a2.next(editor));
+        }
+      });
+    }
     const settings = new NextSettings(this);
     this.addSettingTab(settings);
     this.register(() => settings.hide());
@@ -14933,81 +15182,83 @@ var KeylineNext = class extends import_obsidian30.Plugin {
         return eligible;
       }
     });
-    for (const action of blockActions)
+    if (!this.mobile) {
+      for (const action of blockActions)
+        this.addCommand({
+          id: `block-${action.id}`,
+          name: message(action.label, this.zh),
+          editorCheckCallback: (checking, editor, view) => {
+            const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : void 0;
+            const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
+            const eligible = !!context && (action.id === "select" || !!blockActionPlan(context, action.id));
+            if (eligible && !checking)
+              performBlock(context, action.id);
+            return eligible;
+          }
+        });
       this.addCommand({
-        id: `block-${action.id}`,
-        name: message(action.label, this.zh),
+        id: "block-convert",
+        name: message("convertBlock", this.zh),
         editorCheckCallback: (checking, editor, view) => {
           const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : void 0;
           const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
-          const eligible = !!context && (action.id === "select" || !!blockActionPlan(context, action.id));
+          if (context && !checking)
+            new BlockConvertPicker(this.app, context, this.zh).open();
+          return !!context;
+        }
+      });
+      for (const [id, label2, run] of [
+        ["switch-workspace", "switchWorkspace", () => {
+          var _a2;
+          return (_a2 = this.workspaces) == null ? void 0 : _a2.open();
+        }],
+        ["save-workspace", "saveWorkspace", () => {
+          var _a2;
+          return (_a2 = this.workspaces) == null ? void 0 : _a2.save();
+        }],
+        ["save-workspace-as", "saveWorkspaceAs", () => {
+          var _a2;
+          return (_a2 = this.workspaces) == null ? void 0 : _a2.saveAs();
+        }],
+        ["restore-workspace", "restoreWorkspace", () => {
+          var _a2;
+          void ((_a2 = this.workspaces) == null ? void 0 : _a2.restore());
+        }]
+      ])
+        this.addCommand({ id, name: message(label2, this.zh), callback: run });
+      this.addCommand({
+        id: "focus-toolbar",
+        name: message("focusToolbar", this.zh),
+        editorCheckCallback: (checking, editor) => {
+          var _a2;
+          const selected = editor.getSelection(), text2 = editor.getValue();
+          const eligible = this.editorPreferences.toolbar && editor.listSelections().length === 1 && !!selected.trim() && selected.length <= 16e3 && text2.length <= 2 * 1024 * 1024 && !inProtectedSyntax(text2, editor.posToOffset(editor.getCursor("from")), editor.posToOffset(editor.getCursor("to")));
           if (eligible && !checking)
-            performBlock(context, action.id);
+            (_a2 = this.toolbar) == null ? void 0 : _a2.focus(editor);
           return eligible;
         }
       });
-    this.addCommand({
-      id: "block-convert",
-      name: message("convertBlock", this.zh),
-      editorCheckCallback: (checking, editor, view) => {
-        const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : void 0;
-        const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
-        if (context && !checking)
-          new BlockConvertPicker(this.app, context, this.zh).open();
-        return !!context;
-      }
-    });
-    for (const [id, label2, run] of [
-      ["switch-workspace", "switchWorkspace", () => {
-        var _a2;
-        return (_a2 = this.workspaces) == null ? void 0 : _a2.open();
-      }],
-      ["save-workspace", "saveWorkspace", () => {
-        var _a2;
-        return (_a2 = this.workspaces) == null ? void 0 : _a2.save();
-      }],
-      ["save-workspace-as", "saveWorkspaceAs", () => {
-        var _a2;
-        return (_a2 = this.workspaces) == null ? void 0 : _a2.saveAs();
-      }],
-      ["restore-workspace", "restoreWorkspace", () => {
-        var _a2;
-        void ((_a2 = this.workspaces) == null ? void 0 : _a2.restore());
-      }]
-    ])
-      this.addCommand({ id, name: message(label2, this.zh), callback: run });
-    this.addCommand({
-      id: "focus-toolbar",
-      name: message("focusToolbar", this.zh),
-      editorCheckCallback: (checking, editor) => {
-        var _a2;
-        const selected = editor.getSelection(), text2 = editor.getValue();
-        const eligible = this.editorPreferences.toolbar && editor.listSelections().length === 1 && !!selected.trim() && selected.length <= 16e3 && text2.length <= 2 * 1024 * 1024 && !inProtectedSyntax(text2, editor.posToOffset(editor.getCursor("from")), editor.posToOffset(editor.getCursor("to")));
-        if (eligible && !checking)
-          (_a2 = this.toolbar) == null ? void 0 : _a2.focus(editor);
-        return eligible;
-      }
-    });
-    for (const action of ["colors", "link"])
-      this.addCommand({
-        id: `selection-${action}`,
-        name: message(action, this.zh),
-        editorCheckCallback: (checking, editor, view) => {
-          var _a2;
-          const context = view.file && ((_a2 = this.rich) == null ? void 0 : _a2.capture(editor, view.file));
-          if (!(context == null ? void 0 : context.valid()))
-            return false;
-          if (!checking) {
-            if (action === "colors")
-              this.rich.colors(context);
-            else if ("containerEl" in view) {
-              const rect = view.containerEl.getBoundingClientRect();
-              this.rich.link(context, { x: rect.left + 24, y: rect.top + 80 }, view.containerEl.ownerDocument);
+      for (const action of ["colors", "link"])
+        this.addCommand({
+          id: `selection-${action}`,
+          name: message(action, this.zh),
+          editorCheckCallback: (checking, editor, view) => {
+            var _a2;
+            const context = view.file && ((_a2 = this.rich) == null ? void 0 : _a2.capture(editor, view.file));
+            if (!(context == null ? void 0 : context.valid()))
+              return false;
+            if (!checking) {
+              if (action === "colors")
+                this.rich.colors(context);
+              else if ("containerEl" in view) {
+                const rect = view.containerEl.getBoundingClientRect();
+                this.rich.link(context, { x: rect.left + 24, y: rect.top + 80 }, view.containerEl.ownerDocument);
+              }
             }
+            return true;
           }
-          return true;
-        }
-      });
+        });
+    }
     for (const style of inlineStyles)
       this.addCommand({
         id: `format-${style}`,
@@ -15032,7 +15283,7 @@ var KeylineNext = class extends import_obsidian30.Plugin {
     this.registerEvent(this.app.workspace.on("editor-menu", (menu, editor, view) => {
       const file = view.file, doc = "containerEl" in view ? view.containerEl.ownerDocument : void 0;
       const context = captureBlock(editor, () => this.active && !!doc && !!file && view.file === file && !this.composition.has(doc));
-      if (context)
+      if (context && !this.mobile)
         appendBlockMenu(menu, this.app, context, this.zh);
       if (editor.listSelections().length !== 1 || !inlineEdit(editor.getSelection(), "bold"))
         return;
@@ -15069,7 +15320,7 @@ var KeylineNext = class extends import_obsidian30.Plugin {
       if (this.warning) {
         this.warning.hide();
         this.warning = void 0;
-        new import_obsidian30.Notice(message("saved", this.zh));
+        new import_obsidian31.Notice(message("saved", this.zh));
       }
     } else if (!((_a = this.warning) == null ? void 0 : _a.noticeEl.isConnected)) {
       const doc = (_c = (_b = this.app.workspace.getMostRecentLeaf()) == null ? void 0 : _b.view.containerEl.ownerDocument) != null ? _c : document;
@@ -15081,7 +15332,7 @@ var KeylineNext = class extends import_obsidian30.Plugin {
         event.stopPropagation();
         void this.store.retry();
       });
-      this.warning = new import_obsidian30.Notice(fragment2, 0);
+      this.warning = new import_obsidian31.Notice(fragment2, 0);
     }
   }
 };

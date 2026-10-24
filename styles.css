@@ -177,6 +177,10 @@
   padding-inline-start: var(--size-4-3);
   margin-block: var(--size-4-3);
 }
+/* Mobile Beta notice stays visible in settings after the startup toast. */
+.keyline-next-mobile-beta { margin: 12px 0; padding: 12px; border: 1px solid var(--background-modifier-border); border-radius: 8px; background: var(--background-secondary); }
+.keyline-next-mobile-beta p { margin: 6px 0 0; color: var(--text-muted); font-size: var(--font-ui-small); }
+
 .keyline-next-toolbar {
   position: fixed; z-index: var(--layer-popover);
   display: flex; align-items: center; gap: 0; padding: 2px 4px; min-height: 34px;
@@ -489,6 +493,30 @@ body:not(.is-mobile) .app-container > .status-bar > .keyline-next-workspace.is-s
 .keyline-next-insert-suggestion.is-active :is(.keyline-next-insert-icon,.keyline-next-insert-chevron) { color: inherit; }
 .keyline-next-insert-separator { height: 1px; margin: 4px 8px; background: var(--background-modifier-border); }
 .keyline-next-insert-empty { padding: 8px; color: var(--text-muted); font-size: 13px; }
+
+/* Mobile-only: preserve desktop geometry, allow scrolling without selecting. */
+body.is-mobile :is(.keyline-next-mention-menu, .keyline-next-insert-menu) {
+  width: min(320px, calc(100vw - 16px));
+  max-height: var(--keyline-mobile-menu-height, 400px);
+  touch-action: pan-y;
+}
+body.is-mobile :is(.keyline-next-mention-list, .keyline-next-insert-list) { overscroll-behavior: contain; touch-action: pan-y; }
+body.is-mobile .keyline-next-mention-menu .keyline-next-mention-row,
+body.is-mobile .keyline-next-insert-menu .keyline-next-insert-suggestion { min-height: 44px; }
+body.is-mobile :is(.keyline-next-mention-label, .keyline-next-insert-label) { font-size: var(--font-ui-medium); }
+body.is-mobile .keyline-next-insert-menu.is-callout { z-index: calc(var(--layer-menu, 1000) + 1); }
+body.is-mobile .vertical-tab-content.keyline-next-settings { display: block; overflow-y: auto; }
+body.is-mobile .keyline-next-settings-layout { display: block; }
+body.is-mobile .keyline-next-settings-nav { display: none; }
+body.is-mobile .keyline-next-settings-panel { overflow: visible; padding: 0; }
+body.is-mobile .keyline-next-settings-select { display: block; min-height: 44px; margin-bottom: 14px; }
+body.is-mobile .keyline-next-settings-header { flex-wrap: wrap; }
+body.is-mobile .keyline-next-settings-version { white-space: nowrap; }
+body.is-mobile .keyline-next-settings-header input { width: 100%; max-width: none; min-height: 44px; }
+body.is-mobile .keyline-next-settings .setting-item { flex-direction: column; align-items: stretch; }
+body.is-mobile .keyline-next-settings .setting-item-info { flex: 0 0 auto; }
+body.is-mobile .keyline-next-settings .setting-item-control { flex: 0 0 auto; margin: 0; min-height: 44px; }
+body.is-mobile .keyline-next-settings .setting-item-control :is(button, select, input[type=text]) { min-height: 44px; }
 
 /* Lossless optional status presentation. The source remains available to
    assistive technology and native text equality checks; never hide messages. */

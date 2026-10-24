@@ -8,6 +8,7 @@ import { InsertSettingsModal } from "./platform/insert-settings";
 import { formattedDates } from "./platform/dates";
 import { iconKinds, kindLabels } from "./domain/icons";
 import { SettingsTransferModal } from "./platform/transfer-modal";
+import { mobileUnavailable } from "./domain/mobile";
 
 const sections = ["interface", "typography", "icons", "editing", "insert", "advanced"] as const;
 let settingsSerial = 0;
@@ -73,6 +74,11 @@ export class NextSettings extends PluginSettingTab {
     const header = root.createDiv({ cls: "keyline-next-settings-header" });
     settingsHeading(header, message("title", zh), 2, "keyline-next-settings-title");
     header.createSpan({ text: owner.manifest.version, cls: "keyline-next-settings-version" });
+    if (owner.mobile) {
+      const beta = root.createDiv({ cls: "keyline-next-mobile-beta", attr: { role: "note" } });
+      beta.createEl("strong", { text: message("mobileBetaTitle", zh) });
+      beta.createEl("p", { text: message("mobileBeta", zh) });
+    }
     if (owner.readOnly) root.createEl("p", { text: message("incompatible", zh) });
     const status = root.createDiv({ cls: "keyline-next-save-status", attr: { "aria-live": "polite" } });
     const refreshStatus = () => {
@@ -156,7 +162,9 @@ export class NextSettings extends PluginSettingTab {
         for (const row of rows.filter(row => row.section === section && labelMatches(row.label, ...(row.hint ? [row.hint] : [])))) {
           const setting = new Setting(group).setName(message(row.label, zh));
           if (row.hint) setting.setDesc(message(row.hint, zh));
-          setting.addToggle(t => t.setValue(owner.preferences[row.key]).setDisabled(owner.readOnly).onChange(value => update({ [row.key]: value })));
+          const unavailable = owner.mobile && mobileUnavailable.has(row.key);
+          if (unavailable) setting.setDesc(message("mobileUnavailable", zh));
+          setting.addToggle(t => t.setValue(unavailable ? false : owner.preferences[row.key]).setDisabled(owner.readOnly || unavailable).onChange(value => update({ [row.key]: value })));
           count++;
         }
         if (section === "icons") {
@@ -166,7 +174,7 @@ export class NextSettings extends PluginSettingTab {
           }
           if (!this.query) group.createEl("p", { text: message("iconRulesHint", zh), cls: "setting-item-description" });
         }
-        if (section === "editing") {
+        if (section === "editing" && !owner.mobile) {
           if (labelMatches("dragGranularity", "dragGranularityHint", "dragLine", "dragBlock")) {
             new Setting(group).setName(message("dragGranularity", zh)).setDesc(message("dragGranularityHint", zh)).addDropdown(d => {
               d.selectEl.dataset.keylineDragGranularity = "true";
@@ -220,11 +228,13 @@ export class NextSettings extends PluginSettingTab {
             const spec = typographySpecs[key];
             if (!matches(...spec.label)) continue;
             const setting = new Setting(group).setName(spec.label[zh ? 1 : 0]);
+            const mobileInset = owner.mobile && key === "inset";
+            if (mobileInset) setting.setDesc(zh ? "移动端使用自动留白，已保存的桌面值保留。" : "Mobile uses automatic inset; the desktop value is preserved.");
             setting.addSlider(slider => {
               slider.sliderEl.setAttribute("aria-label", spec.label[zh ? 1 : 0]);
               slider.setLimits(spec.min, spec.max, spec.step).setDisplayFormat(value =>
                 key === "inset" && value < 0 ? message("auto", zh) : `${value}${spec.unit}`
-              ).setValue(owner.preferences.typography[key]).setInstant(true).setDisabled(owner.readOnly).onChange(async value => {
+              ).setValue(mobileInset ? -1 : owner.preferences.typography[key]).setInstant(true).setDisabled(owner.readOnly || mobileInset).onChange(async value => {
                 await update({ typography: { ...owner.preferences.typography, [key]: value } }); updatePreview();
               });
             });

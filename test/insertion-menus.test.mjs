@@ -5,11 +5,13 @@ import {readFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 const {slashAt}=createRequire(import.meta.url)('../.test-build/domain/insertion.cjs');
 
-function fixture(){
+function fixture(mobile=false){
   const target=()=>({handlers:new Map(),attrs:new Map(),addEventListener(k,f){const a=this.handlers.get(k)??[];a.push(f);this.handlers.set(k,a);},removeEventListener(k,f){this.handlers.set(k,(this.handlers.get(k)??[]).filter(x=>x!==f));},getAttribute(k){return this.attrs.get(k)??null;},setAttribute(k,v){this.attrs.set(k,v);},removeAttribute(k){this.attrs.delete(k);}});
   const doc=target(),timers=new Map();let timer=0,rendered=0,text='';
   doc.defaultView={...target(),setTimeout(fn){timers.set(++timer,fn);return timer;},clearTimeout(id){timers.delete(id);}};
   const content=target();doc.activeElement=content;
+  doc.body={classList:{contains:()=>mobile}};
+  content.emit=(type,event={})=>{for(const fn of content.handlers.get(type)??[])fn(event);};
   const prefs={slash:true,slashTrigger:'/',insertOrder:[],hiddenInsert:[],customInsert:[]},writes=[];
   const file={path:'Start.md'},editor={getCursor:()=>({line:0,ch:text.length}),posToOffset:p=>p.ch,focus(){doc.activeElement=content;}};
   const owner={live:true,preferences:()=>prefs,zh:()=>false,suggest:{onTrigger(){const hit=slashAt(text,text.length,{...prefs,inlineSlash:true});return hit?{start:{line:0,ch:hit.from},end:editor.getCursor(),query:hit.query}:null;}},capture(){const source=text;return{editor,file,text:source,from:0,to:text.length,valid:()=>owner.live&&source===text};},choose:(context,entry)=>writes.push(entry.id)};
@@ -27,6 +29,27 @@ function fixture(){
 }
 for(const event of ['input.paste','undo','redo','set','input.type.compose'])test(`insert menu ignores non-trigger ${event}`,()=>{
   const f=fixture();f.input('/',event);f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);
+});
+for(const trigger of ['/','、'])test(`mobile ${trigger} IME trigger opens only after composition and never edits preedit`,()=>{
+  const f=fixture(true);f.view.composing=true;f.content.emit('compositionstart');
+  f.input(trigger,'input.type.compose');f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);
+  f.view.composing=false;f.content.emit('compositionend');f.flush();assert.equal(f.rendered,1);assert.equal(f.text,trigger);assert.deepEqual(f.writes,[]);
+});
+test('mobile slash query composition retains anchor and does not consume candidate keys',()=>{
+  const f=fixture(true);f.input('/');f.flush();f.view.composing=true;f.content.emit('compositionstart');
+  f.input('待办','input.type.compose');f.flush();assert.equal(f.key('Enter'),false);assert.deepEqual(f.writes,[]);
+  f.view.composing=false;f.content.emit('compositionend');f.flush();assert.deepEqual(Array.from(f.instance.entries,e=>e.id),['task']);
+  assert.equal(f.key('Enter'),true);assert.deepEqual(f.writes,['task']);
+});
+test('closing mobile slash during composition never reopens on compositionend',()=>{
+  const f=fixture(true);f.input('/');f.flush();f.view.composing=true;f.content.emit('compositionstart');f.input('待办','input.type.compose');
+  f.instance.close();f.view.composing=false;f.content.emit('compositionend');f.flush();assert.equal(f.rendered,1);assert.deepEqual(f.writes,[]);
+});
+test('mobile viewport and editor autoscroll reposition instead of dismissing slash',()=>{
+  const f=fixture(true);f.input('/');f.flush();let positioned=0;f.instance.position=()=>positioned++;
+  f.instance.viewport({type:'resize',target:f.doc.defaultView});f.instance.viewport({type:'scroll',target:f.content});
+  assert.equal(positioned,2);assert.equal(f.instance.anchor,0);assert.deepEqual(f.writes,[]);
+  const desktop=fixture();desktop.input('/');desktop.flush();desktop.instance.viewport({type:'resize',target:desktop.doc.defaultView});assert.equal(desktop.instance.anchor,-1);
 });
 for(const event of ['input.paste','undo','redo','set','input.type.compose'])test(`ideographic comma ignores non-trigger ${event}`,()=>{
   const f=fixture();f.input('、',event);f.flush();assert.equal(f.rendered,0);assert.equal(f.key('Enter'),false);

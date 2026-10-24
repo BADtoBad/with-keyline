@@ -1,5 +1,53 @@
 # With Keyline — verification scope
 
+## 1.1.0 — Mobile Beta, 2026-10-24
+
+**Mobile Beta, not physical-device acceptance. No personal Vault was changed.**
+Version 1.1.0 enables phone/tablet installation with explicit Beta notices while
+retaining desktop functionality. The maintainer explicitly authorized this Beta
+rollout before physical-device acceptance; the outstanding checks below are not
+being represented as passed.
+
+- Strict TypeScript, production build and **1,354 automated tests** pass.
+- The public 1.1.0 package reuses the exact runtime and stylesheet tested as
+  1.1.0-beta.1; only release metadata and documentation changed after host checks.
+  SHA-256: `main.js` = `48097820afffdc0f60ab8cfdcd29192437a50a71fb5ae12ae8fa9fcb090ad5dd`;
+  `styles.css` = `4008eefbbea8e9123b7b4384bd76dd029f56455b4e82a064fa264379a30c3851`.
+  Typecheck, all automated tests and the production build were rerun for 1.1.0.
+- The mobile host harness passes **36 checks** in a fresh fictional Vault using
+  macOS Obsidian 1.13.7's `app.emulateMobile(true)`, with Keyline 0.8.27. It verifies
+  the actual mobile startup path, not only a mobile CSS class.
+- Light/dark checks cover phone 390×780, tablet 768×1000 and reduced-height
+  390×420 viewports: date/page insertion, `/` and `、`, touch selection, callout
+  submenu/back navigation, touch target dimensions, menu bounds and native undo.
+- Additional checks cover native CDP touch scrolling without insertion,
+  repositioning an open menu after a viewport reduction, CDP IME composition
+  commits for `@`, `/` and `、`, a basic format command and undo, persistent Beta
+  settings text and reachable controls, a note saved to disk, disable/re-enable,
+  unchanged stored desktop preferences and zero renderer runtime exceptions.
+- A touch retargeting bug found in the first pass was fixed: after opening a
+  submenu, the browser's compatibility click must not choose another row under
+  the same finger. Unit tests cover cancelled/scrolling gestures, duplicate clicks,
+  subsequent independent mouse input, viewport offsets and listener cleanup.
+- Desktop regression uses the existing **31-check** insertion harness with the
+  same Keyline 0.8.27 theme, light/dark, mouse/keyboard, Chinese filtering,
+  undo/dismissal, protected text and preferences. It is not a complete rerun of
+  all desktop workspace/drag/third-party combinations.
+- Harnesses: `scripts/host-mobile-beta.mjs` and `scripts/host-insert-trigger.mjs`.
+  Both accept an absolute Keyline theme directory and create/close their own
+  isolated host. Reports, hashes and inspected screenshots are under
+  `evidence/mobile-beta/` and `evidence/insert-trigger/` (not plugin payload).
+
+**Outstanding validation:** physical Android/Xiaomi and iOS testing, including
+real keyboards/IME candidates, touch selection, file persistence after app restart,
+and mobile lifecycle/accessibility. CDP IME and reduced viewport checks do not
+simulate an actual OS keyboard or certify Android WebView/iOS WebKit. Test the
+release in a separate Vault with backups before using it for important notes.
+
+移动端已完成桌面宿主模拟检查；不是小米、Android 或 iOS 真机验收。
+维护者明确授权以移动端 Beta 发布；启用提示与设置页持续说明限制，
+桌面设置不被移动端限制覆盖。未完成的真机检查仍如实保留。
+
 ## 1.0.2 insertion-trigger update
 
 Added `、` as an alias for the default `/` trigger across query recognition,
