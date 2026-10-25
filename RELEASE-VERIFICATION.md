@@ -1,5 +1,42 @@
 # With Keyline — verification scope
 
+## 1.2.0 — Properties and themed calendar, 2026-10-25
+
+All checks use disposable fictional Vaults. No personal Vault was changed.
+
+- Strict TypeScript, production build and **1,424 automated tests** pass.
+- **29 native property/calendar checks** pass on macOS Obsidian 1.13.7 with
+  Keyline 0.8.28, including light/dark mode, Reading/Live Preview, blank native
+  property entry, no unsolicited note writes or focus changes, native property
+  editing and undo/redo, mouse and keyboard calendar selection, cancellation,
+  datetime preservation, narrow bounds, stale-input dismissal and unload cleanup.
+- The calendar changes colour with the active theme. Date selection uses local
+  civil dates rather than UTC conversion. Merely opening or navigating the
+  calendar does not save a value. Datetime changes require Apply.
+- Existing insertion regression: **31 checks** pass with the same theme,
+  including `/`, `、`, mention insertion, native undo and dismissal.
+- Existing Mobile Beta regression: **36 checks** pass using Obsidian's actual
+  mobile startup emulation in the macOS host, light/dark phone/tablet and
+  reduced-height layouts. Mobile date fields retain their native picker.
+- No renderer exceptions were recorded in the property, insertion or mobile
+  runs. `git diff --check` passes. Earlier release checks below are historical,
+  not a claim that every desktop feature was retested in this release.
+
+Reproduce with Node.js 22+ and a desktop Obsidian executable:
+
+```sh
+node scripts/host-properties.mjs /absolute/path/to/Keyline
+node scripts/host-insert-trigger.mjs /absolute/path/to/Keyline
+node scripts/host-mobile-beta.mjs /absolute/path/to/Keyline
+```
+
+Set `OBSIDIAN_TEST_BINARY` if necessary. Reports/captures are saved under
+`evidence/` and are not included in the plugin payload. The blank-row integration
+feature-detects Obsidian's internal metadata editor; unsupported hosts keep native
+behaviour. Arbitrary plugins/snippets, other desktop systems and physical
+Android/Xiaomi/iOS devices remain unverified. Mobile remains Beta; desktop
+emulation does not certify real keyboards, WebView/WebKit or mobile lifecycle.
+
 ## 1.1.0 — Mobile Beta, 2026-10-24
 
 **Mobile Beta, not physical-device acceptance. No personal Vault was changed.**

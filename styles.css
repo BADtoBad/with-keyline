@@ -1,3 +1,86 @@
+/* An empty property row, not a recommended-property panel. Native controls
+   own keyboard navigation, type choices, values, saving and undo. */
+body .workspace-leaf-content[data-type="markdown"] .metadata-container.keyline-next-empty-properties[data-property-count="1"] {
+  margin-block: 8px 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.metadata-container.keyline-next-empty-properties > .metadata-properties-heading,
+.metadata-container.keyline-next-empty-properties .metadata-add-button {
+  display: none;
+}
+body .workspace-leaf-content[data-type="markdown"] .metadata-container.keyline-next-empty-properties > .metadata-content {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transform: none;
+  width: 100%;
+}
+.metadata-container.keyline-next-empty-properties .metadata-property {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  min-height: 36px;
+}
+.metadata-container.keyline-next-empty-properties .metadata-property:focus-within {
+  border-color: var(--interactive-accent);
+}
+.metadata-container.keyline-next-empty-properties .metadata-property-value {
+  border-inline-start: 1px solid var(--background-modifier-border);
+}
+.metadata-container.keyline-next-empty-properties [placeholder]:empty::before {
+  content: none;
+}
+.metadata-container.keyline-next-empty-properties input::placeholder {
+  color: transparent;
+}
+body.is-mobile .metadata-container.keyline-next-empty-properties .metadata-property {
+  min-height: 44px;
+}
+
+/* Share the suite's menu surface tokens, not a second light/dark palette. */
+.keyline-next-property-calendar {
+  position: fixed; z-index: var(--layer-menu, 1000); box-sizing: border-box;
+  width: 280px; max-width: calc(100vw - 16px); max-height: calc(100vh - 16px);
+  overflow: auto; overscroll-behavior: contain; padding: 10px;
+  border: 1px solid var(--ncl-surface-border, var(--background-modifier-border));
+  border-radius: var(--ncl-menu-radius, var(--radius-m));
+  background: var(--ncl-surface-bg, var(--background-primary));
+  box-shadow: var(--ncl-menu-shadow, var(--shadow-s)); color: var(--text-normal);
+  font: 13px/1.4 var(--font-interface); user-select: none;
+}
+.keyline-next-property-calendar button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 0; height: 32px; padding: 0; margin: 0;
+  border: 0; border-radius: var(--radius-s); box-shadow: none;
+  background: transparent; color: var(--text-normal); font: inherit;
+}
+.keyline-next-property-calendar button:not(:disabled):hover {
+  background: var(--ncl-menu-active-bg, var(--background-modifier-hover));
+}
+.keyline-next-property-calendar button:focus-visible {
+  outline: 2px solid var(--interactive-accent); outline-offset: -2px;
+}
+.keyline-next-property-calendar button:disabled { opacity: .35; cursor: default; }
+.keyline-calendar-header { display: grid; grid-template-columns: 1fr 28px 28px; align-items: center; gap: 2px; margin-bottom: 8px; }
+.keyline-calendar-month { padding-inline: 6px; font-weight: 600; }
+.keyline-calendar-header button { height: 28px; color: var(--text-muted); }
+.keyline-calendar-header svg { width: 16px; height: 16px; }
+.keyline-calendar-weekdays, .keyline-calendar-week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.keyline-calendar-weekdays { margin-bottom: 4px; color: var(--text-muted); text-align: center; font-size: 11px; line-height: 24px; }
+.keyline-calendar-grid { display: grid; gap: 2px; }
+.keyline-calendar-grid button { width: 100%; font-variant-numeric: tabular-nums; }
+.keyline-calendar-grid button.is-outside { color: var(--text-faint); }
+.keyline-calendar-grid button[aria-current=date] { box-shadow: inset 0 0 0 1px var(--background-modifier-border-hover); font-weight: 600; }
+.keyline-calendar-grid button.is-selected,
+.keyline-calendar-grid button.is-selected:hover { background: var(--interactive-accent); color: var(--text-on-accent); box-shadow: none; }
+.keyline-calendar-footer { display: flex; justify-content: space-between; gap: 8px; padding-top: 8px; margin-top: 8px; border-top: 1px solid var(--background-modifier-border); }
+.keyline-calendar-footer button { padding: 0 8px; height: 28px; color: var(--text-muted); }
+.keyline-calendar-footer button[data-action=apply] { color: var(--text-accent); }
+.keyline-calendar-time { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 6px 0; color: var(--text-muted); }
+.keyline-calendar-time input { width: 120px; height: 28px; font: inherit; color: var(--text-normal); }
+
 .keyline-next-suggestion {
   display: grid;
   grid-template-columns: 3.5em minmax(0, 1fr);

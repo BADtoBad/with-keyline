@@ -77,7 +77,7 @@ __export(main_exports, {
   default: () => KeylineNext
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian31 = require("obsidian");
+var import_obsidian32 = require("obsidian");
 
 // src/domain/typography.ts
 var typographySpecs = {
@@ -14843,8 +14843,524 @@ var SyncStatusPresentation = class {
   }
 };
 
+// src/platform/property-calendar.ts
+var import_obsidian31 = require("obsidian");
+
+// src/domain/calendar.ts
+function daysInMonth(year, month) {
+  var _a;
+  return (_a = [
+    31,
+    year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31
+  ][month - 1]) != null ? _a : 0;
+}
+function parseCalendarDate(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})(?:T|$)/.exec(value);
+  if (!match)
+    return;
+  const [, y, m, d] = match, date = { year: +y, month: +m, day: +d };
+  if (date.year < 1 || date.month < 1 || date.month > 12 || date.day < 1 || date.day > daysInMonth(date.year, date.month))
+    return;
+  return date;
+}
+function calendarISO(date) {
+  return `${String(date.year).padStart(4, "0")}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`;
+}
+function localCalendarDate(now = new Date()) {
+  return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+}
+function nativeDate(date) {
+  const result = new Date(0);
+  result.setFullYear(date.year, date.month - 1, date.day);
+  result.setHours(12, 0, 0, 0);
+  return result;
+}
+function moveCalendarDay(date, delta) {
+  const result = nativeDate(date);
+  result.setDate(result.getDate() + delta);
+  return localCalendarDate(result);
+}
+function moveCalendarMonth(date, delta) {
+  const total = (date.year - 1) * 12 + date.month - 1 + delta;
+  const bounded = Math.max(0, Math.min(9999 * 12 - 1, total));
+  const year = Math.floor(bounded / 12) + 1, month = bounded % 12 + 1;
+  return { year, month, day: Math.min(date.day, daysInMonth(year, month)) };
+}
+function calendarCells(month, mondayFirst) {
+  const first = { ...month, day: 1 };
+  const offset = (nativeDate(first).getDay() + (mondayFirst ? 6 : 0)) % 7;
+  return Array.from({ length: 42 }, (_, i) => moveCalendarDay(first, i - offset));
+}
+function calendarValue(date, type, time) {
+  return type === "datetime-local" ? `${date}T${time || "00:00"}` : date;
+}
+
+// src/platform/property-calendar.ts
+var openCalendars = /* @__PURE__ */ new WeakMap();
+var serial2 = 0;
+var PropertyCalendar = class {
+  constructor(input, zh, valid) {
+    this.input = input;
+    this.zh = zh;
+    this.valid = valid;
+    this.live = true;
+    this.lease = new PresentationLease();
+    this.cleanup = [];
+    this.today = localCalendarDate();
+    var _a, _b;
+    this.doc = input.ownerDocument;
+    (_a = openCalendars.get(this.doc)) == null ? void 0 : _a.close();
+    this.original = input.value;
+    this.selected = parseCalendarDate(input.value) ? input.value.slice(0, 10) : "";
+    this.time = input.type === "datetime-local" ? input.value.split("T")[1] || "00:00" : "";
+    this.cursor = (_b = parseCalendarDate(this.selected)) != null ? _b : this.today;
+    this.root = this.doc.createElement("div");
+    this.root.className = "keyline-next-property-calendar";
+    this.root.id = `keyline-property-calendar-${++serial2}`;
+    this.root.setAttribute("role", "dialog");
+    this.root.setAttribute("aria-label", zh ? "\u9009\u62E9\u65E5\u671F" : "Choose a date");
+    this.root.tabIndex = -1;
+    const header = this.element("div", "keyline-calendar-header", this.root);
+    this.heading = this.element("div", "keyline-calendar-month", header);
+    this.heading.id = `${this.root.id}-month`;
+    this.heading.setAttribute("aria-live", "polite");
+    this.previous = this.button(header, zh ? "\u4E0A\u4E2A\u6708" : "Previous month", () => this.changeMonth(-1));
+    this.previous.dataset.action = "previous";
+    (0, import_obsidian31.setIcon)(this.previous, "chevron-left");
+    this.next = this.button(header, zh ? "\u4E0B\u4E2A\u6708" : "Next month", () => this.changeMonth(1));
+    this.next.dataset.action = "next";
+    (0, import_obsidian31.setIcon)(this.next, "chevron-right");
+    const weekdays = this.element("div", "keyline-calendar-weekdays", this.root);
+    weekdays.setAttribute("aria-hidden", "true");
+    for (const label2 of zh ? ["\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u65E5"] : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"])
+      this.element("span", "", weekdays).textContent = label2;
+    this.grid = this.element("div", "keyline-calendar-grid", this.root);
+    this.grid.setAttribute("role", "grid");
+    this.grid.setAttribute("aria-labelledby", this.heading.id);
+    if (input.type === "datetime-local") {
+      const label2 = this.element("label", "keyline-calendar-time", this.root);
+      this.element("span", "", label2).textContent = zh ? "\u65F6\u95F4" : "Time";
+      const time = this.element("input", "", label2);
+      time.type = "time";
+      time.step = "any";
+      time.value = this.time;
+      time.addEventListener("input", () => {
+        this.time = time.value;
+        this.updateConfirm();
+      });
+    }
+    const footer = this.element("div", "keyline-calendar-footer", this.root);
+    this.button(footer, zh ? "\u6E05\u7A7A" : "Clear", () => this.commit("")).dataset.action = "clear";
+    this.todayButton = this.button(footer, zh ? "\u4ECA\u5929" : "Today", () => this.choose(calendarISO(this.today)));
+    this.todayButton.dataset.action = "today";
+    if (input.type === "datetime-local") {
+      this.confirm = this.button(footer, zh ? "\u786E\u5B9A" : "Apply", () => this.commit(this.selected));
+      this.confirm.dataset.action = "apply";
+    }
+    this.doc.body.append(this.root);
+    openCalendars.set(this.doc, this);
+    this.lease.attribute(input, "aria-haspopup", "dialog");
+    this.lease.attribute(input, "aria-expanded", "true");
+    this.lease.attribute(input, "aria-controls", this.root.id);
+    this.on(this.root, "keydown", (event) => this.key(event));
+    this.on(this.doc, "pointerdown", (event) => {
+      if (!this.root.contains(event.target) && event.target !== input)
+        this.close();
+    }, true);
+    this.on(this.doc, "focusin", (event) => {
+      if (!this.root.contains(event.target) && event.target !== input)
+        this.close();
+    }, true);
+    this.on(this.doc, "scroll", (event) => {
+      if (!this.root.contains(event.target))
+        this.close();
+    }, true);
+    this.on(this.doc.defaultView, "resize", () => this.position());
+    this.on(this.doc.defaultView, "blur", () => this.close());
+    this.on(input, "input", () => this.close());
+    this.render();
+    this.position();
+    this.focusDay();
+  }
+  static supported(input) {
+    const doc = input.ownerDocument;
+    return !!(doc == null ? void 0 : doc.defaultView) && !!doc.body && !doc.body.classList.contains("is-mobile") && ["date", "datetime-local"].includes(input.type);
+  }
+  on(target, type, handler, capture = false) {
+    target.addEventListener(type, handler, capture);
+    this.cleanup.push(() => target.removeEventListener(type, handler, capture));
+  }
+  element(tag, cls, parent) {
+    const el = this.doc.createElement(tag);
+    el.className = cls;
+    parent.append(el);
+    return el;
+  }
+  button(parent, label2, click) {
+    const button = this.element("button", "", parent);
+    button.type = "button";
+    button.textContent = label2;
+    button.setAttribute("aria-label", label2);
+    button.addEventListener("click", click);
+    return button;
+  }
+  /** A stale popup must never write to another note, a replaced field or a
+   * value changed meanwhile by sync/undo/another plugin. */
+  refresh() {
+    if (this.live && (!this.valid() || !this.input.isConnected || this.input.disabled || this.input.readOnly || this.input.value !== this.original || this.input.ownerDocument !== this.doc || !this.input.getClientRects().length || !PropertyCalendar.supported(this.input)))
+      this.close();
+  }
+  allowed(iso) {
+    const date = parseCalendarDate(iso);
+    if (!date || date.year > 9999)
+      return false;
+    const min = this.input.min.slice(0, 10), max = this.input.max.slice(0, 10);
+    return (!parseCalendarDate(min) || iso >= min) && (!parseCalendarDate(max) || iso <= max);
+  }
+  render() {
+    this.heading.textContent = this.zh ? `${this.cursor.year}\u5E74${this.cursor.month}\u6708` : `${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][this.cursor.month - 1]} ${this.cursor.year}`;
+    this.previous.disabled = this.cursor.year === 1 && this.cursor.month === 1;
+    this.next.disabled = this.cursor.year === 9999 && this.cursor.month === 12;
+    this.todayButton.disabled = !this.allowed(calendarISO(this.today));
+    this.grid.replaceChildren();
+    const cells = calendarCells(this.cursor, this.zh), cursor = calendarISO(this.cursor), today = calendarISO(this.today);
+    for (let i = 0; i < cells.length; i += 7) {
+      const row = this.element("div", "keyline-calendar-week", this.grid);
+      row.setAttribute("role", "row");
+      for (const date of cells.slice(i, i + 7)) {
+        const iso = calendarISO(date), cell = this.element("div", "", row);
+        cell.setAttribute("role", "gridcell");
+        cell.setAttribute("aria-selected", String(iso === this.selected));
+        const button = this.button(cell, iso, () => this.choose(iso));
+        button.textContent = String(date.day);
+        button.dataset.date = iso;
+        button.tabIndex = iso === cursor ? 0 : -1;
+        button.disabled = !this.allowed(iso);
+        button.classList.toggle("is-outside", date.month !== this.cursor.month);
+        button.classList.toggle("is-selected", iso === this.selected);
+        if (iso === today)
+          button.setAttribute("aria-current", "date");
+      }
+    }
+    this.updateConfirm();
+  }
+  updateConfirm() {
+    if (this.confirm)
+      this.confirm.disabled = !this.selected || !this.time;
+  }
+  focusDay() {
+    const target = this.grid.querySelector(`button[data-date="${calendarISO(this.cursor)}"]:not(:disabled)`);
+    (target != null ? target : this.root).focus({ preventScroll: true });
+  }
+  changeMonth(delta) {
+    this.refresh();
+    if (!this.live)
+      return;
+    this.cursor = moveCalendarMonth(this.cursor, delta);
+    this.render();
+    this.position();
+  }
+  choose(iso) {
+    this.refresh();
+    if (!this.live || !this.allowed(iso))
+      return;
+    if (this.input.type === "datetime-local") {
+      this.selected = iso;
+      this.cursor = parseCalendarDate(iso);
+      this.render();
+      this.focusDay();
+    } else
+      this.commit(iso);
+  }
+  key(event) {
+    if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey)
+      return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close(true);
+      return;
+    }
+    const target = event.target;
+    if ((event.key === "Enter" || event.key === " ") && target.tagName === "BUTTON") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!target.disabled)
+        target.click();
+      return;
+    }
+    if (event.key === "Enter" && target.tagName === "INPUT" && this.confirm && !this.confirm.disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.confirm.click();
+      return;
+    }
+    if (!target.dataset.date)
+      return;
+    let next;
+    const steps = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+    if (event.key in steps)
+      next = moveCalendarDay(this.cursor, steps[event.key]);
+    else if (event.key === "PageUp" || event.key === "PageDown")
+      next = moveCalendarMonth(this.cursor, (event.key === "PageUp" ? -1 : 1) * (event.shiftKey ? 12 : 1));
+    else if (event.key === "Home" || event.key === "End") {
+      const cells = calendarCells(this.cursor, this.zh), index = cells.findIndex((d) => calendarISO(d) === calendarISO(this.cursor));
+      next = cells[Math.floor(index / 7) * 7 + (event.key === "End" ? 6 : 0)];
+    }
+    if (next) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!this.allowed(calendarISO(next)))
+        return;
+      this.cursor = next;
+      this.render();
+      this.position();
+      this.focusDay();
+    }
+  }
+  commit(date) {
+    this.refresh();
+    if (!this.live || date && !this.allowed(date))
+      return;
+    const input = this.input, value = date ? calendarValue(date, input.type, this.time) : "";
+    const probe = input.cloneNode(false);
+    if (input.type === "datetime-local" && !input.hasAttribute("step"))
+      probe.step = "any";
+    probe.value = value;
+    if (date && (probe.value !== value || !probe.validity.valid))
+      return;
+    this.close();
+    if (value === input.value) {
+      this.focusProperty();
+      return;
+    }
+    input.focus({ preventScroll: true });
+    input.value = value;
+    const EventClass = input.ownerDocument.defaultView.Event;
+    input.dispatchEvent(new EventClass("input", { bubbles: true }));
+    input.dispatchEvent(new EventClass("change", { bubbles: true }));
+    input.blur();
+    this.focusProperty();
+  }
+  focusProperty() {
+    var _a;
+    if (this.input.isConnected)
+      ((_a = this.input.closest(".metadata-property[tabindex]")) != null ? _a : this.input).focus({ preventScroll: true });
+  }
+  position() {
+    this.refresh();
+    if (!this.live)
+      return;
+    const win = this.doc.defaultView, anchor = this.input.getBoundingClientRect(), box = this.root.getBoundingClientRect();
+    const left = Math.max(8, Math.min(anchor.left, win.innerWidth - box.width - 8));
+    const top = anchor.bottom + 6 + box.height <= win.innerHeight - 8 ? anchor.bottom + 6 : anchor.top - box.height - 6;
+    this.root.style.left = `${left}px`;
+    this.root.style.top = `${Math.max(8, top)}px`;
+  }
+  close(restoreFocus = false) {
+    if (!this.live)
+      return;
+    this.live = false;
+    for (const stop of this.cleanup)
+      stop();
+    this.cleanup = [];
+    this.lease.release();
+    this.root.remove();
+    if (openCalendars.get(this.doc) === this)
+      openCalendars.delete(this.doc);
+    if (restoreFocus && this.input.isConnected)
+      this.input.focus({ preventScroll: true });
+  }
+};
+
+// src/platform/note-properties.ts
+function supportsProperties(view) {
+  var _a;
+  const m = view.metadataEditor;
+  return ((_a = view.file) == null ? void 0 : _a.extension) === "md" && typeof view.canShowProperties === "function" && !!(m == null ? void 0 : m.containerEl) && typeof m.synchronize === "function" && Array.isArray(m.properties) && Array.isArray(m.rendered) && typeof m.invalidFrontmatter === "boolean";
+}
+function needsPropertyDraft(view) {
+  return supportsProperties(view) && view.canShowProperties() && !view.metadataEditor.invalidFrontmatter && view.metadataEditor.properties.length === 0;
+}
+var emptyClass = "keyline-next-empty-properties";
+var PropertyDraft = class {
+  constructor(view, zh = () => false) {
+    this.view = view;
+    this.zh = zh;
+    this.live = true;
+    this.labels = new PresentationLease();
+    this.dateClick = (event) => {
+      var _a;
+      if (!this.live || !event.isTrusted || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey)
+        return;
+      const target = event.target;
+      if (!target || target.tagName !== "INPUT" || !["date", "datetime-local"].includes(target.type) || !target.closest(".metadata-property-value") || target.disabled || target.readOnly)
+        return;
+      if (this.openCalendar(target)) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      try {
+        (_a = target.showPicker) == null ? void 0 : _a.call(target);
+      } catch (e) {
+      }
+    };
+    this.dateKey = (event) => {
+      if (!event.isTrusted || event.isComposing || !event.altKey || event.key !== "ArrowDown" || event.ctrlKey || event.metaKey || event.shiftKey)
+        return;
+      const target = event.target;
+      if ((target == null ? void 0 : target.tagName) === "INPUT" && target.closest(".metadata-property-value") && this.openCalendar(target)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+    this.metadata = view.metadataEditor;
+    const win = view.containerEl.ownerDocument.defaultView;
+    if (win) {
+      this.observer = new win.MutationObserver((records) => {
+        if (records.some((r) => r.target === this.metadata.containerEl || this.metadata.containerEl.contains(r.target) || r.type === "attributes" && r.target.matches(".markdown-source-view,.markdown-preview-view") || Array.from(r.addedNodes).some((n) => n === this.metadata.containerEl || n.contains(this.metadata.containerEl))))
+          this.schedule();
+      });
+      this.observer.observe(view.containerEl, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-property-count", "data-property-key", "class"]
+      });
+    }
+    this.metadata.containerEl.addEventListener("click", this.dateClick, true);
+    this.metadata.containerEl.addEventListener("keydown", this.dateKey, true);
+    this.refresh();
+  }
+  openCalendar(input) {
+    var _a;
+    if (!this.live || input.disabled || input.readOnly || !PropertyCalendar.supported(input))
+      return false;
+    const file = this.view.file, type = input.type;
+    (_a = this.calendar) == null ? void 0 : _a.close();
+    this.calendar = new PropertyCalendar(input, this.zh(), () => this.live && this.view.file === file && this.view.metadataEditor === this.metadata && this.metadata.containerEl.contains(input) && this.view.canShowProperties() && !this.metadata.invalidFrontmatter && input.type === type);
+    return true;
+  }
+  matches(view) {
+    return view === this.view && view.metadataEditor === this.metadata;
+  }
+  schedule() {
+    if (!this.live || this.timer !== void 0)
+      return;
+    this.timer = setTimeout(() => {
+      this.timer = void 0;
+      this.refresh();
+    }, 30);
+  }
+  refresh() {
+    var _a, _b;
+    (_a = this.calendar) == null ? void 0 : _a.refresh();
+    if (!this.live || this.view.metadataEditor !== this.metadata || !supportsProperties(this.view))
+      return;
+    const m = this.metadata;
+    if (!this.view.canShowProperties() || m.invalidFrontmatter) {
+      this.labels.release();
+      this.removeEmptyDraft();
+      m.containerEl.classList.remove(emptyClass);
+      return;
+    }
+    if (needsPropertyDraft(this.view)) {
+      m.synchronize({ "": null });
+      this.row = m.rendered.find((r) => r.entry.key === "");
+    }
+    const empty = m.properties.length === 1 && m.properties[0].key === "" && !m.invalidFrontmatter;
+    m.containerEl.classList.toggle(emptyClass, empty);
+    if (empty) {
+      const row = (_b = m.rendered[0]) == null ? void 0 : _b.containerEl;
+      const key = row == null ? void 0 : row.querySelector(".metadata-property-key-input");
+      const value = row == null ? void 0 : row.querySelector(".metadata-property-value [contenteditable=true]");
+      if (key)
+        this.labels.attribute(key, "aria-label", this.zh() ? "\u5C5E\u6027\u540D" : "Property name");
+      if (value)
+        this.labels.attribute(value, "aria-label", this.zh() ? "\u5C5E\u6027\u503C" : "Property value");
+    } else
+      this.labels.release();
+  }
+  removeEmptyDraft() {
+    const m = this.metadata, row = this.row;
+    this.row = void 0;
+    if (!row || !m.rendered.includes(row) || row.entry.key !== "" || row.entry.value != null || m.invalidFrontmatter || m.properties.length !== 1 || Array.from(row.containerEl.querySelectorAll("input,[contenteditable=true]")).some((e) => {
+      var _a;
+      return (_a = e.tagName === "INPUT" ? e.value : e.textContent) == null ? void 0 : _a.trim();
+    }))
+      return;
+    const focused = row.containerEl.ownerDocument.activeElement;
+    if (focused && row.containerEl.contains(focused))
+      focused.blur();
+    m.synchronize({});
+  }
+  dispose() {
+    var _a, _b;
+    this.live = false;
+    if (this.timer !== void 0)
+      clearTimeout(this.timer);
+    (_a = this.observer) == null ? void 0 : _a.disconnect();
+    this.labels.release();
+    (_b = this.calendar) == null ? void 0 : _b.close();
+    this.metadata.containerEl.removeEventListener("click", this.dateClick, true);
+    this.metadata.containerEl.removeEventListener("keydown", this.dateKey, true);
+    this.metadata.containerEl.classList.remove(emptyClass);
+    this.removeEmptyDraft();
+  }
+};
+var NoteProperties = class {
+  constructor(app, zh = () => false) {
+    this.app = app;
+    this.zh = zh;
+    this.mounts = /* @__PURE__ */ new Map();
+    this.live = true;
+  }
+  refresh() {
+    if (!this.live)
+      return;
+    const views = new Set(this.app.workspace.getLeavesOfType("markdown").map((l) => l.view));
+    for (const [view, mount] of this.mounts)
+      if (!views.has(view)) {
+        mount.dispose();
+        this.mounts.delete(view);
+      }
+    for (const view of views) {
+      if (!supportsProperties(view))
+        continue;
+      let mount = this.mounts.get(view);
+      if (mount && !mount.matches(view)) {
+        mount.dispose();
+        this.mounts.delete(view);
+        mount = void 0;
+      }
+      if (!mount) {
+        mount = new PropertyDraft(view, this.zh);
+        this.mounts.set(view, mount);
+      } else
+        mount.refresh();
+    }
+  }
+  dispose() {
+    this.live = false;
+    for (const mount of this.mounts.values())
+      mount.dispose();
+    this.mounts.clear();
+  }
+};
+
 // src/main.ts
-var KeylineNext = class extends import_obsidian31.Plugin {
+var KeylineNext = class extends import_obsidian32.Plugin {
   constructor() {
     super(...arguments);
     this.preferences = { ...defaults };
@@ -14857,7 +15373,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
     return isChinese(this.preferences);
   }
   get mobile() {
-    return import_obsidian31.Platform.isMobile;
+    return import_obsidian32.Platform.isMobile;
   }
   get effectivePreferences() {
     return platformPreferences(this.preferences, this.mobile);
@@ -14884,7 +15400,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
     if (!this.active)
       return;
     if (this.mobile) {
-      this.betaNotice = new import_obsidian31.Notice(message("mobileBeta", this.zh), 12e3);
+      this.betaNotice = new import_obsidian32.Notice(message("mobileBeta", this.zh), 12e3);
       this.register(() => {
         var _a2;
         return (_a2 = this.betaNotice) == null ? void 0 : _a2.hide();
@@ -14973,6 +15489,11 @@ var KeylineNext = class extends import_obsidian31.Plugin {
       var _a2;
       return (_a2 = this.syncStatus) == null ? void 0 : _a2.dispose();
     });
+    this.noteProperties = new NoteProperties(this.app, () => this.zh);
+    this.register(() => {
+      var _a2;
+      return (_a2 = this.noteProperties) == null ? void 0 : _a2.dispose();
+    });
     this.registerEvent(this.app.workspace.on("window-open", (_workspace, win) => {
       var _a2, _b2, _c2, _d;
       (_a2 = this.hints) == null ? void 0 : _a2.watch(win.document);
@@ -15054,7 +15575,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
       });
     };
     this.app.workspace.onLayoutReady(() => {
-      var _a2, _b2, _c2, _d, _e, _f;
+      var _a2, _b2, _c2, _d, _e, _f, _g;
       if (!this.active)
         return;
       this.ready = true;
@@ -15065,9 +15586,10 @@ var KeylineNext = class extends import_obsidian31.Plugin {
       (_d = this.explorer) == null ? void 0 : _d.refresh();
       (_e = this.typography) == null ? void 0 : _e.refresh();
       (_f = this.workspaces) == null ? void 0 : _f.refresh();
+      (_g = this.noteProperties) == null ? void 0 : _g.refresh();
     });
     this.registerEvent(this.app.workspace.on("layout-change", () => {
-      var _a2, _b2, _c2, _d, _e;
+      var _a2, _b2, _c2, _d, _e, _f;
       if (this.ready) {
         bindDocuments();
         (_a2 = this.shell) == null ? void 0 : _a2.refresh();
@@ -15075,7 +15597,13 @@ var KeylineNext = class extends import_obsidian31.Plugin {
         (_c2 = this.explorer) == null ? void 0 : _c2.schedule();
         (_d = this.typography) == null ? void 0 : _d.refresh();
         (_e = this.workspaces) == null ? void 0 : _e.refresh();
+        (_f = this.noteProperties) == null ? void 0 : _f.refresh();
       }
+    }));
+    this.registerEvent(this.app.workspace.on("file-open", () => {
+      var _a2;
+      if (this.ready)
+        (_a2 = this.noteProperties) == null ? void 0 : _a2.refresh();
     }));
     this.registerEvent(this.app.workspace.on("css-change", () => {
       var _a2, _b2, _c2, _d, _e, _f, _g, _h;
@@ -15092,7 +15620,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
       var _a2, _b2;
       const result = renameIconRules(this.preferences.iconRules, before, file.path);
       if (result.conflict)
-        new import_obsidian31.Notice(message("iconRenameConflict", this.zh));
+        new import_obsidian32.Notice(message("iconRenameConflict", this.zh));
       else if (JSON.stringify(result.rules) !== JSON.stringify(this.preferences.iconRules))
         void this.update({ iconRules: result.rules });
       (_a2 = this.identities) == null ? void 0 : _a2.schedule();
@@ -15320,7 +15848,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
       if (this.warning) {
         this.warning.hide();
         this.warning = void 0;
-        new import_obsidian31.Notice(message("saved", this.zh));
+        new import_obsidian32.Notice(message("saved", this.zh));
       }
     } else if (!((_a = this.warning) == null ? void 0 : _a.noticeEl.isConnected)) {
       const doc = (_c = (_b = this.app.workspace.getMostRecentLeaf()) == null ? void 0 : _b.view.containerEl.ownerDocument) != null ? _c : document;
@@ -15332,7 +15860,7 @@ var KeylineNext = class extends import_obsidian31.Plugin {
         event.stopPropagation();
         void this.store.retry();
       });
-      this.warning = new import_obsidian31.Notice(fragment2, 0);
+      this.warning = new import_obsidian32.Notice(fragment2, 0);
     }
   }
 };

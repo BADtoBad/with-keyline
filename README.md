@@ -26,6 +26,7 @@ Mobile menus have touch-sized rows, scroll without inserting, and fit the keyboa
 - **Insert without breaking your flow.** Type `/` or `、` with the default trigger, or use the plus button, for headings, lists, tasks, callouts, links, images and attachments. Reorder or hide menu items and add registered commands. Explicit custom triggers and the inline-menu setting are respected.
 - **Know your files at a glance.** The original Keyline filled/sharp icon family distinguishes notes, folders and file types in the native sidebar and document tabs. Give individual files their own icon and colour. Folder expansion stays in the same icon slot.
 - **One coordinated writing surface.** Tune text width, paragraph rhythm, list indentation and headings from six clear settings categories: tabs on the left, options on the right. English and Chinese are built in.
+- **Properties without a blank-state puzzle.** Notes without properties show an empty name/value row, without recommendations or automatic frontmatter writes. Desktop date fields open a calendar that follows the theme, with month navigation, Today, Clear and keyboard access. Date-time fields retain their time and use an explicit Apply action. Manual entry, native undo and existing tag choices remain available; mobile uses the native date picker.
 - **Switch the whole working context.** With core Workspaces enabled, switch saved layouts from a compact control, with a verified recovery snapshot before a switch.
 
 ![With Keyline inline editing toolbar in a fully English showcase Vault](assets/inline-editing-en.png)
@@ -51,7 +52,8 @@ No personal notes, demo workspace or old settings are installed automatically. O
 
 ## Compatibility and privacy
 
-- **Obsidian 1.13.7 or newer. Desktop functionality plus limited Mobile Beta.** Current checks use macOS Obsidian 1.13.7 with Keyline 0.8.27. Other systems, physical mobile devices and third-party combinations need their own checks.
+- **Obsidian 1.13.7 or newer. Desktop functionality plus limited Mobile Beta.** Current checks use macOS Obsidian 1.13.7 with Keyline 0.8.28. Other systems, physical mobile devices and third-party combinations need their own checks.
+- The optional property presentation respects hidden properties, raw source mode and invalid frontmatter. Its narrow, feature-detected native metadata adapter falls back to Obsidian's UI if unsupported; it does not parse or save YAML itself.
 - File icons identify formats; they do not add EPUB or other file readers. Workspace actions require core Workspaces. Iconic retains ownership when enabled.
 - No telemetry or plugin-owned network requests. Settings and recovery data stay in the Vault configuration. User-invoked host commands and other plugins retain their own behaviour.
 - Formatting and block commands can change selected note content. Imported files and newly created notes are retained when you undo their inserted links; they are not silently deleted.

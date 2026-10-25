@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 — Properties and themed calendar — 2026-10-25
+
+- Show a single native, unsaved property name/value row on Markdown notes with no properties. No suggested fields or automatic frontmatter writes; preserve the native hidden-properties and source-mode settings.
+- Desktop date fields open a theme-aware calendar using the same surface, colour, typography and shadow tokens as the suite's menus. Support month navigation, Today, Clear, keyboard navigation and Escape; opening or browsing never writes a date. Date-time fields retain time with an explicit Apply action.
+- Retain native date storage, validation, manual entry, type/tag choices and undo/redo. Mobile keeps the native picker; detached/stale fields and plugin unload close the calendar without saving.
+- Mobile support remains Beta. Desktop/macOS and emulated viewport checks do not certify Android, Xiaomi, iOS or software keyboards. See [verification](RELEASE-VERIFICATION.md).
+- 中文：无属性的笔记在标题下显示一行空的属性名／属性值输入框，不推荐字段、不自动写入空属性。桌面日期弹层跟随 Keyline 亮暗配色、字体、边框及阴影，支持翻月、今天、清空与键盘操作；打开、浏览及取消不写入日期。日期时间字段保留时间并明确确认。保留原生保存、手动输入、类型与标签选项、撤销，以及隐藏属性和源码设置；移动端回退原生日期控件。
+
 ## 1.1.0 — Mobile Beta — 2026-10-24
 
 - Opened phone/tablet installation with limited Mobile Beta, a startup reminder and persistent settings notice. Desktop functionality remains available.

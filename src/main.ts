@@ -28,6 +28,7 @@ import { ShellPresentation } from "./platform/shell";
 import { SyncStatusPresentation } from "./platform/sync-status";
 import { SettingsTransfer } from "./platform/settings-transfer";
 import { platformPreferences } from "./domain/mobile";
+import { NoteProperties } from "./platform/note-properties";
 
 export default class KeylineNext extends Plugin {
   preferences: Preferences = { ...defaults };
@@ -41,6 +42,7 @@ export default class KeylineNext extends Plugin {
   private hints?: HoverHints;
   private shell?: ShellPresentation;
   private syncStatus?: SyncStatusPresentation;
+  private noteProperties?: NoteProperties;
   private typography?: TypographyController;
   private rhythm?: EditorRhythmController;
   private rowSelection?: RowSelection;
@@ -108,6 +110,8 @@ export default class KeylineNext extends Plugin {
     this.register(() => this.shell?.dispose());
     if (!this.mobile) this.syncStatus = new SyncStatusPresentation();
     this.register(() => this.syncStatus?.dispose());
+    this.noteProperties = new NoteProperties(this.app, () => this.zh);
+    this.register(() => this.noteProperties?.dispose());
     this.registerEvent(this.app.workspace.on("window-open", (_workspace, win) => {
       this.hints?.watch(win.document); this.explorer?.schedule();
       this.shell?.watch(win.document);
@@ -160,9 +164,10 @@ export default class KeylineNext extends Plugin {
     };
     this.app.workspace.onLayoutReady(() => {
       if (!this.active) return;
-      this.ready = true; this.shell?.watch(document); this.syncStatus?.watch(document); bindDocuments(); this.identities?.refresh(); this.explorer?.refresh(); this.typography?.refresh(); this.workspaces?.refresh();
+      this.ready = true; this.shell?.watch(document); this.syncStatus?.watch(document); bindDocuments(); this.identities?.refresh(); this.explorer?.refresh(); this.typography?.refresh(); this.workspaces?.refresh(); this.noteProperties?.refresh();
     });
-    this.registerEvent(this.app.workspace.on("layout-change", () => { if (this.ready) { bindDocuments(); this.shell?.refresh(); this.identities?.schedule(); this.explorer?.schedule(); this.typography?.refresh(); this.workspaces?.refresh(); } }));
+    this.registerEvent(this.app.workspace.on("layout-change", () => { if (this.ready) { bindDocuments(); this.shell?.refresh(); this.identities?.schedule(); this.explorer?.schedule(); this.typography?.refresh(); this.workspaces?.refresh(); this.noteProperties?.refresh(); } }));
+    this.registerEvent(this.app.workspace.on("file-open", () => { if (this.ready) this.noteProperties?.refresh(); }));
     this.registerEvent(this.app.workspace.on("css-change", () => { this.shell?.refresh(); this.syncStatus?.refresh(); this.identities?.schedule(); this.explorer?.schedule(); this.typography?.refresh(); this.rhythm?.refresh(); this.rowSelection?.refresh(); this.workspaces?.refresh(); }));
     this.registerEvent(this.app.vault.on("rename", (file, before) => {
       const result = renameIconRules(this.preferences.iconRules, before, file.path);
